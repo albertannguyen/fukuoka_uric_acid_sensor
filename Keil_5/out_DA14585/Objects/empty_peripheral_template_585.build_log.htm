@@ -1,0 +1,259 @@
+<html>
+<body>
+<pre>
+<h1>µVision Build Log</h1>
+<h2>Tool Versions:</h2>
+IDE-Version: µVision V5.42.0.0
+Copyright (C) 2025 ARM Ltd and ARM Germany GmbH. All rights reserved.
+License Information: Albert Nguyen
+Texas A&M University
+User-based license: Keil MDK Community (non-commercial free of charge)
+Valid until: May 31 2033. Cached until: Aug 25 2025
+ 
+Tool Versions:
+Toolchain:       Keil MDK Community (non-commercial free of charge  Version: 5.42.0.0
+Toolchain Path:  C:\Users\alber\AppData\Local\Keil_v5\ARM\ARMCLANG\Bin
+C Compiler:      ArmClang.exe V6.23
+Assembler:       Armasm.exe V6.23
+Linker/Locator:  ArmLink.exe V6.23
+Library Manager: ArmAr.exe V6.23
+Hex Converter:   FromElf.exe V6.23
+CPU DLL:         SARMCM3.DLL V5.42.0.0
+Dialog DLL:      DARMCM1.DLL V1.19.6.0
+Target DLL:      Segger\JL2CM3.dll V2.99.45.0
+Dialog DLL:      TARMCM1.DLL V1.14.6.0
+ 
+<h2>Project:</h2>
+C:\Users\alber\Documents\DA145xx_SDK\6.0.24.1464\projects\target_apps\template\fukuoka_new\Keil_5\empty_peripheral_template.uvprojx
+Project File Date:  08/18/2025
+
+<h2>Output:</h2>
+*** Using Compiler 'V6.23', folder: 'C:\Users\alber\AppData\Local\Keil_v5\ARM\ARMCLANG\Bin'
+Build target 'DA14585'
+../../../../../sdk/app_modules/src/app_sec/app_security_task.c(36): warning: In file included from...
+./../src/config\user_callback_config.h(27): warning: In file included from...
+./../src\user_empty_peripheral_template.h(102): error: unknown type name 'adc_input_attn_t'
+  102 | void gpadc_init(uint8_t smpl_time_mult, bool continuous, uint8_t interval_mult, adc_input_attn_t input_attenuator, bool chopping, uint8_t oversampling);
+      |                                                                                 ^
+./../src\user_empty_peripheral_template.h(147): error: unknown type name 'tim2_clk_src_t'
+  147 | void timer2_pwm_init(tim0_2_clk_div_t clk_div, tim2_clk_src_t clk_src, tim2_hw_pause_t hw_pause, uint16_t pwm_div);
+      |                                                ^
+2 errors generated.
+compiling app_security_task.c...
+../../../../../sdk/app_modules/src/app_entry/app_entry_point.c(41): warning: In file included from...
+./../src/config\user_callback_config.h(27): warning: In file included from...
+./../src\user_empty_peripheral_template.h(102): error: unknown type name 'adc_input_attn_t'
+  102 | void gpadc_init(uint8_t smpl_time_mult, bool continuous, uint8_t interval_mult, adc_input_attn_t input_attenuator, bool chopping, uint8_t oversampling);
+      |                                                                                 ^
+./../src\user_empty_peripheral_template.h(147): error: unknown type name 'tim2_clk_src_t'
+  147 | void timer2_pwm_init(tim0_2_clk_div_t clk_div, tim2_clk_src_t clk_src, tim2_hw_pause_t hw_pause, uint16_t pwm_div);
+      |                                                ^
+2 errors generated.
+compiling app_entry_point.c...
+../../../../../sdk/app_modules/src/app_default_hnd/app_default_handlers.c(62): warning: In file included from...
+./../src/config\user_callback_config.h(27): warning: In file included from...
+./../src\user_empty_peripheral_template.h(102): error: unknown type name 'adc_input_attn_t'
+  102 | void gpadc_init(uint8_t smpl_time_mult, bool continuous, uint8_t interval_mult, adc_input_attn_t input_attenuator, bool chopping, uint8_t oversampling);
+      |                                                                                 ^
+./../src\user_empty_peripheral_template.h(147): error: unknown type name 'tim2_clk_src_t'
+  147 | void timer2_pwm_init(tim0_2_clk_div_t clk_div, tim2_clk_src_t clk_src, tim2_hw_pause_t hw_pause, uint16_t pwm_div);
+      |                                                ^
+2 errors generated.
+compiling app_default_handlers.c...
+../../../../../sdk/app_modules/src/app_common/app_task.c(48): warning: In file included from...
+./../src/config\user_callback_config.h(27): warning: In file included from...
+./../src\user_empty_peripheral_template.h(102): error: unknown type name 'adc_input_attn_t'
+  102 | void gpadc_init(uint8_t smpl_time_mult, bool continuous, uint8_t interval_mult, adc_input_attn_t input_attenuator, bool chopping, uint8_t oversampling);
+      |                                                                                 ^
+./../src\user_empty_peripheral_template.h(147): error: unknown type name 'tim2_clk_src_t'
+  147 | void timer2_pwm_init(tim0_2_clk_div_t clk_div, tim2_clk_src_t clk_src, tim2_hw_pause_t hw_pause, uint16_t pwm_div);
+      |                                                ^
+2 errors generated.
+compiling app_task.c...
+../../../../../sdk/app_modules/src/app_common/app.c(40): warning: In file included from...
+./../src/config\user_callback_config.h(27): warning: In file included from...
+./../src\user_empty_peripheral_template.h(102): error: unknown type name 'adc_input_attn_t'
+  102 | void gpadc_init(uint8_t smpl_time_mult, bool continuous, uint8_t interval_mult, adc_input_attn_t input_attenuator, bool chopping, uint8_t oversampling);
+      |                                                                                 ^
+./../src\user_empty_peripheral_template.h(147): error: unknown type name 'tim2_clk_src_t'
+  147 | void timer2_pwm_init(tim0_2_clk_div_t clk_div, tim2_clk_src_t clk_src, tim2_hw_pause_t hw_pause, uint16_t pwm_div);
+      |                                                ^
+2 errors generated.
+compiling app.c...
+../../../../../sdk/platform/arch/main/arch_system.c(54): warning: In file included from...
+./../src/config\user_callback_config.h(27): warning: In file included from...
+./../src\user_empty_peripheral_template.h(102): error: unknown type name 'adc_input_attn_t'
+  102 | void gpadc_init(uint8_t smpl_time_mult, bool continuous, uint8_t interval_mult, adc_input_attn_t input_attenuator, bool chopping, uint8_t oversampling);
+      |                                                                                 ^
+./../src\user_empty_peripheral_template.h(147): error: unknown type name 'tim2_clk_src_t'
+  147 | void timer2_pwm_init(tim0_2_clk_div_t clk_div, tim2_clk_src_t clk_src, tim2_hw_pause_t hw_pause, uint16_t pwm_div);
+      |                                                ^
+2 errors generated.
+compiling arch_system.c...
+../../../../../sdk/platform/arch/main/arch_main.c(79): warning: In file included from...
+./../src/config\user_callback_config.h(27): warning: In file included from...
+./../src\user_empty_peripheral_template.h(102): error: unknown type name 'adc_input_attn_t'
+  102 | void gpadc_init(uint8_t smpl_time_mult, bool continuous, uint8_t interval_mult, adc_input_attn_t input_attenuator, bool chopping, uint8_t oversampling);
+      |                                                                                 ^
+./../src\user_empty_peripheral_template.h(147): error: unknown type name 'tim2_clk_src_t'
+  147 | void timer2_pwm_init(tim0_2_clk_div_t clk_div, tim2_clk_src_t clk_src, tim2_hw_pause_t hw_pause, uint16_t pwm_div);
+      |                                                ^
+2 errors generated.
+compiling arch_main.c...
+../../../../../sdk/app_modules/src/app_easy/app_easy_security.c(57): warning: In file included from...
+./../src/config\user_callback_config.h(27): warning: In file included from...
+./../src\user_empty_peripheral_template.h(102): error: unknown type name 'adc_input_attn_t'
+  102 | void gpadc_init(uint8_t smpl_time_mult, bool continuous, uint8_t interval_mult, adc_input_attn_t input_attenuator, bool chopping, uint8_t oversampling);
+      |                                                                                 ^
+./../src\user_empty_peripheral_template.h(147): error: unknown type name 'tim2_clk_src_t'
+  147 | void timer2_pwm_init(tim0_2_clk_div_t clk_div, tim2_clk_src_t clk_src, tim2_hw_pause_t hw_pause, uint16_t pwm_div);
+      |                                                ^
+2 errors generated.
+compiling app_easy_security.c...
+../../../../../sdk/app_modules/src/app_easy/app_easy_storage.c(47): warning: In file included from...
+./../src/config\user_callback_config.h(27): warning: In file included from...
+./../src\user_empty_peripheral_template.h(102): error: unknown type name 'adc_input_attn_t'
+  102 | void gpadc_init(uint8_t smpl_time_mult, bool continuous, uint8_t interval_mult, adc_input_attn_t input_attenuator, bool chopping, uint8_t oversampling);
+      |                                                                                 ^
+./../src\user_empty_peripheral_template.h(147): error: unknown type name 'tim2_clk_src_t'
+  147 | void timer2_pwm_init(tim0_2_clk_div_t clk_div, tim2_clk_src_t clk_src, tim2_hw_pause_t hw_pause, uint16_t pwm_div);
+      |                                                ^
+2 errors generated.
+compiling app_easy_storage.c...
+../src/platform/user_periph_setup.c(55): error: use of undeclared identifier 'GPIO_PIN_11'; did you mean 'GPIO_PIN_1'?
+   55 |         RESERVE_GPIO(PWM3_OUTPUT, PWM3_PORT, PWM3_PIN, PID_PWM3);
+      |                                              ^~~~~~~~
+      |                                              GPIO_PIN_1
+./../src/config\user_periph_setup.h(43): note: expanded from macro 'PWM3_PIN'
+   43 | #define PWM3_PIN                GPIO_PIN_11 // INT on MikroBus
+      |                                 ^
+./../../../../../sdk/platform/driver/gpio\gpio.h(420): note: expanded from macro 'RESERVE_GPIO'
+  420 | #define RESERVE_GPIO( name, port, pin, func )   { GPIO[port][pin] = (GPIO[port][pin] != 0) ? (-1) : 1; GPIO_status |= ((uint64_t)GPIO[port][pin] << pin) << (port * 16);}
+      |                                                              ^
+./../../../../../sdk/platform/driver/gpio\gpio.h(148): note: 'GPIO_PIN_1' declared here
+  148 |     GPIO_PIN_1 = 1U,
+      |     ^
+../src/platform/user_periph_setup.c(55): error: use of undeclared identifier 'GPIO_PIN_11'; did you mean 'GPIO_PIN_1'?
+   55 |         RESERVE_GPIO(PWM3_OUTPUT, PWM3_PORT, PWM3_PIN, PID_PWM3);
+      |                                              ^~~~~~~~
+      |                                              GPIO_PIN_1
+./../src/config\user_periph_setup.h(43): note: expanded from macro 'PWM3_PIN'
+   43 | #define PWM3_PIN                GPIO_PIN_11 // INT on MikroBus
+      |                                 ^
+./../../../../../sdk/platform/driver/gpio\gpio.h(420): note: expanded from macro 'RESERVE_GPIO'
+  420 | #define RESERVE_GPIO( name, port, pin, func )   { GPIO[port][pin] = (GPIO[port][pin] != 0) ? (-1) : 1; GPIO_status |= ((uint64_t)GPIO[port][pin] << pin) << (port * 16);}
+      |                                                                                 ^
+./../../../../../sdk/platform/driver/gpio\gpio.h(148): note: 'GPIO_PIN_1' declared here
+  148 |     GPIO_PIN_1 = 1U,
+      |     ^
+../src/platform/user_periph_setup.c(55): error: use of undeclared identifier 'GPIO_PIN_11'; did you mean 'GPIO_PIN_1'?
+   55 |         RESERVE_GPIO(PWM3_OUTPUT, PWM3_PORT, PWM3_PIN, PID_PWM3);
+      |                                              ^~~~~~~~
+      |                                              GPIO_PIN_1
+./../src/config\user_periph_setup.h(43): note: expanded from macro 'PWM3_PIN'
+   43 | #define PWM3_PIN                GPIO_PIN_11 // INT on MikroBus
+      |                                 ^
+./../../../../../sdk/platform/driver/gpio\gpio.h(420): note: expanded from macro 'RESERVE_GPIO'
+  420 | #define RESERVE_GPIO( name, port, pin, func )   { GPIO[port][pin] = (GPIO[port][pin] != 0) ? (-1) : 1; GPIO_status |= ((uint64_t)GPIO[port][pin] << pin) << (port * 16);}
+      |                                                                                                                                             ^
+./../../../../../sdk/platform/driver/gpio\gpio.h(148): note: 'GPIO_PIN_1' declared here
+  148 |     GPIO_PIN_1 = 1U,
+      |     ^
+../src/platform/user_periph_setup.c(55): error: use of undeclared identifier 'GPIO_PIN_11'; did you mean 'GPIO_PIN_1'?
+   55 |         RESERVE_GPIO(PWM3_OUTPUT, PWM3_PORT, PWM3_PIN, PID_PWM3);
+      |                                              ^~~~~~~~
+      |                                              GPIO_PIN_1
+./../src/config\user_periph_setup.h(43): note: expanded from macro 'PWM3_PIN'
+   43 | #define PWM3_PIN                GPIO_PIN_11 // INT on MikroBus
+      |                                 ^
+./../../../../../sdk/platform/driver/gpio\gpio.h(420): note: expanded from macro 'RESERVE_GPIO'
+  420 | #define RESERVE_GPIO( name, port, pin, func )   { GPIO[port][pin] = (GPIO[port][pin] != 0) ? (-1) : 1; GPIO_status |= ((uint64_t)GPIO[port][pin] << pin) << (port * 16);}
+      |                                                                                                                                                     ^
+./../../../../../sdk/platform/driver/gpio\gpio.h(148): note: 'GPIO_PIN_1' declared here
+  148 |     GPIO_PIN_1 = 1U,
+      |     ^
+../src/platform/user_periph_setup.c(102): error: use of undeclared identifier 'GPIO_PIN_11'; did you mean 'GPIO_PIN_1'?
+  102 |         GPIO_ConfigurePin(PWM3_PORT, PWM3_PIN, OUTPUT, PID_PWM3, false);
+      |                                      ^~~~~~~~
+      |                                      GPIO_PIN_1
+./../src/config\user_periph_setup.h(43): note: expanded from macro 'PWM3_PIN'
+   43 | #define PWM3_PIN                GPIO_PIN_11 // INT on MikroBus
+      |                                 ^
+./../../../../../sdk/platform/driver/gpio\gpio.h(148): note: 'GPIO_PIN_1' declared here
+  148 |     GPIO_PIN_1 = 1U,
+      |     ^
+5 errors generated.
+compiling user_periph_setup.c...
+../src/user_empty_peripheral_template.c(20): warning: In file included from...
+../src\user_empty_peripheral_template.h(102): error: unknown type name 'adc_input_attn_t'
+  102 | void gpadc_init(uint8_t smpl_time_mult, bool continuous, uint8_t interval_mult, adc_input_attn_t input_attenuator, bool chopping, uint8_t oversampling);
+      |                                                                                 ^
+../src\user_empty_peripheral_template.h(147): error: unknown type name 'tim2_clk_src_t'
+  147 | void timer2_pwm_init(tim0_2_clk_div_t clk_div, tim2_clk_src_t clk_src, tim2_hw_pause_t hw_pause, uint16_t pwm_div);
+      |                                                ^
+../src/user_empty_peripheral_template.c(134): error: call to undeclared function 'adc_clear_interrupt'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+  134 |         adc_clear_interrupt();
+      |         ^
+../src/user_empty_peripheral_template.c(138): error: unknown type name 'adc_input_attn_t'
+  138 | void gpadc_init(uint8_t smpl_time_mult, bool continuous, uint8_t interval_mult, adc_input_attn_t input_attenuator, bool chopping, uint8_t oversampling)
+      |                                                                                 ^
+../src/user_empty_peripheral_template.c(145): error: use of undeclared identifier 'ADC_INPUT_SE_P0_6'
+  145 |                 .input = ADC_INPUT_SE_P0_6,
+      |                          ^
+../src/user_empty_peripheral_template.c(160): error: call to undeclared function 'adc_input_shift_disable'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+  160 |         adc_input_shift_disable();
+      |         ^
+../src/user_empty_peripheral_template.c(162): error: call to undeclared function 'adc_temp_sensor_disable'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+  162 |         adc_temp_sensor_disable();
+      |         ^
+../src/user_empty_peripheral_template.c(165): error: call to undeclared function 'adc_reset_offsets'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+  165 |         adc_reset_offsets();
+      |         ^
+../src/user_empty_peripheral_template.c(178): error: call to undeclared function 'adc_correct_sample'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+  178 |         uint16_t sample = adc_correct_sample(adc_get_sample());
+      |                           ^
+../src/user_empty_peripheral_template.c(178): note: did you mean 'gpadc_collect_sample'?
+../src/user_empty_peripheral_template.c(174): note: 'gpadc_collect_sample' declared here
+  174 | uint16_t gpadc_collect_sample(void)
+      |          ^
+  175 | {
+  176 |         // adc_get_sample() is only for single mode
+  177 |         // Single mode operation
+  178 |         uint16_t sample = adc_correct_sample(adc_get_sample());
+      |                           ~~~~~~~~~~~~~~~~~~
+      |                           gpadc_collect_sample
+../src/user_empty_peripheral_template.c(189): error: call to undeclared function 'adc_get_oversampling'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+  189 |         uint32_t adc_resolution = 10 + ((6 < adc_get_oversampling()) ? 6 : adc_get_oversampling());
+      |                                              ^
+../src/user_empty_peripheral_template.c(192): error: use of undeclared identifier 'GP_ADC_ATTN'
+  192 |         uint32_t ref_mv = 900 * (GetBits16(GP_ADC_CTRL2_REG, GP_ADC_ATTN) + 1);
+      |                                                              ^
+../src/user_empty_peripheral_template.c(192): error: use of undeclared identifier 'GP_ADC_ATTN'
+../src/user_empty_peripheral_template.c(192): error: use of undeclared identifier 'GP_ADC_ATTN'
+../src/user_empty_peripheral_template.c(192): error: use of undeclared identifier 'GP_ADC_ATTN'
+../src/user_empty_peripheral_template.c(192): error: use of undeclared identifier 'GP_ADC_ATTN'
+../src/user_empty_peripheral_template.c(192): error: use of undeclared identifier 'GP_ADC_ATTN'
+../src/user_empty_peripheral_template.c(192): error: use of undeclared identifier 'GP_ADC_ATTN'
+../src/user_empty_peripheral_template.c(192): error: use of undeclared identifier 'GP_ADC_ATTN'
+../src/user_empty_peripheral_template.c(192): error: use of undeclared identifier 'GP_ADC_ATTN'
+fatal error: too many errors emitted, stopping now [-ferror-limit=]
+20 errors generated.
+compiling user_empty_peripheral_template.c...
+".\out_DA14585\Objects\empty_peripheral_template_585.axf" - 42 Error(s), 0 Warning(s).
+
+<h2>Software Packages used:</h2>
+
+Package Vendor: ARM
+                https://www.keil.com/pack/ARM.Cortex_DFP.1.1.0.pack
+                ARM::Cortex_DFP@1.1.0
+                ARM Cortex Reference Subsystems Device Family Pack
+
+<h2>Collection of Component include folders:</h2>
+  C:/Users/alber/AppData/Local/Arm/Packs/ARM/Cortex_DFP/1.1.0/Device/ARMCM0/Include
+
+<h2>Collection of Component Files used:</h2>
+Target not created.
+Build Time Elapsed:  00:00:04
+</pre>
+</body>
+</html>
