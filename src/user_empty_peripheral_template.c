@@ -73,28 +73,42 @@ uint16_t adc_sample_mv __SECTION_ZERO("retention_mem_area0");
  ****************************************************************************************
 */
 
-void uvp_check_and_shutdown(void)
-{
-	// if voltage supervisor drives pin low to 0 V, then start system shutdown
-	// GPIO high is around 3 V, and low is 0 V
-	if(GPIO_GetPinStatus(UVP_TRIGGER_PORT, UVP_TRIGGER_PIN) == false){
-		GPIO_SetInactive(UVP_MAX_SHDN_PORT, UVP_MAX_SHDN_PIN); // shutdown MAX9913
-		// TODO set DA14531 to hibernate (lowest power mode)
-	}else{
-		GPIO_SetActive(UVP_MAX_SHDN_PORT, UVP_MAX_SHDN_PIN); // enable MAX9913
-		// TODO wake up the DA14531
-	}
-}
-
 void uvp_timer_cb(void)
 {
-	uvp_check_and_shutdown(); // check for undervoltage of battery
+	// Declared for UART printout
+	bool uvp_result;
+	
+	// Intialize and enable ADC
+	// FIXME need to initialize ADC pin in user_periph_setup.c and .h
+	gpadc_init(ADC_INPUT_SE_VBAT_HIGH, 2, false, 0, ADC_INPUT_ATTN_4X, false, 0);
+	adc_enable();
+	
+	// Read and print ADC value to UART
+	adc_sample_raw = gpadc_collect_sample();
+	adc_sample_mv = gpadc_sample_to_mv(adc_sample_raw);
 	
 	#ifdef CFG_PRINTF
-	arch_printf("Ran UVP check \n\r");
+	arch_printf("[UVP] Register Value: %d | Battery Voltage: %d mV \n\r", adc_sample_raw, adc_sample_mv);
 	#endif
 	
-	uvp_timer = app_easy_timer(50, uvp_timer_cb); // restart the timer
+	// Compare ADC value to see if it is less than 1.9 V or 1900 mV then print results of check to UART
+	if(adc_sample_mv < (uint16_t)1900){
+		GPIO_SetInactive(UVP_MAX_SHDN_PORT, UVP_MAX_SHDN_PIN); // shutdown amplifiers
+		uvp_result = true;
+	}else{
+		GPIO_SetActive(UVP_MAX_SHDN_PORT, UVP_MAX_SHDN_PIN); // enable amplifiers
+		uvp_result = false;
+	}
+	
+	#ifdef CFG_PRINTF
+	arch_printf("[UVP] System undervoltage status: %s \n\r", uvp_result ? "YES" : "NO");
+	#endif
+	
+	// Disable ADC
+	adc_disable();
+	
+	// Restart the timer for another callback loop
+	uvp_timer = app_easy_timer(50, uvp_timer_cb);
 }
 
 /*
@@ -106,18 +120,26 @@ void uvp_timer_cb(void)
 // Single mode output: Raw = 9, Volt = 31 mV with no connection (valid floating output)
 void gpadc_timer_cb(void)
 {
+	// Intialize and enable ADC
+	gpadc_init(ADC_INPUT_SE_P0_6, 2, false, 0, ADC_INPUT_ATTN_4X, false, 0);
+	adc_enable();
+	
 	// Read and print ADC value to UART
 	adc_sample_raw = gpadc_collect_sample();
 	adc_sample_mv = gpadc_sample_to_mv(adc_sample_raw);
 	
 	#ifdef CFG_PRINTF
-	arch_printf("Register Value: %d | Voltage: %d mV \n\r", adc_sample_raw, adc_sample_mv);
+	arch_printf("[GPADC] Register Value: %d | Sensor Voltage: %d mV \n\r", adc_sample_raw, adc_sample_mv);
 	#endif
 	
-	// Restart the timer
+	// Disable ADC
+	adc_disable();
+	
+	// Restart the timer for another callback loop
 	adc_timer = app_easy_timer(100, gpadc_timer_cb);
 }
 
+/*
 // FIXME email company about how to implement this as interrupt is not being triggered after conversion in continuous mode
 void gpadc_interrupt(void)
 {
@@ -133,16 +155,17 @@ void gpadc_interrupt(void)
 	// Clear the interrupt
 	adc_clear_interrupt();
 }
+*/
 
 // TODO read datasheet and calculate manual mode settings that gives highest sampling rate and accuracy
-void gpadc_init(uint8_t smpl_time_mult, bool continuous, uint8_t interval_mult, adc_input_attn_t input_attenuator, bool chopping, uint8_t oversampling)
+void gpadc_init(uint8_t input, uint8_t smpl_time_mult, bool continuous, uint8_t interval_mult, adc_input_attn_t input_attenuator, bool chopping, uint8_t oversampling)
 {
 	// ADC config structure
 	adc_config_t adc_config_struct =
 	{
 		// HW specific
 		.input_mode = ADC_INPUT_MODE_SINGLE_ENDED,
-		.input = ADC_INPUT_SE_P0_6,
+		.input = input,
 
 		// SW adjustable
 		.smpl_time_mult = smpl_time_mult,
@@ -283,8 +306,6 @@ void user_on_connection(uint8_t connection_idx, struct gapc_connection_req_ind c
 	default_app_on_connection(connection_idx, param);
 	
 	// run ADC
-	gpadc_init(2, false, 0, ADC_INPUT_ATTN_4X, false, 0);
-	adc_enable(); // powers on ADC
 	adc_timer = app_easy_timer(100, gpadc_timer_cb); // starts a 1 second SW timer (ran in BLE core)
 	
 	// run PWM
@@ -299,8 +320,7 @@ void user_on_disconnect(struct gapc_disconnect_ind const *param )
 	default_app_on_disconnect(param);
 	
 	// stop ADC
-	adc_disable(); // powers off ADC
-	app_easy_timer_cancel(adc_timer); // cancels timer
+	app_easy_timer_cancel(adc_timer);
 	
 	// stop PWM
 	timer2_pwm_disable();

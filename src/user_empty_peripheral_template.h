@@ -73,13 +73,6 @@ arch_main_loop_callback_ret_t user_app_on_system_powered(void);
 
 /**
  ****************************************************************************************
- * @brief Defines logic for GPIO pins of the UVP circuit.
- ****************************************************************************************
-*/
-void uvp_check_and_shutdown(void);
-
-/**
- ****************************************************************************************
  * @brief Callback function for timer-driven UVP logic.
  ****************************************************************************************
 */
@@ -94,12 +87,12 @@ void uvp_timer_cb(void);
  * @param[in] input_attenuator   Attenuation factor for the ADC input.
  * @param[in] chopping           Enable or disable chopping.
  * @param[in] oversampling       Oversampling mode (0-7).
- * @note ADC input mode and input pin are fixed in this function (single-ended, P0_6).
+ * @note ADC input mode is fixed in this function (single-ended, P0_6).
  *			 ANY CHANGES TO ADC CONFIG MUST BE APPLIED WHEN ADC IS OFF.
  * @sa adc_init, adc_set_sample_time, adc_set_interval, adc_set_oversampling
  ****************************************************************************************
  */
-void gpadc_init(uint8_t smpl_time_mult, bool continuous, uint8_t interval_mult, adc_input_attn_t input_attenuator, bool chopping, uint8_t oversampling);
+void gpadc_init(uint8_t input, uint8_t smpl_time_mult, bool continuous, uint8_t interval_mult, adc_input_attn_t input_attenuator, bool chopping, uint8_t oversampling);
 
 /**
  ****************************************************************************************

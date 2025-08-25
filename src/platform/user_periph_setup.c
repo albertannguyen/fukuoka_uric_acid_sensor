@@ -44,7 +44,6 @@ void GPIO_reservations(void)
 	#endif
 
 	// reserve UVP pins as GPIO
-	RESERVE_GPIO(UVP_TRIGGER, UVP_TRIGGER_PORT, UVP_TRIGGER_PIN, PID_GPIO);
 	RESERVE_GPIO(UVP_MAX_SHDN, UVP_MAX_SHDN_PORT, UVP_MAX_SHDN_PIN, PID_GPIO);
 	
 	// reserve ADC pins
@@ -83,9 +82,6 @@ void set_pad_functions(void)
 			// Configure UART2 TX Pad
 			GPIO_ConfigurePin(UART2_TX_PORT, UART2_TX_PIN, OUTPUT, PID_UART2_TX, false);
 	#endif
-	
-	// set pin 8 (UVP_TRIGGER) as input
-	GPIO_ConfigurePin(UVP_TRIGGER_PORT, UVP_TRIGGER_PIN, INPUT, PID_GPIO, false);
 	
 	// set pin 9 (UVP_MAX_SHDN) as digital output high
 	// flag is so that it only initializes once

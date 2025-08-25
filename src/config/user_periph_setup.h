@@ -25,10 +25,10 @@
  ****************************************************************************************
  */
 
+// pins are formatted as P0_X in datasheet
+
 // define UVP circuit pins
-// note that pin 9 is the LED pin for USB devkit by default
-#define UVP_TRIGGER_PORT            GPIO_PORT_0
-#define UVP_TRIGGER_PIN             GPIO_PIN_8 // SDA on MikroBus
+// note that P0_9 is the LED pin for USB devkit by default
 #define UVP_MAX_SHDN_PORT           GPIO_PORT_0
 #define UVP_MAX_SHDN_PIN            GPIO_PIN_9 // PWM on MikroBus
 
@@ -51,7 +51,6 @@
 // Define UART2 Tx Pad
 #if defined (__DA14531__)
     #define UART2_TX_PORT           GPIO_PORT_0
-		// changed from pin 6 to pin 5 for USB devkit
     #define UART2_TX_PIN            GPIO_PIN_5
 #else
     #define UART2_TX_PORT           GPIO_PORT_0
