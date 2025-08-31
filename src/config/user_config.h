@@ -2,7 +2,7 @@
  ****************************************************************************************
  * @file user_config.h
  * @brief User configuration file.
- * @note Albert Nguyen enabled ARCH_EXT_SLEEP_ON
+ * @note Albert Nguyen enabled ARCH_EXT_SLEEP_ON and custom advertisement data
  ****************************************************************************************
  */
 
@@ -152,8 +152,13 @@ static const struct advertise_configuration user_adv_conf = {
  *    - The maximum length of the user defined response data shall be 31 bytes.
  ****************************************************************************************
  */
-/// Advertising data
-#define USER_ADVERTISE_DATA                   ""
+/// Define Custom Advertising data
+#define USER_ADVERTISE_DATA      ("\x03"\
+                                 ADV_TYPE_COMPLETE_LIST_16BIT_SERVICE_IDS\
+                                 ADV_UUID_DEVICE_INFORMATION_SERVICE\
+                                 "\x11"\
+                                 ADV_TYPE_COMPLETE_LIST_128BIT_SERVICE_IDS\
+                                 "\x72\x0E\x9F\xE8\xDE\xEC\x12\x4D\x99\xA5\xED\x64\xF3\xC4\x21\xB4")
 
 /// Advertising data length - maximum 28 bytes, 3 bytes are reserved to set
 #define USER_ADVERTISE_DATA_LEN               (sizeof(USER_ADVERTISE_DATA)-1)
@@ -179,7 +184,7 @@ static const struct advertise_configuration user_adv_conf = {
 /// Device name
 
 // custom: changed name to match project
-#define USER_DEVICE_NAME        "FUKUOKA-GLUCOSE-SENSOR"
+#define USER_DEVICE_NAME        "FUKUOKA-URIC-ACID-SENSOR"
 
 /// Device name length
 #define USER_DEVICE_NAME_LEN    (sizeof(USER_DEVICE_NAME)-1)

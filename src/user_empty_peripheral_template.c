@@ -363,9 +363,6 @@ arch_main_loop_callback_ret_t user_app_on_system_powered(void)
 
 void user_app_on_init(void)
 {
-	// start the default initialization process for BLE user application
-	default_app_on_init();
-	
 	// initialize user retained variables
 	uvp_timer_initialized = false;
 	adc_sample_raw = 0;
@@ -373,6 +370,10 @@ void user_app_on_init(void)
 	
 	// TODO make changes to DCDC converter and observe how it changes output of GPIOs
 	syscntl_dcdc_level_t vdd = syscntl_dcdc_get_level();
+	
+	// start the default initialization process for BLE user application
+	// SDK doc states that this should be the last line called in the callback function
+	default_app_on_init();
 }
 
 /// @} APP

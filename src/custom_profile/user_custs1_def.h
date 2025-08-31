@@ -49,13 +49,30 @@
  ****************************************************************************************
  */
 
+// #FIXME Ignore red error here
 #include "attm_db_128.h"
 
 /*
  * DEFINES
  ****************************************************************************************
  */
+ 
+// Define service 1 UUID (custom service for ADC data)
+#define DEF_SVC1_UUID_128 {0x72, 0x0E, 0x9F, 0xE8, 0xDE, 0xEC, 0x12, 0x4D, 0x99, 0xA5, 0xED, 0x64, 0xF3, 0xC4, 0x21, 0xB4}
 
+// Define UUID for sensor voltage characteristic
+#define DEF_SVC1_SENSOR_VOLTAGE_UUID_128 {0x04, 0x03, 0x08, 0x32, 0x72, 0x9D, 0x42, 0x93, 0x61, 0x4D, 0x48, 0xF6, 0x92, 0x2C, 0xD2, 0x41}
+
+// Define characteristic length = 2 bytes (16 bits), which stores 10-bit ADC result
+#define DEF_SVC1_SENSOR_VOLTAGE_CHAR_LEN 2
+
+// Defines user-friendly description as a string
+#define DEF_SVC1_SENSOR_VOLTAGE_USER_DESC   "Sensor voltage level in millivolts"
+
+// #WIP Define standard bluetooth battery service to report battery voltage level to app below
+
+/*
+// Default Examples (Service 1-3)
 // Service 1 of the custom server 1
 #define DEF_SVC1_UUID_128                {0x59, 0x5a, 0x08, 0xe4, 0x86, 0x2a, 0x9e, 0x8f, 0xe9, 0x11, 0xbc, 0x7c, 0x98, 0x43, 0x42, 0x18}
 
@@ -109,13 +126,22 @@
 #define DEF_SVC3_READ_VAL_1_USER_DESC    "Read me (notify)"
 #define DEF_SVC3_READ_VAL_2_USER_DESC    "Read me"
 #define DEF_SVC3_READ_VAL_3_USER_DESC    "Read me (indicate)"
+*/
 
 /// Custom1 Service Data Base Characteristic enum
 enum
 {
-    // Custom Service 1
+    // Service 1
+		// Adds service 1 index as starting point (SDK line)
     SVC1_IDX_SVC = 0,
+		
+		// Adds service 1 attributes
+		SVC1_IDX_SENSOR_VOLTAGE_CHAR,
+		SVC1_IDX_SENSOR_VOLTAGE_VAL,
+		SVC1_IDX_SENSOR_VOLTAGE_NTF_CFG,
+		SVC1_IDX_SENSOR_VOLTAGE_USER_DESC,
 
+		/*
     SVC1_IDX_CONTROL_POINT_CHAR,
     SVC1_IDX_CONTROL_POINT_VAL,
     SVC1_IDX_CONTROL_POINT_USER_DESC,
@@ -175,7 +201,9 @@ enum
     SVC3_IDX_READ_3_VAL,
     SVC3_IDX_READ_3_IND_CFG,
     SVC3_IDX_READ_3_USER_DESC,
-
+		*/
+		
+		// Saves total number of enumeration (SDK line)
     CUSTS1_IDX_NB
 };
 
