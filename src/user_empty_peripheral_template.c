@@ -19,44 +19,42 @@
 #include "app_api.h"
 #include "user_empty_peripheral_template.h"
 
-// for GPIO settings
+// For GPIO settings
 #include "gpio.h"
 #include "user_periph_setup.h"
 
-// for UART serial port debugging
+// For UART serial port debugging
 #include "arch_console.h"
 
-// for ADC functions
+// For ADC functions
 #include "adc.h"
 #include "adc_531.h"
 
-// for timer functions
+// For timer 2 functions
 #include "timer0_2.h"
 #include "timer2.h"
 
-// for DCDC converter debug
+// For DCDC converter debug
 #include "syscntl.h"
 
+// For BLE notifications
+#include "custs1_task.h"
+#include "user_custs1_def.h"
+
 /*
  ****************************************************************************************
- * DEFINES
+ * DEFINITIONS
  ****************************************************************************************
  */
 
-// datasheet values
-#define MIN_PWM_DIV 2
-#define MAX_PWM_DIV 16383
-#define SYS_CLK_FREQ_HZ 16000000
-#define LP_CLK_FREQ_HZ 32000
-
-// clamp macro
+// Clamp macro
 #define CLAMP(value, min, max) ((value) < (min) ? (min) : ((value) > (max) ? (max) : (value)))
 
-/*
- ****************************************************************************************
- * GLOBAL RETENTION VARIABLE DEFINITIONS
- ****************************************************************************************
- */
+// Constants from datasheet
+static const uint16_t MIN_PWM_DIV     = 2U;
+static const uint16_t MAX_PWM_DIV     = 16383U;
+static const uint32_t SYS_CLK_FREQ_HZ = 16000000U;
+static const uint32_t LP_CLK_FREQ_HZ  = 32000U;
 
 // UVP variables
 timer_hnd uvp_timer __SECTION_ZERO("retention_mem_area0");
@@ -64,6 +62,7 @@ bool uvp_timer_initialized __SECTION_ZERO("retention_mem_area0");
 
 // ADC variables
 timer_hnd adc_timer __SECTION_ZERO("retention_mem_area0");
+timer_hnd adc_timer_UART __SECTION_ZERO("retention_mem_area0");
 uint16_t adc_sample_raw __SECTION_ZERO("retention_mem_area0");
 uint16_t adc_sample_mv __SECTION_ZERO("retention_mem_area0");
 
@@ -73,42 +72,44 @@ uint16_t adc_sample_mv __SECTION_ZERO("retention_mem_area0");
  ****************************************************************************************
 */
 
-void uvp_timer_cb(void)
+void uvp_uart_timer_cb(void)
 {
 	// Declared for UART printout
 	bool uvp_result;
 	
 	// Intialize and enable ADC
-	// FIXME need to initialize ADC pin in user_periph_setup.c and .h
+	// FIXME: need to initialize ADC pin in user_periph_setup.c and .h before flashing code to custom PCB
 	gpadc_init(ADC_INPUT_SE_VBAT_HIGH, 2, false, 0, ADC_INPUT_ATTN_4X, false, 0);
 	adc_enable();
 	
-	// Read and print ADC value to UART
+	// Read ADC and convert results to millivolts
 	adc_sample_raw = gpadc_collect_sample();
 	adc_sample_mv = gpadc_sample_to_mv(adc_sample_raw);
 	
-	#ifdef CFG_PRINTF
-	arch_printf("[UVP] Register Value: %d | Battery Voltage: %d mV \n\r", adc_sample_raw, adc_sample_mv);
-	#endif
-	
-	// Compare ADC value to see if it is less than 1.9 V or 1900 mV then print results of check to UART
+	// Compare ADC value to see if it is less than 1900 mV
 	if(adc_sample_mv < (uint16_t)1900){
 		GPIO_SetInactive(UVP_MAX_SHDN_PORT, UVP_MAX_SHDN_PIN); // shutdown amplifiers
 		uvp_result = true;
-	}else{
+	}
+	else
+	{
 		GPIO_SetActive(UVP_MAX_SHDN_PORT, UVP_MAX_SHDN_PIN); // enable amplifiers
 		uvp_result = false;
 	}
 	
+	// Print output to UART for debugging
 	#ifdef CFG_PRINTF
+	arch_printf("---------------------------------------------------------------------\n\r");
+	arch_printf("[UVP] Register Value: %d | Battery Voltage: %d mV \n\r", adc_sample_raw, adc_sample_mv);
 	arch_printf("[UVP] System undervoltage status: %s \n\r", uvp_result ? "YES" : "NO");
+	arch_printf("---------------------------------------------------------------------\n\r");
 	#endif
 	
 	// Disable ADC
 	adc_disable();
 	
-	// Restart the timer for another callback loop
-	uvp_timer = app_easy_timer(50, uvp_timer_cb);
+	// Restart this function every 0.5 seconds
+	uvp_timer = app_easy_timer(50, uvp_uart_timer_cb);
 }
 
 /*
@@ -117,57 +118,66 @@ void uvp_timer_cb(void)
  ****************************************************************************************
 */
 
-// Single mode output: Raw = 9, Volt = 31 mV with no connection (valid floating output)
-void gpadc_timer_cb(void)
+void gpadc_wireless_timer_cb(void)
 {
 	// Intialize and enable ADC
 	gpadc_init(ADC_INPUT_SE_P0_6, 2, false, 0, ADC_INPUT_ATTN_4X, false, 0);
 	adc_enable();
 	
-	// Read and print ADC value to UART
+	// Read ADC and convert results to millivolts
 	adc_sample_raw = gpadc_collect_sample();
 	adc_sample_mv = gpadc_sample_to_mv(adc_sample_raw);
 	
+	// Create dynamic kernel messsage for BLE notifications
+	struct custs1_val_ntf_ind_req *req = KE_MSG_ALLOC_DYN(CUSTS1_VAL_NTF_REQ,
+																												prf_get_task_from_id(TASK_ID_CUSTS1),
+																												TASK_APP,
+																												custs1_val_ntf_ind_req,
+																												DEF_SVC1_SENSOR_VOLTAGE_CHAR_LEN);
+	
+	// Set the parameters of the struct defined above
+	req->handle = SVC1_IDX_SENSOR_VOLTAGE_VAL;
+	req->length = DEF_SVC1_SENSOR_VOLTAGE_CHAR_LEN;
+	req->notification = true;
+	
+	// Copies ADC value to notification payload
+	memcpy(req->value, &adc_sample_mv, DEF_SVC1_SENSOR_VOLTAGE_CHAR_LEN);
+	
+	// Print output to UART for debugging
 	#ifdef CFG_PRINTF
+	arch_printf("---------------------------------------------------------------------\n\r");
 	arch_printf("[GPADC] Register Value: %d | Sensor Voltage: %d mV \n\r", adc_sample_raw, adc_sample_mv);
+	// Note that BLE print is in little-endian order and must be converted to big-endian order before turning into a decimal.
+	arch_printf("[BLE] LSB: 0x%02X, MSB: 0x%02X\n\r",
+							adc_sample_mv & 0xFF,
+							(adc_sample_mv >> 8) & 0xFF);
+	arch_printf("---------------------------------------------------------------------\n\r");
 	#endif
+	
+	// Sends notification to BLE stack
+	KE_MSG_SEND(req);
 	
 	// Disable ADC
 	adc_disable();
 	
-	// Restart the timer for another callback loop
-	adc_timer = app_easy_timer(100, gpadc_timer_cb);
+	// If phone is still connected, restart timer and callback function (SDK line)
+	if (ke_state_get(TASK_APP) == APP_CONNECTED)
+	{
+			adc_timer = app_easy_timer(100, gpadc_wireless_timer_cb); // Restart this function every 1 second
+	}
 }
 
-/*
-// FIXME email company about how to implement this as interrupt is not being triggered after conversion in continuous mode
-void gpadc_interrupt(void)
-{
-	// Read and print ADC value
-	adc_sample_raw = gpadc_collect_sample();
-	adc_sample_mv = gpadc_sample_to_mv(adc_sample_raw);
-	
-	// arch_printf will only print once callback function returns
-	#ifdef CFG_PRINTF
-	arch_printf("Register Value: %d | Voltage: %d mV \n\r", adc_sample_raw, adc_sample_mv);
-	#endif
-	
-	// Clear the interrupt
-	adc_clear_interrupt();
-}
-*/
-
-// TODO read datasheet and calculate manual mode settings that gives highest sampling rate and accuracy
+// TODO: read datasheet and calculate manual mode settings that gives highest sampling rate and accuracy
 void gpadc_init(uint8_t input, uint8_t smpl_time_mult, bool continuous, uint8_t interval_mult, adc_input_attn_t input_attenuator, bool chopping, uint8_t oversampling)
 {
 	// ADC config structure
 	adc_config_t adc_config_struct =
 	{
-		// HW specific
+		// HW fixed for current setup
 		.input_mode = ADC_INPUT_MODE_SINGLE_ENDED,
-		.input = input,
 
 		// SW adjustable
+		.input = input,
 		.smpl_time_mult = smpl_time_mult,
 		.continuous = continuous,
 		.interval_mult = interval_mult,
@@ -181,27 +191,22 @@ void gpadc_init(uint8_t input, uint8_t smpl_time_mult, bool continuous, uint8_t 
 	
 	// Disable input shifter
 	adc_input_shift_disable();
+	
+	// FIXME: determine if this line needs to be included
 	// Disable die temperature sensor
-	adc_temp_sensor_disable();
+	// adc_temp_sensor_disable();
 
 	// Perform offset calibration of the ADC
 	adc_reset_offsets();
 	adc_offset_calibrate(ADC_INPUT_MODE_SINGLE_ENDED);
 	
-	// FIXME Register interrupt function to be used when ADC is on in continuous mode
-	// adc_register_interrupt(gpadc_interrupt);
-	
-	// consider using adc_ldo_const_current_enable() if getting noisy readings at lower voltage
+	// Consider using adc_ldo_const_current_enable() if getting noisy readings at lower voltage
 }
 
 uint16_t gpadc_collect_sample(void)
 {
-	// adc_get_sample() is only for single mode
-	// Single mode operation
+	// Raw sample is processed using ADC parameters and corrected conversion is returned
 	uint16_t sample = adc_correct_sample(adc_get_sample());
-	
-	// Continuous mode operation
-	// uint16_t sample = adc_correct_sample(GetWord16(GP_ADC_RESULT_REG));
 	
 	return (sample);
 }
@@ -211,7 +216,7 @@ uint16_t gpadc_sample_to_mv(uint16_t sample)
 	// Effective resolution of ADC sample based on oversampling rate	
 	uint32_t adc_resolution = 10 + ((6 < adc_get_oversampling()) ? 6 : adc_get_oversampling());
 
-	// Reference voltage is 900mv but can be scaled based on input attenation
+	// Reference voltage is 900mv but is scaled based on input attenation
 	uint32_t ref_mv = 900 * (GetBits16(GP_ADC_CTRL2_REG, GP_ADC_ATTN) + 1);
 
 	// Returns mV value read by the ADC
@@ -237,7 +242,7 @@ void timer2_pwm_init(tim0_2_clk_div_t clk_div, tim2_clk_src_t clk_src, tim2_hw_p
     .hw_pause = hw_pause
 	};
 	
-	// Set timer parameters
+	// Set timer parameters using structs above
 	timer0_2_clk_div_set(&clk_cfg);
 	timer2_config(&tmr_cfg);
 	
@@ -255,7 +260,7 @@ void timer2_pwm_init(tim0_2_clk_div_t clk_div, tim2_clk_src_t clk_src, tim2_hw_p
 
 void timer2_pwm_enable(uint8_t dc_pwm2, uint8_t offset_pwm2, uint8_t dc_pwm3, uint8_t offset_pwm3)
 {
-	// Clamp values if inputs are outside of 0-100% range
+	// Clamp input values if outside of valid 0-100% range
 	dc_pwm2 = CLAMP(dc_pwm2, 0, 100);
 	offset_pwm2 = CLAMP(offset_pwm2, 0, 100);
 	dc_pwm3 = CLAMP(dc_pwm3, 0, 100);
@@ -275,7 +280,6 @@ void timer2_pwm_enable(uint8_t dc_pwm2, uint8_t offset_pwm2, uint8_t dc_pwm3, ui
 	};
 	
 	// Set PWM parameters
-	// This function already comes with ASSERT_WARNING input protection, clamping is not mandatory
 	timer2_pwm_signal_config(&pwm2_cfg);
 	timer2_pwm_signal_config(&pwm3_cfg);
 	
@@ -305,12 +309,12 @@ void user_on_connection(uint8_t connection_idx, struct gapc_connection_req_ind c
 {
 	default_app_on_connection(connection_idx, param);
 	
-	// run ADC
-	adc_timer = app_easy_timer(100, gpadc_timer_cb); // starts a 1 second SW timer (ran in BLE core)
+	// FIXME: temporary mode of operation
+	gpadc_wireless_timer_cb();
 	
-	// run PWM
-	// max voltage is 3.3 V on LP clock source, min is 0 V
-	// this is because GPIO is supplied by VBAT_HIGH or the 3.3 V LDO on devkit
+	// Run PWM
+	// Max voltage is 3.3 V on LP clock source, min is 0 V
+	// This is because GPIO is supplied by VBAT_HIGH or the 3.3 V LDO on devkit
 	timer2_pwm_init(TIM0_2_CLK_DIV_8, TIM2_CLK_LP, TIM2_HW_PAUSE_OFF, 0xFFFF);
 	timer2_pwm_enable(50, 0, 25, 0);
 }
@@ -319,10 +323,7 @@ void user_on_disconnect(struct gapc_disconnect_ind const *param )
 {
 	default_app_on_disconnect(param);
 	
-	// stop ADC
-	app_easy_timer_cancel(adc_timer);
-	
-	// stop PWM
+	// Stop PWM
 	timer2_pwm_disable();
 }
 
@@ -344,14 +345,13 @@ void user_catch_rest_hndl(ke_msg_id_t const msgid, void const *param, ke_task_id
     }
 }
 
-
 arch_main_loop_callback_ret_t user_app_on_system_powered(void)
 {
 	wdg_freeze(); // freeze watchdog timer
 	
-	// initiates UVP timer only once
+	// Initiates UVP timer only once
 	if(!uvp_timer_initialized){
-		uvp_timer = app_easy_timer(50, uvp_timer_cb);
+		uvp_timer = app_easy_timer(50, uvp_uart_timer_cb);
 		uvp_timer_initialized = true;
 	}
 	
@@ -360,19 +360,19 @@ arch_main_loop_callback_ret_t user_app_on_system_powered(void)
 	return GOTO_SLEEP; // returning KEEP_POWERED hardfaults to nmi_handler.c, likely due to how SDK handles sleep
 }
 
-
 void user_app_on_init(void)
 {
-	// start the default initialization process for BLE user application
-	default_app_on_init();
-	
-	// initialize user retained variables
+	// Initialize user retained variables
 	uvp_timer_initialized = false;
 	adc_sample_raw = 0;
 	adc_sample_mv = 0;
 	
-	// TODO make changes to DCDC converter and observe how it changes output of GPIOs
-	syscntl_dcdc_level_t vdd = syscntl_dcdc_get_level();
+	// TODO: make changes to DCDC converter and observe how it changes output of GPIOs
+	// syscntl_dcdc_level_t vdd = syscntl_dcdc_get_level();
+	
+	// Start the default initialization process for BLE user application
+	// SDK doc states that this should be the last line called in the callback function
+	default_app_on_init();
 }
 
 /// @} APP

@@ -58,101 +58,106 @@ i.e.
 
 /**
  ****************************************************************************************
- * @brief app_on_init callback function rerouted to user space.
- * @note See user_callback_config.h for reroutes.
+ * @brief Timer-driven callback for undervoltage protection (UVP) logic.
+ * @details
+ *      This function is called periodically by a timer. It:
+ *          1. Reads battery voltage using the ADC.
+ *          2. Compares voltage to a threshold (i.e. 1.9 V).
+ *          3. Shuts down or enables amplifiers via GPIO based on result of comparison.
+ *          4. Reports ADC sample and comparison result to UART for debugging.
+ *      Timer is automatically restarted after each call.
+ * @note Needs work, in final firmware must send this information to client.
+ * @sa gpadc_init, gpadc_collect_sample, gpadc_sample_to_mv, GPIO_SetActive, GPIO_SetInactive, app_easy_timer
  ****************************************************************************************
 */
-void user_app_on_init(void);
+void uvp_uart_timer_cb(void);
 
 /**
  ****************************************************************************************
- * @brief app_on_system_powered callback function rerouted to user space.
+ * @brief Timer-driven callback for ADC conversions and BLE notifications.
+ * @details
+ *      This function periodically:
+ *          1. Initializes ADC for a specific input (i.e., P0_6).
+ *          2. Collects ADC sample and converts it to millivolts.
+ *          3. Sends the value over BLE notifications using the custom service.
+ *          4. Optionally prints values to UART for debugging on the devkit.
+ * @note Timer is automatically restarted as long as a BLE connection is active.
+ * @sa gpadc_init, gpadc_collect_sample, gpadc_sample_to_mv, KE_MSG_ALLOC_DYN, KE_MSG_SEND, ke_state_get, app_easy_timer
  ****************************************************************************************
 */
-arch_main_loop_callback_ret_t user_app_on_system_powered(void);
-
-/**
+void gpadc_wireless_timer_cb(void);
+ 
+ /**
  ****************************************************************************************
- * @brief Callback function for timer-driven UVP logic.
+ * @brief Initialize ADC with specific configuration parameters.
+ * @param[in] input            ADC input channel (e.g., P0_6, VBAT_HIGH).
+ * @param[in] smpl_time_mult   Sample time multiplier (1–15).
+ * @param[in] continuous       Enable or disable continuous sampling mode.
+ * @param[in] interval_mult    Interval multiplier for continuous mode (0–255).
+ * @param[in] input_attenuator Attenuation factor for the ADC input.
+ * @param[in] chopping         Enable or disable chopping.
+ * @param[in] oversampling     Oversampling setting (0–7).
+ * @note Input mode is fixed to single-ended. ADC must be off before changing config.
+ * @sa adc_init, adc_input_shift_disable, adc_reset_offsets, adc_offset_calibrate, adc_temp_sensor_disable
  ****************************************************************************************
 */
-void uvp_timer_cb(void);
-
-/**
- ****************************************************************************************
- * @brief Initializes the ADC with a given configuration.
- * @param[in] smpl_time_mult     Sample time multiplier (1-15).
- * @param[in] continuous         Enable or disable continuous conversion mode.
- * @param[in] interval_mult      Interval multiplier for continuous mode (0-255).
- * @param[in] input_attenuator   Attenuation factor for the ADC input.
- * @param[in] chopping           Enable or disable chopping.
- * @param[in] oversampling       Oversampling mode (0-7).
- * @note ADC input mode is fixed in this function (single-ended, P0_6).
- *			 ANY CHANGES TO ADC CONFIG MUST BE APPLIED WHEN ADC IS OFF.
- * @sa adc_init, adc_set_sample_time, adc_set_interval, adc_set_oversampling
- ****************************************************************************************
- */
 void gpadc_init(uint8_t input, uint8_t smpl_time_mult, bool continuous, uint8_t interval_mult, adc_input_attn_t input_attenuator, bool chopping, uint8_t oversampling);
 
 /**
  ****************************************************************************************
- * @brief Starts an ADC conversion, reads register value, and corrects the results.
- * @sa adc_get_sample
- * @sa adc_correct_sample
- * @return conversion result
+ * @brief Collect a single ADC sample and apply corrections.
+ * @details Reads raw ADC register, applies corrections based on current ADC config, and returns.
+ * @return Corrected ADC sample as a 16-bit unsigned integer.
+ * @sa adc_get_sample, adc_correct_sample
  ****************************************************************************************
 */
 uint16_t gpadc_collect_sample(void);
 
 /**
  ****************************************************************************************
- * @brief Returns the raw conversion of ADC in millivolts.
- * @param[in] sample        Raw conversion result of the ADC.
- * @note This is a code snippet given by Renesas.
- * @return sample in millivolts 
+ * @brief Converts raw ADC sample to millivolts.
+ * @param[in] sample Raw ADC register value.
+ * @return Voltage in millivolts.
+ * @note Reference voltage and attenuation are accounted for.
+ *			 This is a function given by Renesas.
+ * @sa adc_get_oversampling
  ****************************************************************************************
 */
 uint16_t gpadc_sample_to_mv(uint16_t sample);
 
 /**
  ****************************************************************************************
- * @brief Callback function for timer-driven measurements.
- ****************************************************************************************
-*/
-void gpadc_timer_cb(void);
-
-/**
- ****************************************************************************************
- * @brief Callback function for interrupt-driven measurements.
- ****************************************************************************************
-*/
-void gpadc_interrupt(void);
-
-/**
- ****************************************************************************************
- * @brief Initializes Timer 2 and the PWM output.
- * @param[in] clk_div       Clock divider for Timer 2.
- * @param[in] clk_src       Clock source for Timer 2.
- * @param[in] hw_pause      Enable or disable hardware pause for Timer 2.
- * @param[in] pwm_div       PWM frequency divider for PWM output (2 to (2^14 - 1)).
+ * @brief Initializes Timer2 for PWM generation.
+ * @param[in] clk_div  Clock divider for Timer2 input.
+ * @param[in] clk_src  Clock source for Timer2.
+ * @param[in] hw_pause Enable or disable hardware pause of Timer2.
+ * @param[in] pwm_div  Divider to set PWM frequency (2–16383).
+ * @details Sets up Timer2 with PWM frequency and clock source. Must call
+ *          timer2_pwm_enable() afterward to start outputs.
+ * @sa timer0_2_clk_div_set, timer2_config, timer2_pwm_freq_set
  ****************************************************************************************
 */
 void timer2_pwm_init(tim0_2_clk_div_t clk_div, tim2_clk_src_t clk_src, tim2_hw_pause_t hw_pause, uint16_t pwm_div);
 
 /**
  ****************************************************************************************
- * @brief Enables the PWM output.
- * @param[in] dc_pwm2       Duty cycle of PWM2 (0% - 100%).
- * @param[in] offset_pwm2   Offset of PWM2, delays the first rising edge (0% - 100%).
- * @param[in] dc_pwm3       Duty cycle of PWM3 (0% - 100%).
- * @param[in] offset_pwm3   Offset of PWM3, delays the first rising edge (0% - 100%).
+ * @brief Enable PWM outputs on Timer2's PWM2 and PWM3 signals. Also enables timer input clock.
+ * @param[in] dc_pwm2     Duty cycle for PWM2 (0–100%).
+ * @param[in] offset_pwm2 Phase offset for PWM2, delays first rising edge (0–100%).
+ * @param[in] dc_pwm3     Duty cycle for PWM3 (0–100%).
+ * @param[in] offset_pwm3 Phase offset for PWM3, delays first rising edge (0–100%).
+ * @details PWM outputs start immediately and run until disabled.
+ *          Use timer2_pwm_disable() to stop PWM signals.
+ * @sa timer2_pwm_signal_config, timer0_2_clk_enable, timer2_start
  ****************************************************************************************
 */
 void timer2_pwm_enable(uint8_t dc_pwm2, uint8_t offset_pwm2, uint8_t dc_pwm3, uint8_t offset_pwm3);
 
 /**
  ****************************************************************************************
- * @brief Disables the PWM output.
+ * @brief Disable all Timer2 PWM outputs.
+ * @details Stops PWM signals and disables the timer input clock.
+ * @sa timer2_stop, timer0_2_clk_disable
  ****************************************************************************************
 */
 void timer2_pwm_disable(void);
@@ -162,8 +167,8 @@ void timer2_pwm_disable(void);
  * @brief Connection function.
  * @param[in] conidx        Connection Id index
  * @param[in] param         Pointer to GAPC_CONNECTION_REQ_IND message
- * @note Yellow warning only shows up after building the project (they can be ignored for now).
- *			 Default callback function given by template.
+ * @note Starts ADC sampling and PWM outputs upon connection.
+ * @sa default_app_on_connection, gpadc_wireless_timer_cb, timer2_pwm_init, timer2_pwm_enable
  ****************************************************************************************
 */
 void user_on_connection(const uint8_t conidx, struct gapc_connection_req_ind const *param);
@@ -172,7 +177,8 @@ void user_on_connection(const uint8_t conidx, struct gapc_connection_req_ind con
  ****************************************************************************************
  * @brief Disconnection function.
  * @param[in] param         Pointer to GAPC_DISCONNECT_IND message
- * @note Default callback function given by template.
+ * @note Stops PWM outputs to save power after disconnection.
+ * @sa default_app_on_disconnect, timer2_pwm_disable
  ****************************************************************************************
 */
 void user_on_disconnect(struct gapc_disconnect_ind const *param);
@@ -184,10 +190,32 @@ void user_on_disconnect(struct gapc_disconnect_ind const *param);
  * @param[in] param   Pointer to the parameters of the message.
  * @param[in] dest_id ID of the receiving task instance.
  * @param[in] src_id  ID of the sending task instance.
- * @note Default callback function given by template.
+ * @note Required to avoid GATT timeouts for unhandled messages.
+ *			 This is a function given by Renesas.
+ * @sa KE_MSG_ALLOC, KE_MSG_SEND
  ****************************************************************************************
 */
 void user_catch_rest_hndl(ke_msg_id_t const msgid, void const *param, ke_task_id_t const dest_id, ke_task_id_t const src_id);
+
+/**
+ ****************************************************************************************
+ * @brief User callback when the system is powered on.
+ * @return GOTO_SLEEP to allow the system to enter low-power mode after execution.
+ * @note Called repeatedly by the SDK main loop.
+ * @sa wdg_freeze, wdg_resume, app_easy_timer, uvp_uart_timer_cb
+ ****************************************************************************************
+*/
+arch_main_loop_callback_ret_t user_app_on_system_powered(void);
+
+/**
+ ****************************************************************************************
+ * @brief User initialization callback.
+ * @note Initializes retained variables and starts default SDK initialization.
+ * @details Should call default_app_on_init() as the last line.
+ * @sa default_app_on_init
+ ****************************************************************************************
+*/
+void user_app_on_init(void);
 
 /// @} APP
 
