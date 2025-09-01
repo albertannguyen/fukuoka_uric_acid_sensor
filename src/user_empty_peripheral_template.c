@@ -10,7 +10,7 @@
 
 /*
  ****************************************************************************************
- * INCLUDE HEADERS
+ * INCLUDE FILES
  ****************************************************************************************
  */
  
@@ -19,25 +19,25 @@
 #include "app_api.h"
 #include "user_empty_peripheral_template.h"
 
-// for GPIO settings
+// For GPIO settings
 #include "gpio.h"
 #include "user_periph_setup.h"
 
-// for UART serial port debugging
+// For UART serial port debugging
 #include "arch_console.h"
 
-// for ADC functions
+// For ADC functions
 #include "adc.h"
 #include "adc_531.h"
 
-// for timer 2 functions
+// For timer 2 functions
 #include "timer0_2.h"
 #include "timer2.h"
 
-// for DCDC converter debug
+// For DCDC converter debug
 #include "syscntl.h"
 
-// for BLE notifications
+// For BLE notifications
 #include "custs1_task.h"
 #include "user_custs1_def.h"
 
@@ -47,10 +47,10 @@
  ****************************************************************************************
  */
 
-// clamp macro
+// Clamp macro
 #define CLAMP(value, min, max) ((value) < (min) ? (min) : ((value) > (max) ? (max) : (value)))
 
-// constants from datasheet
+// Constants from datasheet
 static const uint16_t MIN_PWM_DIV     = 2U;
 static const uint16_t MAX_PWM_DIV     = 16383U;
 static const uint32_t SYS_CLK_FREQ_HZ = 16000000U;
@@ -147,7 +147,8 @@ void gpadc_wireless_timer_cb(void)
 	#ifdef CFG_PRINTF
 	arch_printf("---------------------------------------------------------------------\n\r");
 	arch_printf("[GPADC] Register Value: %d | Sensor Voltage: %d mV \n\r", adc_sample_raw, adc_sample_mv);
-	arch_printf("[BLE little-endian bytes] LSB: 0x%02X, MSB: 0x%02X\n\r",
+	// Note that BLE print is in little-endian order and must be converted to big-endian order before turning into a decimal.
+	arch_printf("[BLE] LSB: 0x%02X, MSB: 0x%02X\n\r",
 							adc_sample_mv & 0xFF,
 							(adc_sample_mv >> 8) & 0xFF);
 	arch_printf("---------------------------------------------------------------------\n\r");
@@ -199,7 +200,7 @@ void gpadc_init(uint8_t input, uint8_t smpl_time_mult, bool continuous, uint8_t 
 	adc_reset_offsets();
 	adc_offset_calibrate(ADC_INPUT_MODE_SINGLE_ENDED);
 	
-	// consider using adc_ldo_const_current_enable() if getting noisy readings at lower voltage
+	// Consider using adc_ldo_const_current_enable() if getting noisy readings at lower voltage
 }
 
 uint16_t gpadc_collect_sample(void)
@@ -311,9 +312,9 @@ void user_on_connection(uint8_t connection_idx, struct gapc_connection_req_ind c
 	// FIXME: temporary mode of operation
 	gpadc_wireless_timer_cb();
 	
-	// run PWM
-	// max voltage is 3.3 V on LP clock source, min is 0 V
-	// this is because GPIO is supplied by VBAT_HIGH or the 3.3 V LDO on devkit
+	// Run PWM
+	// Max voltage is 3.3 V on LP clock source, min is 0 V
+	// This is because GPIO is supplied by VBAT_HIGH or the 3.3 V LDO on devkit
 	timer2_pwm_init(TIM0_2_CLK_DIV_8, TIM2_CLK_LP, TIM2_HW_PAUSE_OFF, 0xFFFF);
 	timer2_pwm_enable(50, 0, 25, 0);
 }
@@ -322,7 +323,7 @@ void user_on_disconnect(struct gapc_disconnect_ind const *param )
 {
 	default_app_on_disconnect(param);
 	
-	// stop PWM
+	// Stop PWM
 	timer2_pwm_disable();
 }
 
@@ -348,7 +349,7 @@ arch_main_loop_callback_ret_t user_app_on_system_powered(void)
 {
 	wdg_freeze(); // freeze watchdog timer
 	
-	// initiates UVP timer only once
+	// Initiates UVP timer only once
 	if(!uvp_timer_initialized){
 		uvp_timer = app_easy_timer(50, uvp_uart_timer_cb);
 		uvp_timer_initialized = true;
@@ -361,7 +362,7 @@ arch_main_loop_callback_ret_t user_app_on_system_powered(void)
 
 void user_app_on_init(void)
 {
-	// initialize user retained variables
+	// Initialize user retained variables
 	uvp_timer_initialized = false;
 	adc_sample_raw = 0;
 	adc_sample_mv = 0;
@@ -369,7 +370,7 @@ void user_app_on_init(void)
 	// TODO: make changes to DCDC converter and observe how it changes output of GPIOs
 	// syscntl_dcdc_level_t vdd = syscntl_dcdc_get_level();
 	
-	// start the default initialization process for BLE user application
+	// Start the default initialization process for BLE user application
 	// SDK doc states that this should be the last line called in the callback function
 	default_app_on_init();
 }

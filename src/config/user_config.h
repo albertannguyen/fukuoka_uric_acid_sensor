@@ -2,7 +2,7 @@
  ****************************************************************************************
  * @file user_config.h
  * @brief User configuration file.
- * @note Albert Nguyen enabled ARCH_EXT_SLEEP_ON and custom advertisement data
+ * @note Albert Nguyen enabled ARCH_EXT_SLEEP_ON and custom advertisement data.
  ****************************************************************************************
  */
 
@@ -305,7 +305,7 @@ static const struct connection_param_configuration user_connection_param_conf = 
  ****************************************************************************************
  */
 
-// Albert: for some reason red errors here, does not break build
+// Ignore red build errors in this code block
 static const struct default_handlers_configuration  user_default_hnd_conf = {
     // Configure the advertise operation used by the default handlers
     // Possible values:
