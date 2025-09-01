@@ -49,7 +49,7 @@
  ****************************************************************************************
  */
 
-// #FIXME Ignore red error here
+// Ignore red build error here
 #include "attm_db_128.h"
 
 /*

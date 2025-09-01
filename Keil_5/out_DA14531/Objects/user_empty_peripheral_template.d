@@ -100,4 +100,7 @@
   ..\..\..\..\..\sdk\platform\driver\dma\dma.h \
   ..\..\..\..\..\sdk\platform\core_modules\arch_console\arch_console.h \
   ..\..\..\..\..\sdk\platform\driver\adc\adc.h \
-  ..\..\..\..\..\sdk\platform\driver\syscntl\syscntl.h
+  ..\..\..\..\..\sdk\platform\driver\syscntl\syscntl.h \
+  ..\..\..\..\..\sdk\ble_stack\profiles\custom\custs\api\custs1_task.h \
+  ..\..\..\..\..\sdk\ble_stack\host\att\attm\attm_db_128.h \
+  ..\src\custom_profile\user_custs1_def.h
