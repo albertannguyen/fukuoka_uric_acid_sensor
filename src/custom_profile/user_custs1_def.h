@@ -43,7 +43,7 @@
 #define DEF_SVC1_SENSOR_VOLTAGE_CHAR_LEN 2
 
 // Defines user-friendly description as a string
-#define DEF_SVC1_SENSOR_VOLTAGE_USER_DESC   "Sensor voltage level in millivolts"
+#define DEF_SVC1_SENSOR_VOLTAGE_USER_DESC   "Sensor voltage (mV)"
 
 // WIP: Define standard bluetooth battery service to report battery voltage level to app below
 
