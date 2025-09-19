@@ -2,7 +2,7 @@
  ****************************************************************************************
  * @file user_empty_peripheral_template.h
  * @brief Empty peripheral template project header file.
- * @note Albert Nguyen: use "__BKPT(0);" for debugging with LTO compile
+ * @note Albert Nguyen
  ****************************************************************************************
  */
 
@@ -49,6 +49,11 @@ i.e.
 // for PWM functions
 #include "timer0_2.h"
 #include "timer2.h"
+
+// for BLE handler functions
+#include "gapc_task.h" // gap functions and messages
+#include "gapm_task.h" // gap functions and messages
+#include "custs1_task.h"
 
 /*
  ****************************************************************************************
@@ -196,6 +201,22 @@ void user_on_disconnect(struct gapc_disconnect_ind const *param);
  ****************************************************************************************
 */
 void user_catch_rest_hndl(ke_msg_id_t const msgid, void const *param, ke_task_id_t const dest_id, ke_task_id_t const src_id);
+
+// FIXME: comments
+// runs on both subscribe and unsubscribe
+/**
+ ****************************************************************************************
+ * @brief ADC value 1 configuration indication handler.
+ * @param[in] msgid   Id of the message received.
+ * @param[in] param   Pointer to the parameters of the message.
+ * @param[in] dest_id ID of the receiving task instance.
+ * @param[in] src_id  ID of the sending task instance.
+ ****************************************************************************************
+*/
+void user_svc1_sensor_voltage_cfg_ind_handler(ke_msg_id_t const msgid,
+                                         struct custs1_val_write_ind const *param,
+                                         ke_task_id_t const dest_id,
+                                         ke_task_id_t const src_id);
 
 /**
  ****************************************************************************************

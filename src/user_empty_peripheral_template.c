@@ -13,7 +13,7 @@
  * INCLUDE FILES
  ****************************************************************************************
  */
- 
+
 #include "rwip_config.h" // SW configuration
 #include "gattc_task.h"
 #include "app_api.h"
@@ -38,7 +38,8 @@
 #include "syscntl.h"
 
 // For BLE notifications
-#include "custs1_task.h"
+// FIXME: included this in header file instead
+// #include "custs1_task.h"
 #include "user_custs1_def.h"
 
 /*
@@ -62,7 +63,6 @@ bool uvp_timer_initialized __SECTION_ZERO("retention_mem_area0");
 
 // ADC variables
 timer_hnd adc_timer __SECTION_ZERO("retention_mem_area0");
-timer_hnd adc_timer_UART __SECTION_ZERO("retention_mem_area0");
 uint16_t adc_sample_raw __SECTION_ZERO("retention_mem_area0");
 uint16_t adc_sample_mv __SECTION_ZERO("retention_mem_area0");
 
@@ -192,9 +192,14 @@ void gpadc_init(uint8_t input, uint8_t smpl_time_mult, bool continuous, uint8_t 
 	// Disable input shifter
 	adc_input_shift_disable();
 	
-	// FIXME: determine if this line needs to be included
 	// Disable die temperature sensor
-	// adc_temp_sensor_disable();
+	adc_temp_sensor_disable();
+	
+	// Set ADC statup delay after LDO powers on as recommended by datasheet (16 Mhz = 16 us delay)
+	adc_delay_set(64);
+	
+	// Enable load current on ADC LDO for additional stability
+	adc_ldo_const_current_enable();
 
 	// Perform offset calibration of the ADC
 	adc_reset_offsets();
@@ -309,9 +314,6 @@ void user_on_connection(uint8_t connection_idx, struct gapc_connection_req_ind c
 {
 	default_app_on_connection(connection_idx, param);
 	
-	// FIXME: temporary mode of operation
-	gpadc_wireless_timer_cb();
-	
 	// Run PWM
 	// Max voltage is 3.3 V on LP clock source, min is 0 V
 	// This is because GPIO is supplied by VBAT_HIGH or the 3.3 V LDO on devkit
@@ -327,22 +329,77 @@ void user_on_disconnect(struct gapc_disconnect_ind const *param )
 	timer2_pwm_disable();
 }
 
-void user_catch_rest_hndl(ke_msg_id_t const msgid, void const *param, ke_task_id_t const dest_id, ke_task_id_t const src_id)
+void user_catch_rest_hndl(ke_msg_id_t const msgid,
+													void const *param,
+													ke_task_id_t const dest_id,
+													ke_task_id_t const src_id)
 {
-    switch(msgid)
-    {
-        case GATTC_EVENT_REQ_IND:
-        {
-            // Confirm unhandled indication to avoid GATT timeout
-            struct gattc_event_ind const *ind = (struct gattc_event_ind const *) param;
-            struct gattc_event_cfm *cfm = KE_MSG_ALLOC(GATTC_EVENT_CFM, src_id, dest_id, gattc_event_cfm);
-            cfm->handle = ind->handle;
-            KE_MSG_SEND(cfm);
-        } break;
+	switch(msgid)
+	{
+		// Checks for case when client writes data to a custom characteristic
+		case CUSTS1_VAL_WRITE_IND:
+		{
+			// Param is generic constant so must change type to expected struct by casting it (SDK line)
+			struct custs1_val_write_ind const *msg_param = (struct custs1_val_write_ind const *)(param);
+			
+			// Determine which characteristic was written to by checking its handle and jumping to the respective handler
+			switch (msg_param->handle)
+			{
+					case SVC1_IDX_SENSOR_VOLTAGE_NTF_CFG:
+							user_svc1_sensor_voltage_cfg_ind_handler(msgid, msg_param, dest_id, src_id);
+							break;
 
-        default:
-            break;
-    }
+					default:
+							break;
+			}
+		} break;
+	
+		case GATTC_EVENT_REQ_IND:
+		{
+				// Confirm unhandled indication to avoid GATT timeout
+				struct gattc_event_ind const *ind = (struct gattc_event_ind const *) param;
+				struct gattc_event_cfm *cfm = KE_MSG_ALLOC(GATTC_EVENT_CFM, src_id, dest_id, gattc_event_cfm);
+				cfm->handle = ind->handle;
+				KE_MSG_SEND(cfm);
+		} break;
+
+		default:
+				break;
+	}
+}
+
+void user_svc1_sensor_voltage_cfg_ind_handler(ke_msg_id_t const msgid,
+                                         struct custs1_val_write_ind const *param,
+                                         ke_task_id_t const dest_id,
+                                         ke_task_id_t const src_id)
+{
+	// Copy the value written by the client into a local variable
+	// Server defined in user_custs1_def.c defined the value as a CCCD (2 bytes)
+	uint16_t cccd_value = 0; // initialized to 0 for safe memcpy
+	memcpy(&cccd_value, param->value, param->length);
+
+	if (cccd_value == 0x0001) // notifications enabled
+	{
+		#ifdef CFG_PRINTF
+		arch_printf("Starting ADC. \n\r");
+		#endif
+		
+		// Start ADC conversions
+		adc_timer = app_easy_timer(100, gpadc_wireless_timer_cb);
+	}
+	else if (cccd_value == 0x0000) // notifications disabled
+	{
+		#ifdef CFG_PRINTF
+		arch_printf("Exiting ADC. \n\r");
+		#endif
+		
+		// Stop ADC conversions
+		if (adc_timer != EASY_TIMER_INVALID_TIMER) // if condition prevents cancel when timer does not exist
+		{
+			app_easy_timer_cancel(adc_timer);
+			adc_timer = EASY_TIMER_INVALID_TIMER;
+		}
+	}
 }
 
 arch_main_loop_callback_ret_t user_app_on_system_powered(void)

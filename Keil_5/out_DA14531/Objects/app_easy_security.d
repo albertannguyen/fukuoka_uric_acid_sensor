@@ -104,4 +104,6 @@
   ..\src\user_empty_peripheral_template.h \
   ..\..\..\..\..\sdk\platform\driver\adc\adc_531.h \
   ..\..\..\..\..\sdk\platform\driver\timer\timer0_2.h \
-  ..\..\..\..\..\sdk\platform\driver\timer\timer2.h
+  ..\..\..\..\..\sdk\platform\driver\timer\timer2.h \
+  ..\..\..\..\..\sdk\ble_stack\profiles\custom\custs\api\custs1_task.h \
+  ..\..\..\..\..\sdk\ble_stack\host\att\attm\attm_db_128.h
