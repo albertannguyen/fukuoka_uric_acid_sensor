@@ -79,7 +79,7 @@ void uvp_uart_timer_cb(void)
 	
 	// Intialize and enable ADC
 	// FIXME: need to initialize ADC pin in user_periph_setup.c and .h before flashing code to custom PCB
-	gpadc_init(ADC_INPUT_SE_VBAT_HIGH, 2, false, 0, ADC_INPUT_ATTN_4X, false, 0);
+	gpadc_init_se(ADC_INPUT_SE_VBAT_HIGH, 2, false, 0, ADC_INPUT_ATTN_4X, false, 0);
 	adc_enable();
 	
 	// Read ADC and convert results to millivolts
@@ -121,7 +121,7 @@ void uvp_uart_timer_cb(void)
 void gpadc_wireless_timer_cb(void)
 {
 	// Intialize and enable ADC
-	gpadc_init(ADC_INPUT_SE_P0_6, 2, false, 0, ADC_INPUT_ATTN_4X, false, 0);
+	gpadc_init_se(ADC_INPUT_SE_P0_6, 2, false, 0, ADC_INPUT_ATTN_4X, false, 0);
 	adc_enable();
 	
 	// Read ADC and convert results to millivolts
@@ -148,9 +148,7 @@ void gpadc_wireless_timer_cb(void)
 	arch_printf("---------------------------------------------------------------------\n\r");
 	arch_printf("[GPADC] Register Value: %d | Sensor Voltage: %d mV \n\r", adc_sample_raw, adc_sample_mv);
 	// Note that BLE print is in little-endian order and must be converted to big-endian order before turning into a decimal.
-	arch_printf("[BLE] LSB: 0x%02X, MSB: 0x%02X\n\r",
-							adc_sample_mv & 0xFF,
-							(adc_sample_mv >> 8) & 0xFF);
+	arch_printf("[BLE] LSB: 0x%02X, MSB: 0x%02X\n\r", adc_sample_mv & 0xFF, (adc_sample_mv >> 8) & 0xFF);
 	arch_printf("---------------------------------------------------------------------\n\r");
 	#endif
 	
@@ -168,15 +166,15 @@ void gpadc_wireless_timer_cb(void)
 }
 
 // TODO: read datasheet and calculate manual mode settings that gives highest sampling rate and accuracy
-void gpadc_init(uint8_t input, uint8_t smpl_time_mult, bool continuous, uint8_t interval_mult, adc_input_attn_t input_attenuator, bool chopping, uint8_t oversampling)
+void gpadc_init_se(adc_input_se_t input, uint8_t smpl_time_mult, bool continuous, uint8_t interval_mult, adc_input_attn_t input_attenuator, bool chopping, uint8_t oversampling)
 {
 	// ADC config structure
 	adc_config_t adc_config_struct =
 	{
-		// HW fixed for current setup
+		// ADC fixed to single-ended due to PCB layout
 		.input_mode = ADC_INPUT_MODE_SINGLE_ENDED,
 
-		// SW adjustable
+		// Adjustable values
 		.input = input,
 		.smpl_time_mult = smpl_time_mult,
 		.continuous = continuous,
@@ -204,8 +202,6 @@ void gpadc_init(uint8_t input, uint8_t smpl_time_mult, bool continuous, uint8_t 
 	// Perform offset calibration of the ADC
 	adc_reset_offsets();
 	adc_offset_calibrate(ADC_INPUT_MODE_SINGLE_ENDED);
-	
-	// Consider using adc_ldo_const_current_enable() if getting noisy readings at lower voltage
 }
 
 uint16_t gpadc_collect_sample(void)
@@ -234,7 +230,7 @@ uint16_t gpadc_sample_to_mv(uint16_t sample)
  ****************************************************************************************
 */
 
-void timer2_pwm_init(tim0_2_clk_div_t clk_div, tim2_clk_src_t clk_src, tim2_hw_pause_t hw_pause, uint16_t pwm_div)
+void timer2_pwm_set_freq(tim0_2_clk_div_t clk_div, tim2_clk_src_t clk_src, uint16_t pwm_div)
 {
 	// Define timer parameters in struct
 	tim0_2_clk_div_config_t clk_cfg = {
@@ -244,7 +240,7 @@ void timer2_pwm_init(tim0_2_clk_div_t clk_div, tim2_clk_src_t clk_src, tim2_hw_p
 	tim2_config_t tmr_cfg =
 	{
 		.clk_source = clk_src,
-    .hw_pause = hw_pause
+    .hw_pause = TIM2_HW_PAUSE_OFF // fixed for now
 	};
 	
 	// Set timer parameters using structs above
@@ -260,10 +256,14 @@ void timer2_pwm_init(tim0_2_clk_div_t clk_div, tim2_clk_src_t clk_src, tim2_hw_p
 	pwm_div = CLAMP(pwm_div, MIN_PWM_DIV, MAX_PWM_DIV);
 
 	// Set PWM frequency based on datasheet for Timer 2
-	timer2_pwm_freq_set(input_freq / pwm_div, input_freq);
+	timer2_pwm_freq_set(input_freq / pwm_div, input_freq); // pwm_div promoted to 32 bits
+	
+	#ifdef CFG_PRINTF
+	arch_printf("[PWM FREQ] SUCCESS on setting config. \n\r");
+	#endif
 }
 
-void timer2_pwm_enable(uint8_t dc_pwm2, uint8_t offset_pwm2, uint8_t dc_pwm3, uint8_t offset_pwm3)
+void timer2_pwm_set_duty_offsets(uint8_t dc_pwm2, uint8_t offset_pwm2, uint8_t dc_pwm3, uint8_t offset_pwm3)
 {
 	// Clamp input values if outside of valid 0-100% range
 	dc_pwm2 = CLAMP(dc_pwm2, 0, 100);
@@ -287,7 +287,10 @@ void timer2_pwm_enable(uint8_t dc_pwm2, uint8_t offset_pwm2, uint8_t dc_pwm3, ui
 	// Set PWM parameters
 	timer2_pwm_signal_config(&pwm2_cfg);
 	timer2_pwm_signal_config(&pwm3_cfg);
-	
+}
+
+void timer2_pwm_enable(void)
+{
 	// Enable timer input clock
 	timer0_2_clk_enable();
 	
@@ -317,8 +320,8 @@ void user_on_connection(uint8_t connection_idx, struct gapc_connection_req_ind c
 	// Run PWM
 	// Max voltage is 3.3 V on LP clock source, min is 0 V
 	// This is because GPIO is supplied by VBAT_HIGH or the 3.3 V LDO on devkit
-	timer2_pwm_init(TIM0_2_CLK_DIV_8, TIM2_CLK_LP, TIM2_HW_PAUSE_OFF, 0xFFFF);
-	timer2_pwm_enable(50, 0, 25, 0);
+	// timer2_pwm_init(TIM0_2_CLK_DIV_8, TIM2_CLK_LP, TIM2_HW_PAUSE_OFF, 0xFFFF);
+	// timer2_pwm_enable(50, 0, 25, 0);
 }
 
 void user_on_disconnect(struct gapc_disconnect_ind const *param )
@@ -336,7 +339,7 @@ void user_catch_rest_hndl(ke_msg_id_t const msgid,
 {
 	switch(msgid)
 	{
-		// Checks for case when client writes data to a custom characteristic
+		// Checks for case when client writes data to a custom characteristic value
 		case CUSTS1_VAL_WRITE_IND:
 		{
 			// Param is generic constant so must change type to expected struct by casting it (SDK line)
@@ -345,22 +348,26 @@ void user_catch_rest_hndl(ke_msg_id_t const msgid,
 			// Determine which characteristic was written to by checking its handle and jumping to the respective handler
 			switch (msg_param->handle)
 			{
-					case SVC1_IDX_SENSOR_VOLTAGE_NTF_CFG:
-							user_svc1_sensor_voltage_cfg_ind_handler(msgid, msg_param, dest_id, src_id);
-							break;
+				case SVC1_IDX_SENSOR_VOLTAGE_NTF_CFG:
+					user_svc1_sensor_voltage_cfg_ind_handler(msgid, msg_param, dest_id, src_id);
+					break;
 
-					default:
-							break;
+				case SVC1_IDX_PWM_FREQ_VAL:
+					user_svc1_pwm_freq_wr_ind_handler(msgid, msg_param, dest_id, src_id);
+					break;
+				
+				default:
+						break;
 			}
 		} break;
 	
 		case GATTC_EVENT_REQ_IND:
 		{
-				// Confirm unhandled indication to avoid GATT timeout
-				struct gattc_event_ind const *ind = (struct gattc_event_ind const *) param;
-				struct gattc_event_cfm *cfm = KE_MSG_ALLOC(GATTC_EVENT_CFM, src_id, dest_id, gattc_event_cfm);
-				cfm->handle = ind->handle;
-				KE_MSG_SEND(cfm);
+			// Confirm unhandled indication to avoid GATT timeout
+			struct gattc_event_ind const *ind = (struct gattc_event_ind const *) param;
+			struct gattc_event_cfm *cfm = KE_MSG_ALLOC(GATTC_EVENT_CFM, src_id, dest_id, gattc_event_cfm);
+			cfm->handle = ind->handle;
+			KE_MSG_SEND(cfm);
 		} break;
 
 		default:
@@ -374,14 +381,16 @@ void user_svc1_sensor_voltage_cfg_ind_handler(ke_msg_id_t const msgid,
                                          ke_task_id_t const src_id)
 {
 	// Copy the value written by the client into a local variable
-	// Server defined in user_custs1_def.c defined the value as a CCCD (2 bytes)
-	uint16_t cccd_value = 0; // initialized to 0 for safe memcpy
+	// Server defined in user_custs1_def.c made the value a CCCD (2 bytes = 16 bits)
+	uint16_t cccd_value;
 	memcpy(&cccd_value, param->value, param->length);
 
 	if (cccd_value == 0x0001) // notifications enabled
 	{
 		#ifdef CFG_PRINTF
-		arch_printf("Starting ADC. \n\r");
+		arch_printf("***************** \n\r");
+		arch_printf("* Starting ADC. * \n\r");
+		arch_printf("***************** \n\r");
 		#endif
 		
 		// Start ADC conversions
@@ -390,7 +399,9 @@ void user_svc1_sensor_voltage_cfg_ind_handler(ke_msg_id_t const msgid,
 	else if (cccd_value == 0x0000) // notifications disabled
 	{
 		#ifdef CFG_PRINTF
-		arch_printf("Exiting ADC. \n\r");
+		arch_printf("**************** \n\r");
+		arch_printf("* Exiting ADC. * \n\r");
+		arch_printf("**************** \n\r");
 		#endif
 		
 		// Stop ADC conversions
@@ -400,6 +411,47 @@ void user_svc1_sensor_voltage_cfg_ind_handler(ke_msg_id_t const msgid,
 			adc_timer = EASY_TIMER_INVALID_TIMER;
 		}
 	}
+}
+
+void user_svc1_pwm_freq_wr_ind_handler(ke_msg_id_t const msgid,
+                               struct custs1_val_write_ind const *param,
+                               ke_task_id_t const dest_id,
+                               ke_task_id_t const src_id)
+{
+	#ifdef CFG_PRINTF
+	arch_printf("****************************** \n\r");
+	arch_printf("* Entering PWM FREQ handler. * \n\r");
+	arch_printf("****************************** \n\r");
+	#endif
+	
+	// check byte length of char val
+	if (param->length != DEF_SVC1_PWM_FREQ_CHAR_LEN)
+	{
+    #ifdef CFG_PRINTF
+    arch_printf("[PWM FREQ] Invalid packet byte length: %d (expected %d) \n\r", param->length, DEF_SVC1_PWM_FREQ_CHAR_LEN);
+    #endif
+		
+    return; // ignore incomplete write
+	}
+	
+	// Parse little-endian byte array into expected values for PWM init function
+	// Byte order is [clk_div, clk_src, hw_pause, pwm_div_LSB, pwm_div_MSB]
+	uint8_t clk_div = param->value[0];
+	uint8_t clk_src = param->value[1];
+	uint16_t pwm_div = (param->value[2] | (param->value[3] << 8));
+
+	// Validate inputs with enum int literals from timer headers
+	if (clk_div > TIM0_2_CLK_DIV_8 || clk_src > TIM2_CLK_SYS) // literals are auto-promoted to uint8 for comparison
+	{
+		#ifdef CFG_PRINTF
+    arch_printf("[PWM FREQ] Invalid clk_div or clk_src write (first 2 bytes), input is ignored. \n\r");
+    #endif
+		
+		return; // ignore invalid BLE write
+	}
+
+	// Apply config to Timer 2
+	timer2_pwm_set_freq((tim0_2_clk_div_t)clk_div, (tim2_clk_src_t)clk_src, pwm_div); // note that pwm_div is clamped in this function already
 }
 
 arch_main_loop_callback_ret_t user_app_on_system_powered(void)

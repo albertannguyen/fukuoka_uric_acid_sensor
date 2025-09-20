@@ -106,7 +106,7 @@ void gpadc_wireless_timer_cb(void);
  * @sa adc_init, adc_input_shift_disable, adc_reset_offsets, adc_offset_calibrate, adc_temp_sensor_disable
  ****************************************************************************************
 */
-void gpadc_init(uint8_t input, uint8_t smpl_time_mult, bool continuous, uint8_t interval_mult, adc_input_attn_t input_attenuator, bool chopping, uint8_t oversampling);
+void gpadc_init_se(adc_input_se_t input, uint8_t smpl_time_mult, bool continuous, uint8_t interval_mult, adc_input_attn_t input_attenuator, bool chopping, uint8_t oversampling);
 
 /**
  ****************************************************************************************
@@ -130,33 +130,23 @@ uint16_t gpadc_collect_sample(void);
 */
 uint16_t gpadc_sample_to_mv(uint16_t sample);
 
+// FIXME: all PWM function comments
 /**
  ****************************************************************************************
- * @brief Initializes Timer2 for PWM generation.
+ * @brief Initializes Timer2 frequency for PWM generation.
  * @param[in] clk_div  Clock divider for Timer2 input.
  * @param[in] clk_src  Clock source for Timer2.
- * @param[in] hw_pause Enable or disable hardware pause of Timer2.
  * @param[in] pwm_div  Divider to set PWM frequency (2–16383).
  * @details Sets up Timer2 with PWM frequency and clock source. Must call
- *          timer2_pwm_enable() afterward to start outputs.
+ *          timer2_pwm_set_duty_offsets() and then timer2_pwm_enable() afterward to start outputs.
  * @sa timer0_2_clk_div_set, timer2_config, timer2_pwm_freq_set
  ****************************************************************************************
 */
-void timer2_pwm_init(tim0_2_clk_div_t clk_div, tim2_clk_src_t clk_src, tim2_hw_pause_t hw_pause, uint16_t pwm_div);
+void timer2_pwm_set_freq(tim0_2_clk_div_t clk_div, tim2_clk_src_t clk_src, uint16_t pwm_div);
 
-/**
- ****************************************************************************************
- * @brief Enable PWM outputs on Timer2's PWM2 and PWM3 signals. Also enables timer input clock.
- * @param[in] dc_pwm2     Duty cycle for PWM2 (0–100%).
- * @param[in] offset_pwm2 Phase offset for PWM2, delays first rising edge (0–100%).
- * @param[in] dc_pwm3     Duty cycle for PWM3 (0–100%).
- * @param[in] offset_pwm3 Phase offset for PWM3, delays first rising edge (0–100%).
- * @details PWM outputs start immediately and run until disabled.
- *          Use timer2_pwm_disable() to stop PWM signals.
- * @sa timer2_pwm_signal_config, timer0_2_clk_enable, timer2_start
- ****************************************************************************************
-*/
-void timer2_pwm_enable(uint8_t dc_pwm2, uint8_t offset_pwm2, uint8_t dc_pwm3, uint8_t offset_pwm3);
+void timer2_pwm_set_duty_offsets(uint8_t dc_pwm2, uint8_t offset_pwm2, uint8_t dc_pwm3, uint8_t offset_pwm3);
+
+void timer2_pwm_enable(void);
 
 /**
  ****************************************************************************************
@@ -202,21 +192,17 @@ void user_on_disconnect(struct gapc_disconnect_ind const *param);
 */
 void user_catch_rest_hndl(ke_msg_id_t const msgid, void const *param, ke_task_id_t const dest_id, ke_task_id_t const src_id);
 
-// FIXME: comments
+// FIXME: comments on all handler functions
 // runs on both subscribe and unsubscribe
-/**
- ****************************************************************************************
- * @brief ADC value 1 configuration indication handler.
- * @param[in] msgid   Id of the message received.
- * @param[in] param   Pointer to the parameters of the message.
- * @param[in] dest_id ID of the receiving task instance.
- * @param[in] src_id  ID of the sending task instance.
- ****************************************************************************************
-*/
 void user_svc1_sensor_voltage_cfg_ind_handler(ke_msg_id_t const msgid,
                                          struct custs1_val_write_ind const *param,
                                          ke_task_id_t const dest_id,
                                          ke_task_id_t const src_id);
+																				 
+void user_svc1_pwm_freq_wr_ind_handler(ke_msg_id_t const msgid,
+                               struct custs1_val_write_ind const *param,
+                               ke_task_id_t const dest_id,
+                               ke_task_id_t const src_id);
 
 /**
  ****************************************************************************************
