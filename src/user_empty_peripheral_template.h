@@ -142,7 +142,7 @@ uint16_t gpadc_sample_to_mv(uint16_t sample);
  * @sa timer0_2_clk_div_set, timer2_config, timer2_pwm_freq_set
  ****************************************************************************************
 */
-void timer2_pwm_set_freq(tim0_2_clk_div_t clk_div, tim2_clk_src_t clk_src, uint16_t pwm_div);
+void timer2_pwm_set_frequency(tim0_2_clk_div_t clk_div, tim2_clk_src_t clk_src, uint16_t pwm_div);
 
 void timer2_pwm_set_duty_offsets(uint8_t dc_pwm2, uint8_t offset_pwm2, uint8_t dc_pwm3, uint8_t offset_pwm3);
 
@@ -200,6 +200,11 @@ void user_svc1_sensor_voltage_cfg_ind_handler(ke_msg_id_t const msgid,
                                          ke_task_id_t const src_id);
 																				 
 void user_svc1_pwm_freq_wr_ind_handler(ke_msg_id_t const msgid,
+                               struct custs1_val_write_ind const *param,
+                               ke_task_id_t const dest_id,
+                               ke_task_id_t const src_id);
+															 
+void user_svc1_pwm_state_wr_ind_handler(ke_msg_id_t const msgid,
                                struct custs1_val_write_ind const *param,
                                ke_task_id_t const dest_id,
                                ke_task_id_t const src_id);

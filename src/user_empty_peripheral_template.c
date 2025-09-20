@@ -230,7 +230,7 @@ uint16_t gpadc_sample_to_mv(uint16_t sample)
  ****************************************************************************************
 */
 
-void timer2_pwm_set_freq(tim0_2_clk_div_t clk_div, tim2_clk_src_t clk_src, uint16_t pwm_div)
+void timer2_pwm_set_frequency(tim0_2_clk_div_t clk_div, tim2_clk_src_t clk_src, uint16_t pwm_div)
 {
 	// Define timer parameters in struct
 	tim0_2_clk_div_config_t clk_cfg = {
@@ -257,10 +257,6 @@ void timer2_pwm_set_freq(tim0_2_clk_div_t clk_div, tim2_clk_src_t clk_src, uint1
 
 	// Set PWM frequency based on datasheet for Timer 2
 	timer2_pwm_freq_set(input_freq / pwm_div, input_freq); // pwm_div promoted to 32 bits
-	
-	#ifdef CFG_PRINTF
-	arch_printf("[PWM FREQ] SUCCESS on setting config. \n\r");
-	#endif
 }
 
 void timer2_pwm_set_duty_offsets(uint8_t dc_pwm2, uint8_t offset_pwm2, uint8_t dc_pwm3, uint8_t offset_pwm3)
@@ -356,6 +352,10 @@ void user_catch_rest_hndl(ke_msg_id_t const msgid,
 					user_svc1_pwm_freq_wr_ind_handler(msgid, msg_param, dest_id, src_id);
 					break;
 				
+				case SVC1_IDX_PWM_STATE_VAL:
+					user_svc1_pwm_state_wr_ind_handler(msgid, msg_param, dest_id, src_id);
+					break;
+				
 				default:
 						break;
 			}
@@ -382,7 +382,7 @@ void user_svc1_sensor_voltage_cfg_ind_handler(ke_msg_id_t const msgid,
 {
 	// Copy the value written by the client into a local variable
 	// Server defined in user_custs1_def.c made the value a CCCD (2 bytes = 16 bits)
-	uint16_t cccd_value;
+	uint16_t cccd_value = 0; // set to zero for safe memcpy
 	memcpy(&cccd_value, param->value, param->length);
 
 	if (cccd_value == 0x0001) // notifications enabled
@@ -447,11 +447,57 @@ void user_svc1_pwm_freq_wr_ind_handler(ke_msg_id_t const msgid,
     arch_printf("[PWM FREQ] Invalid clk_div or clk_src write (first 2 bytes), input is ignored. \n\r");
     #endif
 		
-		return; // ignore invalid BLE write
+		return; // ignore invalid write
 	}
 
 	// Apply config to Timer 2
-	timer2_pwm_set_freq((tim0_2_clk_div_t)clk_div, (tim2_clk_src_t)clk_src, pwm_div); // note that pwm_div is clamped in this function already
+	timer2_pwm_set_frequency((tim0_2_clk_div_t)clk_div, (tim2_clk_src_t)clk_src, pwm_div); // note that pwm_div is clamped in this function already
+	
+	#ifdef CFG_PRINTF
+	arch_printf("[PWM FREQ] SUCCESS on setting config. \n\r");
+	#endif
+}
+
+void user_svc1_pwm_state_wr_ind_handler(ke_msg_id_t const msgid,
+                               struct custs1_val_write_ind const *param,
+                               ke_task_id_t const dest_id,
+                               ke_task_id_t const src_id)
+{
+	#ifdef CFG_PRINTF
+	arch_printf("******************************* \n\r");
+	arch_printf("* Entering PWM State handler. * \n\r");
+	arch_printf("******************************* \n\r");
+	#endif
+	
+	// Copy value to variable
+	uint8_t state = 0;
+	memcpy(&state, &param->value, param->length);
+	
+	// Turns on or off PWM output based on value
+	if(state > 1)
+	{
+		#ifdef CFG_PRINTF
+		arch_printf("[PWM STATE] Invalid input. \n\r");
+		#endif
+		
+		return; // ignore invalid write
+	} 
+	else if(state == 1)
+	{
+		timer2_pwm_enable(); // turn on output
+		
+		#ifdef CFG_PRINTF
+		arch_printf("[PWM STATE] Output ON. \n\r");
+		#endif
+	}
+	else if(state == 0)
+	{
+		timer2_pwm_disable(); // turn off output
+		
+		#ifdef CFG_PRINTF
+		arch_printf("[PWM STATE] Output OFF. \n\r");
+		#endif
+	}
 }
 
 arch_main_loop_callback_ret_t user_app_on_system_powered(void)
