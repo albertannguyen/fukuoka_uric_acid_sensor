@@ -2,7 +2,7 @@
  ****************************************************************************************
  * @file user_config.h
  * @brief User configuration file.
- * @note Albert Nguyen enabled ARCH_EXT_SLEEP_ON and custom advertisement data.
+ * @note Albert Nguyen: enabled ARCH_EXT_SLEEP_ON and custom advertisement data.
  ****************************************************************************************
  */
 

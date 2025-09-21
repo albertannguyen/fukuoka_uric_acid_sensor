@@ -38,8 +38,6 @@
 #include "syscntl.h"
 
 // For BLE notifications
-// FIXME: included this in header file instead
-// #include "custs1_task.h"
 #include "user_custs1_def.h"
 
 /*
@@ -60,11 +58,14 @@ static const uint32_t LP_CLK_FREQ_HZ  = 32000U;
 // UVP variables
 timer_hnd uvp_timer __SECTION_ZERO("retention_mem_area0");
 bool uvp_timer_initialized __SECTION_ZERO("retention_mem_area0");
+uint16_t uvp_cccd_value __SECTION_ZERO("retention_mem_area0");
+uint16_t uvp_adc_sample_raw __SECTION_ZERO("retention_mem_area0");
+uint16_t uvp_adc_sample_mv __SECTION_ZERO("retention_mem_area0");
 
-// ADC variables
-timer_hnd adc_timer __SECTION_ZERO("retention_mem_area0");
-uint16_t adc_sample_raw __SECTION_ZERO("retention_mem_area0");
-uint16_t adc_sample_mv __SECTION_ZERO("retention_mem_area0");
+// Sensor variables
+timer_hnd sensor_timer __SECTION_ZERO("retention_mem_area0");
+uint16_t sensor_adc_sample_raw __SECTION_ZERO("retention_mem_area0");
+uint16_t sensor_adc_sample_mv __SECTION_ZERO("retention_mem_area0");
 
 /*
  ****************************************************************************************
@@ -72,22 +73,23 @@ uint16_t adc_sample_mv __SECTION_ZERO("retention_mem_area0");
  ****************************************************************************************
 */
 
-void uvp_uart_timer_cb(void)
+void uvp_wireless_timer_cb(void)
 {
 	// Declared for UART printout
 	bool uvp_result;
 	
 	// Intialize and enable ADC
-	// FIXME: need to initialize ADC pin in user_periph_setup.c and .h before flashing code to custom PCB
+	// FIXME: change settings once implementing on custom PCB, ensure ADC reads VBAT HIGH
 	gpadc_init_se(ADC_INPUT_SE_VBAT_HIGH, 2, false, 0, ADC_INPUT_ATTN_4X, false, 0);
 	adc_enable();
 	
 	// Read ADC and convert results to millivolts
-	adc_sample_raw = gpadc_collect_sample();
-	adc_sample_mv = gpadc_sample_to_mv(adc_sample_raw);
+	uvp_adc_sample_raw = gpadc_collect_sample();
+	uvp_adc_sample_mv = gpadc_sample_to_mv(uvp_adc_sample_raw);
 	
 	// Compare ADC value to see if it is less than 1900 mV
-	if(adc_sample_mv < (uint16_t)1900){
+	if(uvp_adc_sample_mv < (uint16_t)1900)
+	{
 		GPIO_SetInactive(UVP_MAX_SHDN_PORT, UVP_MAX_SHDN_PIN); // shutdown amplifiers
 		uvp_result = true;
 	}
@@ -97,19 +99,46 @@ void uvp_uart_timer_cb(void)
 		uvp_result = false;
 	}
 	
-	// Print output to UART for debugging
 	#ifdef CFG_PRINTF
 	arch_printf("---------------------------------------------------------------------\n\r");
-	arch_printf("[UVP] Register Value: %u | Battery Voltage: %u mV \n\r", adc_sample_raw, adc_sample_mv);
+	arch_printf("[UVP] Register Value: %u | Battery Voltage: %u mV \n\r", uvp_adc_sample_raw, uvp_adc_sample_mv);
 	arch_printf("[UVP] System undervoltage status: %s \n\r", uvp_result ? "YES" : "NO");
+	#endif
+	
+	if (uvp_cccd_value == 0x0001 && (ke_state_get(TASK_APP) == APP_CONNECTED)) // notifications enabled and phone connected
+	{
+		#ifdef CFG_PRINTF
+		arch_printf("[UVP] LSB: 0x%02X, MSB: 0x%02X\n\r", uvp_adc_sample_mv & 0xFF, (uvp_adc_sample_mv >> 8) & 0xFF);
+		#endif
+		
+		// Create dynamic kernel messsage for BLE notifications
+		struct custs1_val_ntf_ind_req *req = KE_MSG_ALLOC_DYN(CUSTS1_VAL_NTF_REQ,
+																													prf_get_task_from_id(TASK_ID_CUSTS1),
+																													TASK_APP,
+																													custs1_val_ntf_ind_req,
+																													DEF_SVC1_BATTERY_VOLTAGE_CHAR_LEN);
+		
+		// Set the parameters of the struct defined above
+		req->handle = SVC1_IDX_BATTERY_VOLTAGE_VAL;
+		req->length = DEF_SVC1_BATTERY_VOLTAGE_CHAR_LEN;
+		req->notification = true;
+		
+		// Copies ADC value to notification payload
+		memcpy(req->value, &uvp_adc_sample_mv, DEF_SVC1_BATTERY_VOLTAGE_CHAR_LEN);
+		
+		// Sends notification to BLE stack
+		KE_MSG_SEND(req);
+	}
+	
+	#ifdef CFG_PRINTF
 	arch_printf("---------------------------------------------------------------------\n\r");
 	#endif
 	
 	// Disable ADC
 	adc_disable();
 	
-	// Restart this function every 0.5 seconds
-	uvp_timer = app_easy_timer(50, uvp_uart_timer_cb);
+	// Restart this function every 0.5 second
+	uvp_timer = app_easy_timer(50, uvp_wireless_timer_cb);
 }
 
 /*
@@ -121,12 +150,13 @@ void uvp_uart_timer_cb(void)
 void gpadc_wireless_timer_cb(void)
 {
 	// Intialize and enable ADC
+	// FIXME: change settings once implementing on custom PCB
 	gpadc_init_se(ADC_INPUT_SE_P0_6, 2, false, 0, ADC_INPUT_ATTN_4X, false, 0);
 	adc_enable();
 	
 	// Read ADC and convert results to millivolts
-	adc_sample_raw = gpadc_collect_sample();
-	adc_sample_mv = gpadc_sample_to_mv(adc_sample_raw);
+	sensor_adc_sample_raw = gpadc_collect_sample();
+	sensor_adc_sample_mv = gpadc_sample_to_mv(sensor_adc_sample_raw);
 	
 	// Create dynamic kernel messsage for BLE notifications
 	struct custs1_val_ntf_ind_req *req = KE_MSG_ALLOC_DYN(CUSTS1_VAL_NTF_REQ,
@@ -141,15 +171,12 @@ void gpadc_wireless_timer_cb(void)
 	req->notification = true;
 	
 	// Copies ADC value to notification payload
-	memcpy(req->value, &adc_sample_mv, DEF_SVC1_SENSOR_VOLTAGE_CHAR_LEN);
+	memcpy(req->value, &sensor_adc_sample_mv, DEF_SVC1_SENSOR_VOLTAGE_CHAR_LEN);
 	
-	// Print output to UART for debugging
 	#ifdef CFG_PRINTF
 	arch_printf("---------------------------------------------------------------------\n\r");
-	arch_printf("[GPADC] Register Value: %u | Sensor Voltage: %u mV \n\r", adc_sample_raw, adc_sample_mv);
-	
-	// Note that BLE print is in little-endian order and must be converted to big-endian order before turning into a decimal.
-	arch_printf("[BLE] LSB: 0x%02X, MSB: 0x%02X\n\r", adc_sample_mv & 0xFF, (adc_sample_mv >> 8) & 0xFF);
+	arch_printf("[GPADC] Register Value: %u | Sensor Voltage: %u mV \n\r", sensor_adc_sample_raw, sensor_adc_sample_mv);
+	arch_printf("[GPADC] LSB: 0x%02X, MSB: 0x%02X\n\r", sensor_adc_sample_mv & 0xFF, (sensor_adc_sample_mv >> 8) & 0xFF);
 	arch_printf("---------------------------------------------------------------------\n\r");
 	#endif
 	
@@ -159,10 +186,10 @@ void gpadc_wireless_timer_cb(void)
 	// Disable ADC
 	adc_disable();
 	
-	// If phone is still connected, restart timer and callback function (SDK line)
+	// If phone is still connected, restart timer and callback function
 	if (ke_state_get(TASK_APP) == APP_CONNECTED)
 	{
-			adc_timer = app_easy_timer(100, gpadc_wireless_timer_cb); // Restart this function every 1 second
+			sensor_timer = app_easy_timer(100, gpadc_wireless_timer_cb); // Restart this function every 1 second
 	}
 }
 
@@ -352,6 +379,10 @@ void user_catch_rest_hndl(ke_msg_id_t const msgid,
 					user_svc1_pwm_state_wr_ind_handler(msgid, msg_param, dest_id, src_id);
 					break;
 				
+				case SVC1_IDX_BATTERY_VOLTAGE_NTF_CFG:
+					user_svc1_battery_voltage_cfg_ind_handler(msgid, msg_param, dest_id, src_id);
+					break;
+				
 				default:
 					break;
 			}
@@ -376,8 +407,7 @@ void user_svc1_sensor_voltage_cfg_ind_handler(ke_msg_id_t const msgid,
                                          ke_task_id_t const dest_id,
                                          ke_task_id_t const src_id)
 {
-	// Copy the value written by the client into a local variable
-	// Server defined in user_custs1_def.c made the value a CCCD (2 bytes = 16 bits)
+	// Copy the CCCD value written by the client into a local variable
 	uint16_t cccd_value = 0; // set to zero for safe memcpy
 	memcpy(&cccd_value, param->value, param->length);
 	
@@ -385,14 +415,14 @@ void user_svc1_sensor_voltage_cfg_ind_handler(ke_msg_id_t const msgid,
 	arch_printf("[SENSOR VOLTAGE] cccd_value = %u \n\r", cccd_value);
 	#endif
 
-	if (cccd_value == 0x0001) // notifications enabled
+	if (cccd_value == 0x0001 && (ke_state_get(TASK_APP) == APP_CONNECTED)) // notifications enabled and phone connected
 	{
 		#ifdef CFG_PRINTF
     arch_printf("[SENSOR VOLTAGE] Starting the ADC. \n\r");
     #endif
 		
 		// Start ADC conversions
-		adc_timer = app_easy_timer(100, gpadc_wireless_timer_cb);
+		sensor_timer = app_easy_timer(100, gpadc_wireless_timer_cb);
 	}
 	else if (cccd_value == 0x0000) // notifications disabled
 	{
@@ -401,10 +431,10 @@ void user_svc1_sensor_voltage_cfg_ind_handler(ke_msg_id_t const msgid,
     #endif
 		
 		// Stop ADC conversions
-		if (adc_timer != EASY_TIMER_INVALID_TIMER) // if condition prevents cancel when timer does not exist
+		if (sensor_timer != EASY_TIMER_INVALID_TIMER) // if condition prevents cancel when timer does not exist
 		{
-			app_easy_timer_cancel(adc_timer);
-			adc_timer = EASY_TIMER_INVALID_TIMER;
+			app_easy_timer_cancel(sensor_timer);
+			sensor_timer = EASY_TIMER_INVALID_TIMER;
 		}
 	}
 }
@@ -477,11 +507,11 @@ void user_svc1_pwm_dc_and_offset_wr_ind_handler(ke_msg_id_t const msgid,
 	uint8_t offset_pwm3 = param->value[3];
 	
 	#ifdef CFG_PRINTF
-	arch_printf("[PWM FREQ] Bytes received. \n\r");
-	arch_printf("[PWM FREQ] dc_pwm2 value = %u (0x%02X) \n\r", dc_pwm2, dc_pwm2);
-	arch_printf("[PWM FREQ] offset_pwm2 value = %u (0x%02X) \n\r", offset_pwm2, offset_pwm2);
-	arch_printf("[PWM FREQ] dc_pwm3 value = %u (0x%02X) \n\r", dc_pwm3, dc_pwm3);
-	arch_printf("[PWM FREQ] offset_pwm3 value = %u (0x%02X) \n\r", offset_pwm3, offset_pwm3);
+	arch_printf("[PWM DC AND OFFSET] Bytes received. \n\r");
+	arch_printf("[PWM DC AND OFFSET] dc_pwm2 value = %u (0x%02X) \n\r", dc_pwm2, dc_pwm2);
+	arch_printf("[PWM DC AND OFFSET] offset_pwm2 value = %u (0x%02X) \n\r", offset_pwm2, offset_pwm2);
+	arch_printf("[PWM DC AND OFFSET] dc_pwm3 value = %u (0x%02X) \n\r", dc_pwm3, dc_pwm3);
+	arch_printf("[PWM DC AND OFFSET] offset_pwm3 value = %u (0x%02X) \n\r", offset_pwm3, offset_pwm3);
 	#endif
 	
 	// Apply values to function (which already has clamp protection for all inputs)
@@ -533,13 +563,43 @@ void user_svc1_pwm_state_wr_ind_handler(ke_msg_id_t const msgid,
 	}
 }
 
+void user_svc1_battery_voltage_cfg_ind_handler(ke_msg_id_t const msgid,
+                               struct custs1_val_write_ind const *param,
+                               ke_task_id_t const dest_id,
+                               ke_task_id_t const src_id)
+{
+	// Copy the CCCD value to local variable
+	uint16_t cccd_value = 0;
+	memcpy(&cccd_value, param->value, param->length);
+	
+	// Copy local variable into retained variable for notification logic in uvp_wireless_timer_cb
+	uvp_cccd_value = cccd_value;
+	
+	#ifdef CFG_PRINTF
+	arch_printf("[BATTERY VOLTAGE] cccd_value = %u \n\r", cccd_value);
+	#endif
+
+	if (uvp_cccd_value == 0x0001) // notifications enabled
+	{
+		#ifdef CFG_PRINTF
+    arch_printf("[BATTERY VOLTAGE] Starting notifications. \n\r");
+    #endif
+	}
+	else if (uvp_cccd_value == 0x0000) // notifications disabled
+	{	
+		#ifdef CFG_PRINTF
+    arch_printf("[BATTERY VOLTAGE] Stopping notifications. \n\r");
+    #endif
+	}
+}
+
 arch_main_loop_callback_ret_t user_app_on_system_powered(void)
 {
 	wdg_freeze(); // freeze watchdog timer
 	
 	// Initiates UVP timer only once
 	if(!uvp_timer_initialized){
-		uvp_timer = app_easy_timer(50, uvp_uart_timer_cb);
+		uvp_timer = app_easy_timer(50, uvp_wireless_timer_cb);
 		uvp_timer_initialized = true;
 	}
 	
@@ -552,8 +612,12 @@ void user_app_on_init(void)
 {
 	// Initialize user retained variables
 	uvp_timer_initialized = false;
-	adc_sample_raw = 0;
-	adc_sample_mv = 0;
+	uvp_cccd_value = 0;
+	uvp_adc_sample_raw = 0;
+	uvp_adc_sample_mv = 0;
+	
+	sensor_adc_sample_raw = 0;
+	sensor_adc_sample_mv = 0;
 	
 	// TODO: make changes to DCDC converter and observe how it changes output of GPIOs
 	// syscntl_dcdc_level_t vdd = syscntl_dcdc_get_level();

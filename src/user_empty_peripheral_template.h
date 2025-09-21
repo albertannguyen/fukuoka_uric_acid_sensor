@@ -61,19 +61,8 @@ i.e.
  ****************************************************************************************
  */
 
-/**
- ****************************************************************************************
- * @brief Timer-driven callback for undervoltage protection (UVP) logic.
- * @details
- *      This function is called periodically by a timer. It:
- *          1. Reads battery voltage using the ADC.
- *          2. Compares voltage to a threshold (i.e. 1.9 V).
- *          3. Shuts down or enables external peripherals via GPIO based on result of comparison.
- *      Timer is automatically restarted after each call.
- * @sa gpadc_init, gpadc_collect_sample, gpadc_sample_to_mv, GPIO_SetActive, GPIO_SetInactive, app_easy_timer
- ****************************************************************************************
- */
-void uvp_uart_timer_cb(void);
+// FIXME: comment
+void uvp_wireless_timer_cb(void);
 
 /**
  ****************************************************************************************
@@ -300,12 +289,18 @@ void user_svc1_pwm_state_wr_ind_handler(ke_msg_id_t const msgid,
                                ke_task_id_t const dest_id,
                                ke_task_id_t const src_id);
 
+// FIXME: comment
+void user_svc1_battery_voltage_cfg_ind_handler(ke_msg_id_t const msgid,
+                               struct custs1_val_write_ind const *param,
+                               ke_task_id_t const dest_id,
+                               ke_task_id_t const src_id);
+
 /**
  ****************************************************************************************
  * @brief User callback when the system is powered on.
  * @return GOTO_SLEEP to allow the system to enter low-power mode after execution.
  * @note Called repeatedly by the SDK main loop.
- * @sa wdg_freeze, wdg_resume, app_easy_timer, uvp_uart_timer_cb
+ * @sa wdg_freeze, wdg_resume, app_easy_timer, uvp_wireless_timer_cb
  ****************************************************************************************
  */
 arch_main_loop_callback_ret_t user_app_on_system_powered(void);

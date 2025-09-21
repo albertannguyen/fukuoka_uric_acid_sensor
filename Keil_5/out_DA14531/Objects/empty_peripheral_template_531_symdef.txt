@@ -1,4 +1,4 @@
-#<SYMDEFS># ARM Linker, 6230001: Last Updated: Sat Sep 20 22:12:59 2025
+#<SYMDEFS># ARM Linker, 6230001: Last Updated: Sun Sep 21 13:33:42 2025
 0x07f02001 T uECC_vli_add
 0x07f02019 T uECC_vli_sub
 0x07f02035 T uECC_vli_mult
@@ -918,11 +918,11 @@
 0x07fc11c9 T HardFault_HandlerC
 0x07fc1261 T NMI_HandlerC
 0x07fc28ad T main
-0x07fc3bb1 T rf_calibration
-0x07fc4941 T __scatterload_copy
-0x07fc494f T __scatterload_null
-0x07fc4951 T __scatterload_zeroinit
-0x07fc5c04 D stack_var
+0x07fc3bb5 T rf_calibration
+0x07fc4a11 T __scatterload_copy
+0x07fc4a1f T __scatterload_null
+0x07fc4a21 T __scatterload_zeroinit
+0x07fc5e2c D stack_var
 0x07fc8bc9 D lld_force_timeout_refresh
 0x07fc8d5a D rf_ldo_calibrated_value
 0x07fc8d5c D rf_ldo_calibration_pending

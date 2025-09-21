@@ -2,7 +2,7 @@
  ****************************************************************************************
  * @file user_periph_setup.c
  * @brief Peripherals setup and initialization.
- * @note Albert Nguyen, this file may run multiple times due to wake up from sleep.
+ * @note Albert Nguyen: this file run multiple times due to wake up from sleep.
  ****************************************************************************************
  */
 
