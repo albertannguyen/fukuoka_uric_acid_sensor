@@ -2,7 +2,7 @@
  ****************************************************************************************
  * @file user_periph_setup.c
  * @brief Peripherals setup and initialization.
- * @note Albert Nguyen
+ * @note Albert Nguyen, this file may run multiple times due to wake up from sleep.
  ****************************************************************************************
  */
 
@@ -20,7 +20,7 @@
 #include "uart.h"
 #include "syscntl.h"
 
-// set flag for UVP GPIO
+// set flag for UVP GPIO with initial value of true
 bool flag_gpio_uvp = true;
 
 /*
@@ -83,11 +83,10 @@ void set_pad_functions(void)
 			GPIO_ConfigurePin(UART2_TX_PORT, UART2_TX_PIN, OUTPUT, PID_UART2_TX, false);
 	#endif
 	
-	// set pin 9 (UVP_MAX_SHDN) as digital output high
-	// flag is so that it only initializes once
+	// FIXME: set pin 9 (UVP_MAX_SHDN) as digital output high
 	if(flag_gpio_uvp){
 		GPIO_ConfigurePin(UVP_MAX_SHDN_PORT, UVP_MAX_SHDN_PIN, OUTPUT, PID_GPIO, true);
-		flag_gpio_uvp = false;
+		flag_gpio_uvp = false; 	// flag is so that it only runs once at startup
 	}
 	
 	// set ADC pin as input

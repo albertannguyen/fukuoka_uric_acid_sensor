@@ -100,7 +100,7 @@ void uvp_uart_timer_cb(void)
 	// Print output to UART for debugging
 	#ifdef CFG_PRINTF
 	arch_printf("---------------------------------------------------------------------\n\r");
-	arch_printf("[UVP] Register Value: %d | Battery Voltage: %d mV \n\r", adc_sample_raw, adc_sample_mv);
+	arch_printf("[UVP] Register Value: %u | Battery Voltage: %u mV \n\r", adc_sample_raw, adc_sample_mv);
 	arch_printf("[UVP] System undervoltage status: %s \n\r", uvp_result ? "YES" : "NO");
 	arch_printf("---------------------------------------------------------------------\n\r");
 	#endif
@@ -146,7 +146,8 @@ void gpadc_wireless_timer_cb(void)
 	// Print output to UART for debugging
 	#ifdef CFG_PRINTF
 	arch_printf("---------------------------------------------------------------------\n\r");
-	arch_printf("[GPADC] Register Value: %d | Sensor Voltage: %d mV \n\r", adc_sample_raw, adc_sample_mv);
+	arch_printf("[GPADC] Register Value: %u | Sensor Voltage: %u mV \n\r", adc_sample_raw, adc_sample_mv);
+	
 	// Note that BLE print is in little-endian order and must be converted to big-endian order before turning into a decimal.
 	arch_printf("[BLE] LSB: 0x%02X, MSB: 0x%02X\n\r", adc_sample_mv & 0xFF, (adc_sample_mv >> 8) & 0xFF);
 	arch_printf("---------------------------------------------------------------------\n\r");
@@ -240,7 +241,7 @@ void timer2_pwm_set_frequency(tim0_2_clk_div_t clk_div, tim2_clk_src_t clk_src, 
 	tim2_config_t tmr_cfg =
 	{
 		.clk_source = clk_src,
-    .hw_pause = TIM2_HW_PAUSE_OFF // fixed for now
+    .hw_pause = TIM2_HW_PAUSE_OFF // WIP: kept off for now
 	};
 	
 	// Set timer parameters using structs above
@@ -259,7 +260,7 @@ void timer2_pwm_set_frequency(tim0_2_clk_div_t clk_div, tim2_clk_src_t clk_src, 
 	timer2_pwm_freq_set(input_freq / pwm_div, input_freq); // pwm_div promoted to 32 bits
 }
 
-void timer2_pwm_set_duty_offsets(uint8_t dc_pwm2, uint8_t offset_pwm2, uint8_t dc_pwm3, uint8_t offset_pwm3)
+void timer2_pwm_set_dc_and_offset(uint8_t dc_pwm2, uint8_t offset_pwm2, uint8_t dc_pwm3, uint8_t offset_pwm3)
 {
 	// Clamp input values if outside of valid 0-100% range
 	dc_pwm2 = CLAMP(dc_pwm2, 0, 100);
@@ -312,20 +313,11 @@ void timer2_pwm_disable(void)
 void user_on_connection(uint8_t connection_idx, struct gapc_connection_req_ind const *param)
 {
 	default_app_on_connection(connection_idx, param);
-	
-	// Run PWM
-	// Max voltage is 3.3 V on LP clock source, min is 0 V
-	// This is because GPIO is supplied by VBAT_HIGH or the 3.3 V LDO on devkit
-	// timer2_pwm_init(TIM0_2_CLK_DIV_8, TIM2_CLK_LP, TIM2_HW_PAUSE_OFF, 0xFFFF);
-	// timer2_pwm_enable(50, 0, 25, 0);
 }
 
 void user_on_disconnect(struct gapc_disconnect_ind const *param )
 {
 	default_app_on_disconnect(param);
-	
-	// Stop PWM
-	timer2_pwm_disable();
 }
 
 void user_catch_rest_hndl(ke_msg_id_t const msgid,
@@ -352,12 +344,16 @@ void user_catch_rest_hndl(ke_msg_id_t const msgid,
 					user_svc1_pwm_freq_wr_ind_handler(msgid, msg_param, dest_id, src_id);
 					break;
 				
+				case SVC1_IDX_PWM_DC_AND_OFFSET_VAL:
+					user_svc1_pwm_dc_and_offset_wr_ind_handler(msgid, msg_param, dest_id, src_id);
+					break;
+				
 				case SVC1_IDX_PWM_STATE_VAL:
 					user_svc1_pwm_state_wr_ind_handler(msgid, msg_param, dest_id, src_id);
 					break;
 				
 				default:
-						break;
+					break;
 			}
 		} break;
 	
@@ -371,7 +367,7 @@ void user_catch_rest_hndl(ke_msg_id_t const msgid,
 		} break;
 
 		default:
-				break;
+			break;
 	}
 }
 
@@ -384,14 +380,16 @@ void user_svc1_sensor_voltage_cfg_ind_handler(ke_msg_id_t const msgid,
 	// Server defined in user_custs1_def.c made the value a CCCD (2 bytes = 16 bits)
 	uint16_t cccd_value = 0; // set to zero for safe memcpy
 	memcpy(&cccd_value, param->value, param->length);
+	
+	#ifdef CFG_PRINTF
+	arch_printf("[SENSOR VOLTAGE] cccd_value = %u \n\r", cccd_value);
+	#endif
 
 	if (cccd_value == 0x0001) // notifications enabled
 	{
 		#ifdef CFG_PRINTF
-		arch_printf("***************** \n\r");
-		arch_printf("* Starting ADC. * \n\r");
-		arch_printf("***************** \n\r");
-		#endif
+    arch_printf("[SENSOR VOLTAGE] Starting the ADC. \n\r");
+    #endif
 		
 		// Start ADC conversions
 		adc_timer = app_easy_timer(100, gpadc_wireless_timer_cb);
@@ -399,10 +397,8 @@ void user_svc1_sensor_voltage_cfg_ind_handler(ke_msg_id_t const msgid,
 	else if (cccd_value == 0x0000) // notifications disabled
 	{
 		#ifdef CFG_PRINTF
-		arch_printf("**************** \n\r");
-		arch_printf("* Exiting ADC. * \n\r");
-		arch_printf("**************** \n\r");
-		#endif
+    arch_printf("[SENSOR VOLTAGE] Stopping the ADC. \n\r");
+    #endif
 		
 		// Stop ADC conversions
 		if (adc_timer != EASY_TIMER_INVALID_TIMER) // if condition prevents cancel when timer does not exist
@@ -418,27 +414,28 @@ void user_svc1_pwm_freq_wr_ind_handler(ke_msg_id_t const msgid,
                                ke_task_id_t const dest_id,
                                ke_task_id_t const src_id)
 {
-	#ifdef CFG_PRINTF
-	arch_printf("****************************** \n\r");
-	arch_printf("* Entering PWM FREQ handler. * \n\r");
-	arch_printf("****************************** \n\r");
-	#endif
-	
 	// check byte length of char val
 	if (param->length != DEF_SVC1_PWM_FREQ_CHAR_LEN)
 	{
     #ifdef CFG_PRINTF
-    arch_printf("[PWM FREQ] Invalid packet byte length: %d (expected %d) \n\r", param->length, DEF_SVC1_PWM_FREQ_CHAR_LEN);
+    arch_printf("[PWM FREQ] Invalid packet byte length: %u (expected %u) \n\r", param->length, DEF_SVC1_PWM_FREQ_CHAR_LEN);
     #endif
 		
     return; // ignore incomplete write
 	}
 	
-	// Parse little-endian byte array into expected values for PWM init function
-	// Byte order is [clk_div, clk_src, hw_pause, pwm_div_LSB, pwm_div_MSB]
+	// Parse byte array into expected values
+	// Byte order is [clk_div, clk_src, pwm_div_MSB, pwm_div_LSB]
 	uint8_t clk_div = param->value[0];
 	uint8_t clk_src = param->value[1];
-	uint16_t pwm_div = (param->value[2] | (param->value[3] << 8));
+	uint16_t pwm_div = ((param->value[2] << 8) | param->value[3]);
+	
+	#ifdef CFG_PRINTF
+	arch_printf("[PWM FREQ] Bytes received. \n\r");
+	arch_printf("[PWM FREQ] clk_div value = %u (0x%02X) \n\r", clk_div, clk_div);
+	arch_printf("[PWM FREQ] clk_src value = %u (0x%02X) \n\r", clk_src, clk_src);
+	arch_printf("[PWM FREQ] pwm_div value = %u (0x%04X) \n\r", pwm_div, pwm_div);
+	#endif
 
 	// Validate inputs with enum int literals from timer headers
 	if (clk_div > TIM0_2_CLK_DIV_8 || clk_src > TIM2_CLK_SYS) // literals are auto-promoted to uint8 for comparison
@@ -458,20 +455,56 @@ void user_svc1_pwm_freq_wr_ind_handler(ke_msg_id_t const msgid,
 	#endif
 }
 
-void user_svc1_pwm_state_wr_ind_handler(ke_msg_id_t const msgid,
+void user_svc1_pwm_dc_and_offset_wr_ind_handler(ke_msg_id_t const msgid,
                                struct custs1_val_write_ind const *param,
                                ke_task_id_t const dest_id,
                                ke_task_id_t const src_id)
 {
+	if (param->length != DEF_SVC1_PWM_DC_AND_OFFSET_CHAR_LEN)
+	{
+		#ifdef CFG_PRINTF
+		arch_printf("[PWM DC AND OFFSET] Invalid packet byte length: %u (expected %u) \n\r", param->length, DEF_SVC1_PWM_DC_AND_OFFSET_CHAR_LEN);
+		#endif
+		
+    return; // ignore incomplete write
+	}
+	
+	// Parse byte array into expected values
+	// Byte order is [dc_pwm2, offset_pwm2, dc_pwm3, offset_pwm3]
+	uint8_t dc_pwm2 = param->value[0];
+	uint8_t offset_pwm2 = param->value[1];
+	uint8_t dc_pwm3 = param->value[2];
+	uint8_t offset_pwm3 = param->value[3];
+	
 	#ifdef CFG_PRINTF
-	arch_printf("******************************* \n\r");
-	arch_printf("* Entering PWM State handler. * \n\r");
-	arch_printf("******************************* \n\r");
+	arch_printf("[PWM FREQ] Bytes received. \n\r");
+	arch_printf("[PWM FREQ] dc_pwm2 value = %u (0x%02X) \n\r", dc_pwm2, dc_pwm2);
+	arch_printf("[PWM FREQ] offset_pwm2 value = %u (0x%02X) \n\r", offset_pwm2, offset_pwm2);
+	arch_printf("[PWM FREQ] dc_pwm3 value = %u (0x%02X) \n\r", dc_pwm3, dc_pwm3);
+	arch_printf("[PWM FREQ] offset_pwm3 value = %u (0x%02X) \n\r", offset_pwm3, offset_pwm3);
 	#endif
 	
-	// Copy value to variable
+	// Apply values to function (which already has clamp protection for all inputs)
+	timer2_pwm_set_dc_and_offset(dc_pwm2, offset_pwm2, dc_pwm3, offset_pwm3);
+	
+	#ifdef CFG_PRINTF
+	arch_printf("[PWM DC AND OFFSET] SUCCESS on setting config. \n\r");
+	#endif
+}
+
+void user_svc1_pwm_state_wr_ind_handler(ke_msg_id_t const msgid,
+                               struct custs1_val_write_ind const *param,
+                               ke_task_id_t const dest_id,
+                               ke_task_id_t const src_id)
+{	
+	// Copy single byte value to variable
 	uint8_t state = 0;
-	memcpy(&state, &param->value, param->length);
+	memcpy(&state, param->value, param->length);
+	
+	#ifdef CFG_PRINTF
+	arch_printf("[PWM STATE] Byte received. \n\r");
+	arch_printf("[PWM STATE] state value = %u (0x%02X) \n\r", state, state);
+	#endif
 	
 	// Turns on or off PWM output based on value
 	if(state > 1)

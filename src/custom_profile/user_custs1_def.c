@@ -53,6 +53,8 @@ static const uint16_t att_desc_user_desc = ATT_DESC_CHAR_USER_DESCRIPTION;
 static const uint8_t SVC1_SENSOR_VOLTAGE_UUID_128[ATT_UUID_128_LEN] = DEF_SVC1_SENSOR_VOLTAGE_UUID_128;
 // PWM freq
 static const uint8_t SVC1_PWM_FREQ_UUID_128[ATT_UUID_128_LEN] = DEF_SVC1_PWM_FREQ_UUID_128;
+// PWM dc and offset
+static const uint8_t SVC1_PWM_DC_AND_OFFSET_UUID_128[ATT_UUID_128_LEN] = DEF_SVC1_PWM_DC_AND_OFFSET_UUID_128;
 // PWM state
 static const uint8_t SVC1_PWM_STATE_UUID_128[ATT_UUID_128_LEN] = DEF_SVC1_PWM_STATE_UUID_128;
 
@@ -108,10 +110,10 @@ const struct attm_desc_128 custs1_att_db[CUSTS1_IDX_NB] =
 	
 	// Value
 	[SVC1_IDX_SENSOR_VOLTAGE_VAL] = {
-		SVC1_SENSOR_VOLTAGE_UUID_128,
+		SVC1_SENSOR_VOLTAGE_UUID_128, // custom
 		ATT_UUID_128_LEN,
-		PERM(NTF, ENABLE),
-		DEF_SVC1_SENSOR_VOLTAGE_CHAR_LEN,
+		PERM(NTF, ENABLE), // custom
+		DEF_SVC1_SENSOR_VOLTAGE_CHAR_LEN, // custom
 		0,
 		NULL
 	},
@@ -131,6 +133,7 @@ const struct attm_desc_128 custs1_att_db[CUSTS1_IDX_NB] =
 		(uint8_t*)&att_desc_user_desc,
 		ATT_UUID_16_LEN,
 		PERM(RD, ENABLE),
+		// next 3 lines are custom
 		sizeof(DEF_SVC1_SENSOR_VOLTAGE_USER_DESC) - 1,
 		sizeof(DEF_SVC1_SENSOR_VOLTAGE_USER_DESC) - 1,
 		(uint8_t *) DEF_SVC1_SENSOR_VOLTAGE_USER_DESC
@@ -154,7 +157,7 @@ const struct attm_desc_128 custs1_att_db[CUSTS1_IDX_NB] =
 	
 	// Value
 	[SVC1_IDX_PWM_FREQ_VAL] = {
-		SVC1_PWM_FREQ_UUID_128, // WIP: why set equal to on top and not put DEF here instead?
+		SVC1_PWM_FREQ_UUID_128,
 		ATT_UUID_128_LEN,
 		PERM(WR, ENABLE) | PERM(WRITE_REQ, ENABLE),
     DEF_SVC1_PWM_FREQ_CHAR_LEN,
@@ -170,6 +173,42 @@ const struct attm_desc_128 custs1_att_db[CUSTS1_IDX_NB] =
     sizeof(DEF_SVC1_PWM_FREQ_USER_DESC) - 1,
 		sizeof(DEF_SVC1_PWM_FREQ_USER_DESC) - 1,
     (uint8_t *) DEF_SVC1_PWM_FREQ_USER_DESC
+	},
+	
+	/*
+	----------------------------------
+	- PWM DC and Offset Characteristic
+	----------------------------------
+	*/
+	
+	// Declaration
+	[SVC1_IDX_PWM_DC_AND_OFFSET_CHAR] = {
+		(uint8_t*)&att_decl_char,
+		ATT_UUID_16_LEN,
+		PERM(RD, ENABLE),
+		0,
+		0,
+		NULL
+	},
+	
+	// Value
+	[SVC1_IDX_PWM_DC_AND_OFFSET_VAL] = {
+		SVC1_PWM_DC_AND_OFFSET_UUID_128,
+		ATT_UUID_128_LEN,
+		PERM(WR, ENABLE) | PERM(WRITE_REQ, ENABLE),
+    DEF_SVC1_PWM_DC_AND_OFFSET_CHAR_LEN,
+		0,
+		NULL
+	},
+	
+	// User description
+	[SVC1_IDX_PWM_DC_AND_OFFSET_USER_DESC] = {
+		(uint8_t*)&att_desc_user_desc,
+		ATT_UUID_16_LEN,
+		PERM(RD, ENABLE),
+    sizeof(DEF_SVC1_PWM_DC_AND_OFFSET_USER_DESC) - 1,
+		sizeof(DEF_SVC1_PWM_DC_AND_OFFSET_USER_DESC) - 1,
+    (uint8_t *) DEF_SVC1_PWM_DC_AND_OFFSET_USER_DESC
 	},
 	
 	/*

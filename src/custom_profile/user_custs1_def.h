@@ -54,10 +54,15 @@
 #define DEF_SVC1_PWM_FREQ_CHAR_LEN 4
 #define DEF_SVC1_PWM_FREQ_USER_DESC "Timer2 PWM Frequency Config"
 
+// Define PWM dc and offset
+#define DEF_SVC1_PWM_DC_AND_OFFSET_UUID_128 {0x72,0x50,0x8a,0x2d,0xca,0xcf,0x9c,0xb6,0x51,0x4f,0x07,0xbc,0xf6,0x0d,0xff,0x3a}
+#define DEF_SVC1_PWM_DC_AND_OFFSET_CHAR_LEN 4
+#define DEF_SVC1_PWM_DC_AND_OFFSET_USER_DESC "Timer2 PWM2 and PWM3 Duty Cycles and Offsets"
+
 // Define PWM state
 #define DEF_SVC1_PWM_STATE_UUID_128 {0x42,0x2d,0x1b,0x1c,0x46,0x02,0x26,0xb4,0xd0,0x4a,0x1e,0xd5,0x25,0xf9,0xc3,0x2d}
 #define DEF_SVC1_PWM_STATE_CHAR_LEN 1
-#define DEF_SVC1_PWM_STATE_USER_DESC "PWM State On/Off"
+#define DEF_SVC1_PWM_STATE_USER_DESC "Timer2 PWM State On/Off"
 
 // WIP: Define standard bluetooth battery service to report battery voltage level to app below, ideally in a separate service
 
@@ -77,6 +82,10 @@ enum
 		SVC1_IDX_PWM_FREQ_CHAR,
 		SVC1_IDX_PWM_FREQ_VAL,
 		SVC1_IDX_PWM_FREQ_USER_DESC,
+	
+		SVC1_IDX_PWM_DC_AND_OFFSET_CHAR,
+		SVC1_IDX_PWM_DC_AND_OFFSET_VAL,
+		SVC1_IDX_PWM_DC_AND_OFFSET_USER_DESC,
 	
 		SVC1_IDX_PWM_STATE_CHAR,
 		SVC1_IDX_PWM_STATE_VAL,
