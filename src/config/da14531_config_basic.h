@@ -65,7 +65,6 @@
 /* will be used.                                                                                                */
 /****************************************************************************************************************/
 
-// enabled UART for debugging
 #define CFG_PRINTF
 #ifdef CFG_PRINTF
     #define CFG_PRINTF_UART2
