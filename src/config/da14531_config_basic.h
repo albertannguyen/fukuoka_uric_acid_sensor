@@ -2,7 +2,7 @@
  ****************************************************************************************
  * @file da14531_config_basic.h
  * @brief Basic compile configuration file.
- * @note Albert Nguyen defined CFG_PRINTF
+ * @note Albert Nguyen: defined CFG_PRINTF
  ****************************************************************************************
  */
 

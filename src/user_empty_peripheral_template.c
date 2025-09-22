@@ -1,10 +1,10 @@
 /**
  ****************************************************************************************
  * @file user_empty_peripheral_template.c
- * @brief Empty peripheral template project source code.
+ * @brief Empty peripheral template project source code with user code.
  * @addtogroup APP
  * @{
- * @note Albert Nguyen
+ * @author Albert Nguyen
  ****************************************************************************************
  */
 
@@ -38,8 +38,6 @@
 #include "syscntl.h"
 
 // For BLE notifications
-// FIXME: included this in header file instead
-// #include "custs1_task.h"
 #include "user_custs1_def.h"
 
 /*
@@ -48,7 +46,7 @@
  ****************************************************************************************
  */
 
-// Clamp macro
+// Macro that clamps value to the range [min, max]
 #define CLAMP(value, min, max) ((value) < (min) ? (min) : ((value) > (max) ? (max) : (value)))
 
 // Constants from datasheet
@@ -57,14 +55,25 @@ static const uint16_t MAX_PWM_DIV     = 16383U;
 static const uint32_t SYS_CLK_FREQ_HZ = 16000000U;
 static const uint32_t LP_CLK_FREQ_HZ  = 32000U;
 
-// UVP variables
+/*
+----------------------------------
+- Retained / Global variables
+----------------------------------
+*/
+
+// These variables are retained across sleep cycles
+
+// UVP (Undervoltage Protection) variables
 timer_hnd uvp_timer __SECTION_ZERO("retention_mem_area0");
 bool uvp_timer_initialized __SECTION_ZERO("retention_mem_area0");
+uint16_t uvp_cccd_value __SECTION_ZERO("retention_mem_area0");
+uint16_t uvp_adc_sample_raw __SECTION_ZERO("retention_mem_area0");
+uint16_t uvp_adc_sample_mv __SECTION_ZERO("retention_mem_area0");
 
-// ADC variables
-timer_hnd adc_timer __SECTION_ZERO("retention_mem_area0");
-uint16_t adc_sample_raw __SECTION_ZERO("retention_mem_area0");
-uint16_t adc_sample_mv __SECTION_ZERO("retention_mem_area0");
+// Sensor voltage variables
+timer_hnd sensor_timer __SECTION_ZERO("retention_mem_area0");
+uint16_t sensor_adc_sample_raw __SECTION_ZERO("retention_mem_area0");
+uint16_t sensor_adc_sample_mv __SECTION_ZERO("retention_mem_area0");
 
 /*
  ****************************************************************************************
@@ -72,22 +81,23 @@ uint16_t adc_sample_mv __SECTION_ZERO("retention_mem_area0");
  ****************************************************************************************
 */
 
-void uvp_uart_timer_cb(void)
+void uvp_wireless_timer_cb(void)
 {
 	// Declared for UART printout
 	bool uvp_result;
 	
-	// Intialize and enable ADC
-	// FIXME: need to initialize ADC pin in user_periph_setup.c and .h before flashing code to custom PCB
+	// Initialize and enable ADC for a single conversion of VBAT HIGH rail
+	// FIXME: change settings once implementing on custom PCB, ensure ADC reads VBAT HIGH
 	gpadc_init_se(ADC_INPUT_SE_VBAT_HIGH, 2, false, 0, ADC_INPUT_ATTN_4X, false, 0);
 	adc_enable();
 	
 	// Read ADC and convert results to millivolts
-	adc_sample_raw = gpadc_collect_sample();
-	adc_sample_mv = gpadc_sample_to_mv(adc_sample_raw);
+	uvp_adc_sample_raw = gpadc_collect_sample();
+	uvp_adc_sample_mv = gpadc_sample_to_mv(uvp_adc_sample_raw);
 	
-	// Compare ADC value to see if it is less than 1900 mV
-	if(adc_sample_mv < (uint16_t)1900){
+	// Compare ADC value to see if it is less than chosen UVP threshold (1900 mV)
+	if(uvp_adc_sample_mv < (uint16_t)1900)
+	{
 		GPIO_SetInactive(UVP_MAX_SHDN_PORT, UVP_MAX_SHDN_PIN); // shutdown amplifiers
 		uvp_result = true;
 	}
@@ -97,19 +107,46 @@ void uvp_uart_timer_cb(void)
 		uvp_result = false;
 	}
 	
-	// Print output to UART for debugging
 	#ifdef CFG_PRINTF
 	arch_printf("---------------------------------------------------------------------\n\r");
-	arch_printf("[UVP] Register Value: %u | Battery Voltage: %u mV \n\r", adc_sample_raw, adc_sample_mv);
+	arch_printf("[UVP] Register Value: %u | Battery Voltage: %u mV \n\r", uvp_adc_sample_raw, uvp_adc_sample_mv);
 	arch_printf("[UVP] System undervoltage status: %s \n\r", uvp_result ? "YES" : "NO");
+	#endif
+	
+	if (uvp_cccd_value == 0x0001 && (ke_state_get(TASK_APP) == APP_CONNECTED)) // notifications enabled and phone connected
+	{
+		#ifdef CFG_PRINTF
+		arch_printf("[UVP] LSB: 0x%02X, MSB: 0x%02X\n\r", uvp_adc_sample_mv & 0xFF, (uvp_adc_sample_mv >> 8) & 0xFF);
+		#endif
+		
+		// Create dynamic kernel message for notifications
+		struct custs1_val_ntf_ind_req *req = KE_MSG_ALLOC_DYN(CUSTS1_VAL_NTF_REQ,
+																													prf_get_task_from_id(TASK_ID_CUSTS1),
+																													TASK_APP,
+																													custs1_val_ntf_ind_req,
+																													DEF_SVC1_BATTERY_VOLTAGE_CHAR_LEN);
+		
+		// Populate the notification structure
+		req->handle = SVC1_IDX_BATTERY_VOLTAGE_VAL;
+		req->length = DEF_SVC1_BATTERY_VOLTAGE_CHAR_LEN;
+		req->notification = true;
+		
+		// Copies UVP ADC value to notification payload
+		memcpy(req->value, &uvp_adc_sample_mv, DEF_SVC1_BATTERY_VOLTAGE_CHAR_LEN);
+		
+		// Send structure to the kernel to be transmitted by the BLE stack
+		KE_MSG_SEND(req);
+	}
+	
+	#ifdef CFG_PRINTF
 	arch_printf("---------------------------------------------------------------------\n\r");
 	#endif
 	
-	// Disable ADC
+	// Disable ADC to conserve power
 	adc_disable();
 	
-	// Restart this function every 0.5 seconds
-	uvp_timer = app_easy_timer(50, uvp_uart_timer_cb);
+	// Restart this function every 0.5 second
+	uvp_timer = app_easy_timer(50, uvp_wireless_timer_cb);
 }
 
 /*
@@ -120,62 +157,60 @@ void uvp_uart_timer_cb(void)
 
 void gpadc_wireless_timer_cb(void)
 {
-	// Intialize and enable ADC
+	// Initialize and enable ADC for a single conversion of sensor voltage
+	// FIXME: change settings once implementing on custom PCB
 	gpadc_init_se(ADC_INPUT_SE_P0_6, 2, false, 0, ADC_INPUT_ATTN_4X, false, 0);
 	adc_enable();
 	
 	// Read ADC and convert results to millivolts
-	adc_sample_raw = gpadc_collect_sample();
-	adc_sample_mv = gpadc_sample_to_mv(adc_sample_raw);
+	sensor_adc_sample_raw = gpadc_collect_sample();
+	sensor_adc_sample_mv = gpadc_sample_to_mv(sensor_adc_sample_raw);
 	
-	// Create dynamic kernel messsage for BLE notifications
+	// Create dynamic kernel message for notifications
 	struct custs1_val_ntf_ind_req *req = KE_MSG_ALLOC_DYN(CUSTS1_VAL_NTF_REQ,
 																												prf_get_task_from_id(TASK_ID_CUSTS1),
 																												TASK_APP,
 																												custs1_val_ntf_ind_req,
 																												DEF_SVC1_SENSOR_VOLTAGE_CHAR_LEN);
 	
-	// Set the parameters of the struct defined above
+	// Populate the notification structure
 	req->handle = SVC1_IDX_SENSOR_VOLTAGE_VAL;
 	req->length = DEF_SVC1_SENSOR_VOLTAGE_CHAR_LEN;
 	req->notification = true;
 	
-	// Copies ADC value to notification payload
-	memcpy(req->value, &adc_sample_mv, DEF_SVC1_SENSOR_VOLTAGE_CHAR_LEN);
+	// Copies sensor voltage ADC value to notification payload
+	memcpy(req->value, &sensor_adc_sample_mv, DEF_SVC1_SENSOR_VOLTAGE_CHAR_LEN);
 	
-	// Print output to UART for debugging
 	#ifdef CFG_PRINTF
 	arch_printf("---------------------------------------------------------------------\n\r");
-	arch_printf("[GPADC] Register Value: %u | Sensor Voltage: %u mV \n\r", adc_sample_raw, adc_sample_mv);
-	
-	// Note that BLE print is in little-endian order and must be converted to big-endian order before turning into a decimal.
-	arch_printf("[BLE] LSB: 0x%02X, MSB: 0x%02X\n\r", adc_sample_mv & 0xFF, (adc_sample_mv >> 8) & 0xFF);
+	arch_printf("[GPADC] Register Value: %u | Sensor Voltage: %u mV \n\r", sensor_adc_sample_raw, sensor_adc_sample_mv);
+	arch_printf("[GPADC] LSB: 0x%02X, MSB: 0x%02X\n\r", sensor_adc_sample_mv & 0xFF, (sensor_adc_sample_mv >> 8) & 0xFF);
 	arch_printf("---------------------------------------------------------------------\n\r");
 	#endif
 	
-	// Sends notification to BLE stack
+	// Send structure to the kernel to be transmitted by the BLE stack
 	KE_MSG_SEND(req);
 	
-	// Disable ADC
+	// Disable ADC to conserve power
 	adc_disable();
 	
-	// If phone is still connected, restart timer and callback function (SDK line)
+	// If phone is still connected, restart this function every 1 second
 	if (ke_state_get(TASK_APP) == APP_CONNECTED)
 	{
-			adc_timer = app_easy_timer(100, gpadc_wireless_timer_cb); // Restart this function every 1 second
+			sensor_timer = app_easy_timer(100, gpadc_wireless_timer_cb);
 	}
 }
 
 // TODO: read datasheet and calculate manual mode settings that gives highest sampling rate and accuracy
 void gpadc_init_se(adc_input_se_t input, uint8_t smpl_time_mult, bool continuous, uint8_t interval_mult, adc_input_attn_t input_attenuator, bool chopping, uint8_t oversampling)
 {
-	// ADC config structure
+	// Build ADC config structure for single-ended measurement
 	adc_config_t adc_config_struct =
 	{
 		// ADC fixed to single-ended due to PCB layout
 		.input_mode = ADC_INPUT_MODE_SINGLE_ENDED,
 
-		// Adjustable values
+		// Adjustable values from ADC parameters
 		.input = input,
 		.smpl_time_mult = smpl_time_mult,
 		.continuous = continuous,
@@ -185,29 +220,29 @@ void gpadc_init_se(adc_input_se_t input, uint8_t smpl_time_mult, bool continuous
 		.oversampling = oversampling
 	};
 	
-	// Initialize ADC with structure
+	// Initialize ADC with the configuration structure
 	adc_init(&adc_config_struct);
 	
-	// Disable input shifter
+	// Disable input shifter (not needed)
 	adc_input_shift_disable();
 	
-	// Disable die temperature sensor
+	// Disable die temperature sensor (may lower noise)
 	adc_temp_sensor_disable();
 	
-	// Set ADC statup delay after LDO powers on as recommended by datasheet (16 Mhz = 16 us delay)
-	adc_delay_set(64);
+	// Set ADC startup delay after LDO powers on
+	adc_delay_set(64); // for 16 Mhz system clock, 16 us delay is recommended by datasheet
 	
-	// Enable load current on ADC LDO for additional stability
+	// Enable load current for ADC's LDO to improve stability during conversion
 	adc_ldo_const_current_enable();
 
-	// Perform offset calibration of the ADC
+	// WIP: Perform offset calibration to remove DC offsets before sampling, needs more bench testing
 	adc_reset_offsets();
 	adc_offset_calibrate(ADC_INPUT_MODE_SINGLE_ENDED);
 }
 
 uint16_t gpadc_collect_sample(void)
 {
-	// Raw sample is processed using ADC parameters and corrected conversion is returned
+	// Fetch raw ADC sample then apply SDK correction routine (config-dependent)
 	uint16_t sample = adc_correct_sample(adc_get_sample());
 	
 	return (sample);
@@ -233,7 +268,7 @@ uint16_t gpadc_sample_to_mv(uint16_t sample)
 
 void timer2_pwm_set_frequency(tim0_2_clk_div_t clk_div, tim2_clk_src_t clk_src, uint16_t pwm_div)
 {
-	// Define timer parameters in struct
+	// Create config structures for clock division and timer2 config
 	tim0_2_clk_div_config_t clk_cfg = {
 		.clk_div = clk_div
 	};
@@ -241,22 +276,22 @@ void timer2_pwm_set_frequency(tim0_2_clk_div_t clk_div, tim2_clk_src_t clk_src, 
 	tim2_config_t tmr_cfg =
 	{
 		.clk_source = clk_src,
-    .hw_pause = TIM2_HW_PAUSE_OFF // WIP: kept off for now
+    .hw_pause = TIM2_HW_PAUSE_OFF // WIP: Keep hardware pause off for now
 	};
 	
-	// Set timer parameters using structs above
+	// Apply clock division and timer config
 	timer0_2_clk_div_set(&clk_cfg);
 	timer2_config(&tmr_cfg);
 	
-	// Define PWM parameters
+	// Compute input clock frequency from selected clock source and divider
 	uint8_t clk_div_int = 1 << clk_div;
 	uint32_t clk_freq = (clk_src == TIM2_CLK_SYS) ? SYS_CLK_FREQ_HZ : LP_CLK_FREQ_HZ,
 					 input_freq = clk_freq / clk_div_int;
 
-	// Clamp pwm_div if beyond datasheet range of 2 to (2^14 - 1)
+	// Clamp pwm_div to datasheet allowed range
 	pwm_div = CLAMP(pwm_div, MIN_PWM_DIV, MAX_PWM_DIV);
 
-	// Set PWM frequency based on datasheet for Timer 2
+	// Set PWM frequency based on formula from datasheet for Timer 2
 	timer2_pwm_freq_set(input_freq / pwm_div, input_freq); // pwm_div promoted to 32 bits
 }
 
@@ -268,7 +303,7 @@ void timer2_pwm_set_dc_and_offset(uint8_t dc_pwm2, uint8_t offset_pwm2, uint8_t 
 	dc_pwm3 = CLAMP(dc_pwm3, 0, 100);
 	offset_pwm3 = CLAMP(offset_pwm3, 0, 100);
 	
-	// Define PWM parameters in struct
+	// Create config structures for PWM signals
 	tim2_pwm_config_t pwm2_cfg = {
 		.pwm_signal = TIM2_PWM_2,
 		.pwm_dc = dc_pwm2,
@@ -281,7 +316,7 @@ void timer2_pwm_set_dc_and_offset(uint8_t dc_pwm2, uint8_t offset_pwm2, uint8_t 
 		.pwm_offset = offset_pwm3
 	};
 	
-	// Set PWM parameters
+	// Apply configuration to PWM signals
 	timer2_pwm_signal_config(&pwm2_cfg);
 	timer2_pwm_signal_config(&pwm3_cfg);
 }
@@ -291,13 +326,13 @@ void timer2_pwm_enable(void)
 	// Enable timer input clock
 	timer0_2_clk_enable();
 	
-	// Enable PWM signal
+	// Enable PWM outputs
 	timer2_start();
 }
 
 void timer2_pwm_disable(void)
 {
-	// Disable PWM signal
+	// Disable PWM outputs
 	timer2_stop();
 
 	// Disable timer input clock
@@ -312,11 +347,19 @@ void timer2_pwm_disable(void)
 
 void user_on_connection(uint8_t connection_idx, struct gapc_connection_req_ind const *param)
 {
+	#ifdef CFG_PRINTF
+	arch_printf("[BLE] Phone connected to DA14531. \n\r");
+	#endif
+	
 	default_app_on_connection(connection_idx, param);
 }
 
 void user_on_disconnect(struct gapc_disconnect_ind const *param )
 {
+	#ifdef CFG_PRINTF
+	arch_printf("[BLE] Phone disconnected from DA14531. \n\r");
+	#endif
+	
 	default_app_on_disconnect(param);
 }
 
@@ -327,7 +370,7 @@ void user_catch_rest_hndl(ke_msg_id_t const msgid,
 {
 	switch(msgid)
 	{
-		// Checks for case when client writes data to a custom characteristic value
+		// Checks for case when phone writes data to a custom characteristic value
 		case CUSTS1_VAL_WRITE_IND:
 		{
 			// Param is generic constant so must change type to expected struct by casting it (SDK line)
@@ -352,11 +395,53 @@ void user_catch_rest_hndl(ke_msg_id_t const msgid,
 					user_svc1_pwm_state_wr_ind_handler(msgid, msg_param, dest_id, src_id);
 					break;
 				
+				case SVC1_IDX_BATTERY_VOLTAGE_NTF_CFG:
+					user_svc1_battery_voltage_cfg_ind_handler(msgid, msg_param, dest_id, src_id);
+					break;
+				
 				default:
 					break;
 			}
 		} break;
 	
+		// Checks for case when client reads a custom characteristic value
+		case CUSTS1_VALUE_REQ_IND:
+		{
+			struct custs1_value_req_ind const *msg_param = (struct custs1_value_req_ind const *) param;
+			
+			switch (msg_param->att_idx)
+			{
+				case SVC1_IDX_SENSOR_VOLTAGE_VAL:
+					user_svc1_read_sensor_voltage_handler(msgid, msg_param, dest_id, src_id);
+					break;
+				
+				case SVC1_IDX_BATTERY_VOLTAGE_VAL:
+					user_svc1_read_battery_voltage_handler(msgid, msg_param, dest_id, src_id);
+					break;
+
+				default: // default read case is an SDK code snippet
+				{
+						// Send Error message
+						struct custs1_value_req_rsp *rsp = KE_MSG_ALLOC(CUSTS1_VALUE_REQ_RSP,
+																														src_id,
+																														dest_id,
+																														custs1_value_req_rsp);
+
+						// Provide the connection index.
+						rsp->conidx  = app_env[msg_param->conidx].conidx;
+						// Provide the attribute index.
+						rsp->att_idx = msg_param->att_idx;
+						// Force current length to zero.
+						rsp->length = 0;
+						// Set Error status
+						rsp->status  = ATT_ERR_APP_ERROR;
+						// Send message
+						KE_MSG_SEND(rsp);
+				} break;
+			}
+		} break;
+		
+		// Code snippet given and required by SDK
 		case GATTC_EVENT_REQ_IND:
 		{
 			// Confirm unhandled indication to avoid GATT timeout
@@ -376,8 +461,7 @@ void user_svc1_sensor_voltage_cfg_ind_handler(ke_msg_id_t const msgid,
                                          ke_task_id_t const dest_id,
                                          ke_task_id_t const src_id)
 {
-	// Copy the value written by the client into a local variable
-	// Server defined in user_custs1_def.c made the value a CCCD (2 bytes = 16 bits)
+	// Copy CCCD value written by the phone into a local variable
 	uint16_t cccd_value = 0; // set to zero for safe memcpy
 	memcpy(&cccd_value, param->value, param->length);
 	
@@ -385,14 +469,14 @@ void user_svc1_sensor_voltage_cfg_ind_handler(ke_msg_id_t const msgid,
 	arch_printf("[SENSOR VOLTAGE] cccd_value = %u \n\r", cccd_value);
 	#endif
 
-	if (cccd_value == 0x0001) // notifications enabled
+	if (cccd_value == 0x0001 && (ke_state_get(TASK_APP) == APP_CONNECTED)) // notifications enabled and phone connected
 	{
 		#ifdef CFG_PRINTF
     arch_printf("[SENSOR VOLTAGE] Starting the ADC. \n\r");
     #endif
 		
-		// Start ADC conversions
-		adc_timer = app_easy_timer(100, gpadc_wireless_timer_cb);
+		// Start ADC conversions on 1 second timer
+		sensor_timer = app_easy_timer(100, gpadc_wireless_timer_cb);
 	}
 	else if (cccd_value == 0x0000) // notifications disabled
 	{
@@ -401,10 +485,11 @@ void user_svc1_sensor_voltage_cfg_ind_handler(ke_msg_id_t const msgid,
     #endif
 		
 		// Stop ADC conversions
-		if (adc_timer != EASY_TIMER_INVALID_TIMER) // if condition prevents cancel when timer does not exist
+		if (sensor_timer != EASY_TIMER_INVALID_TIMER) // prevents cancel when timer does not exist
 		{
-			app_easy_timer_cancel(adc_timer);
-			adc_timer = EASY_TIMER_INVALID_TIMER;
+			// Cancels existing timer
+			app_easy_timer_cancel(sensor_timer);
+			sensor_timer = EASY_TIMER_INVALID_TIMER;
 		}
 	}
 }
@@ -414,7 +499,7 @@ void user_svc1_pwm_freq_wr_ind_handler(ke_msg_id_t const msgid,
                                ke_task_id_t const dest_id,
                                ke_task_id_t const src_id)
 {
-	// check byte length of char val
+	// Validate length of characteristic value written by the phone
 	if (param->length != DEF_SVC1_PWM_FREQ_CHAR_LEN)
 	{
     #ifdef CFG_PRINTF
@@ -447,7 +532,7 @@ void user_svc1_pwm_freq_wr_ind_handler(ke_msg_id_t const msgid,
 		return; // ignore invalid write
 	}
 
-	// Apply config to Timer 2
+	// Apply values to function
 	timer2_pwm_set_frequency((tim0_2_clk_div_t)clk_div, (tim2_clk_src_t)clk_src, pwm_div); // note that pwm_div is clamped in this function already
 	
 	#ifdef CFG_PRINTF
@@ -460,6 +545,7 @@ void user_svc1_pwm_dc_and_offset_wr_ind_handler(ke_msg_id_t const msgid,
                                ke_task_id_t const dest_id,
                                ke_task_id_t const src_id)
 {
+	// Validate length of characteristic value written by the phone
 	if (param->length != DEF_SVC1_PWM_DC_AND_OFFSET_CHAR_LEN)
 	{
 		#ifdef CFG_PRINTF
@@ -477,11 +563,11 @@ void user_svc1_pwm_dc_and_offset_wr_ind_handler(ke_msg_id_t const msgid,
 	uint8_t offset_pwm3 = param->value[3];
 	
 	#ifdef CFG_PRINTF
-	arch_printf("[PWM FREQ] Bytes received. \n\r");
-	arch_printf("[PWM FREQ] dc_pwm2 value = %u (0x%02X) \n\r", dc_pwm2, dc_pwm2);
-	arch_printf("[PWM FREQ] offset_pwm2 value = %u (0x%02X) \n\r", offset_pwm2, offset_pwm2);
-	arch_printf("[PWM FREQ] dc_pwm3 value = %u (0x%02X) \n\r", dc_pwm3, dc_pwm3);
-	arch_printf("[PWM FREQ] offset_pwm3 value = %u (0x%02X) \n\r", offset_pwm3, offset_pwm3);
+	arch_printf("[PWM DC AND OFFSET] Bytes received. \n\r");
+	arch_printf("[PWM DC AND OFFSET] dc_pwm2 value = %u (0x%02X) \n\r", dc_pwm2, dc_pwm2);
+	arch_printf("[PWM DC AND OFFSET] offset_pwm2 value = %u (0x%02X) \n\r", offset_pwm2, offset_pwm2);
+	arch_printf("[PWM DC AND OFFSET] dc_pwm3 value = %u (0x%02X) \n\r", dc_pwm3, dc_pwm3);
+	arch_printf("[PWM DC AND OFFSET] offset_pwm3 value = %u (0x%02X) \n\r", offset_pwm3, offset_pwm3);
 	#endif
 	
 	// Apply values to function (which already has clamp protection for all inputs)
@@ -533,33 +619,129 @@ void user_svc1_pwm_state_wr_ind_handler(ke_msg_id_t const msgid,
 	}
 }
 
+void user_svc1_battery_voltage_cfg_ind_handler(ke_msg_id_t const msgid,
+                               struct custs1_val_write_ind const *param,
+                               ke_task_id_t const dest_id,
+                               ke_task_id_t const src_id)
+{
+	// Copy CCCD value written by the phone into a local variable
+	uint16_t cccd_value = 0;
+	memcpy(&cccd_value, param->value, param->length);
+	
+	// Copy local variable into retained variable for notification logic in uvp_wireless_timer_cb
+	uvp_cccd_value = cccd_value;
+	
+	#ifdef CFG_PRINTF
+	arch_printf("[BATTERY VOLTAGE] cccd_value = %u \n\r", cccd_value);
+	#endif
+
+	if (uvp_cccd_value == 0x0001) // notifications enabled
+	{
+		#ifdef CFG_PRINTF
+    arch_printf("[BATTERY VOLTAGE] Starting notifications. \n\r");
+    #endif
+	}
+	else if (uvp_cccd_value == 0x0000) // notifications disabled
+	{	
+		#ifdef CFG_PRINTF
+    arch_printf("[BATTERY VOLTAGE] Stopping notifications. \n\r");
+    #endif
+	}
+}
+
+void user_svc1_read_sensor_voltage_handler(ke_msg_id_t const msgid,
+                                           struct custs1_value_req_ind const *param,
+                                           ke_task_id_t const dest_id,
+                                           ke_task_id_t const src_id)
+{
+	#ifdef CFG_PRINTF
+	arch_printf("[READ SENSOR VOLTAGE] READING last saved value of sensor voltage. \n\r");
+	arch_printf("[READ SENSOR VOLTAGE] Register Value: %u | Sensor Voltage: %u mV \n\r", sensor_adc_sample_raw, sensor_adc_sample_mv);
+	arch_printf("[READ SENSOR VOLTAGE] LSB: 0x%02X, MSB: 0x%02X\n\r", sensor_adc_sample_mv & 0xFF, (sensor_adc_sample_mv >> 8) & 0xFF);
+	#endif
+	
+	// Create dynamic kernel message for read response
+	struct custs1_value_req_rsp *rsp = KE_MSG_ALLOC_DYN(CUSTS1_VALUE_REQ_RSP,
+																											prf_get_task_from_id(TASK_ID_CUSTS1),
+																											TASK_APP,
+																											custs1_value_req_rsp,
+																											DEF_SVC1_SENSOR_VOLTAGE_CHAR_LEN);
+
+	// Fill response fields with expected values by the SDK
+	rsp->conidx  = app_env[param->conidx].conidx; // connection index
+	rsp->att_idx = param->att_idx; // attribute index
+	rsp->length  = sizeof(sensor_adc_sample_mv); // current length that will be returned
+	rsp->status  = ATT_ERR_NO_ERROR; // ATT error code
+	
+	// Copy last saved sensor voltage value to response payload
+	memcpy(&rsp->value, &sensor_adc_sample_mv, rsp->length);
+	
+	// Send structure to the kernel to be transmitted by the BLE stack
+	KE_MSG_SEND(rsp);
+}
+
+void user_svc1_read_battery_voltage_handler(ke_msg_id_t const msgid,
+                                           struct custs1_value_req_ind const *param,
+                                           ke_task_id_t const dest_id,
+                                           ke_task_id_t const src_id)
+{
+	#ifdef CFG_PRINTF
+	arch_printf("[READ BATTERY VOLTAGE] READING last saved value of battery. \n\r");
+	arch_printf("[READ BATTERY VOLTAGE] Register Value: %u | Battery Voltage: %u mV \n\r", uvp_adc_sample_raw, uvp_adc_sample_mv);
+	arch_printf("[READ BATTERY VOLTAGE] LSB: 0x%02X, MSB: 0x%02X\n\r", uvp_adc_sample_mv & 0xFF, (uvp_adc_sample_mv >> 8) & 0xFF);
+	#endif
+	
+	// Create dynamic kernel message for read response
+	struct custs1_value_req_rsp *rsp = KE_MSG_ALLOC_DYN(CUSTS1_VALUE_REQ_RSP,
+																											prf_get_task_from_id(TASK_ID_CUSTS1),
+																											TASK_APP,
+																											custs1_value_req_rsp,
+																											DEF_SVC1_BATTERY_VOLTAGE_CHAR_LEN);
+
+	// Fill response fields with expected values by the SDK
+	rsp->conidx  = app_env[param->conidx].conidx; // connection index
+	rsp->att_idx = param->att_idx; // attribute index
+	rsp->length  = sizeof(uvp_adc_sample_mv); // current length that will be returned
+	rsp->status  = ATT_ERR_NO_ERROR; // ATT error code
+	
+	// Copy last saved battery voltage value to response payload
+	memcpy(&rsp->value, &uvp_adc_sample_mv, rsp->length);
+	
+	// Send structure to the kernel to be transmitted by the BLE stack
+	KE_MSG_SEND(rsp);
+}
+
 arch_main_loop_callback_ret_t user_app_on_system_powered(void)
 {
 	wdg_freeze(); // freeze watchdog timer
 	
 	// Initiates UVP timer only once
 	if(!uvp_timer_initialized){
-		uvp_timer = app_easy_timer(50, uvp_uart_timer_cb);
+		uvp_timer = app_easy_timer(50, uvp_wireless_timer_cb);
 		uvp_timer_initialized = true;
 	}
 	
 	wdg_resume(); // resume watchdog timer
 	
-	return GOTO_SLEEP; // returning KEEP_POWERED hardfaults to nmi_handler.c, likely due to how SDK handles sleep
+	return GOTO_SLEEP; // returning KEEP_POWERED hardfaults to nmi_handler.c, likely due to how SDK handles sleep mode
 }
 
 void user_app_on_init(void)
 {
-	// Initialize user retained variables
+	// Initialize user retained variables to safe defaults
 	uvp_timer_initialized = false;
-	adc_sample_raw = 0;
-	adc_sample_mv = 0;
+	uvp_cccd_value = 0;
+	uvp_adc_sample_raw = 0;
+	uvp_adc_sample_mv = 0;
+	
+	sensor_adc_sample_raw = 0;
+	sensor_adc_sample_mv = 0;
 	
 	// TODO: make changes to DCDC converter and observe how it changes output of GPIOs
 	// syscntl_dcdc_level_t vdd = syscntl_dcdc_get_level();
 	
 	// Start the default initialization process for BLE user application
-	// SDK doc states that this should be the last line called in the callback function
+	// SDK doc states that this should be the last line called in this function
 	default_app_on_init();
 }
 

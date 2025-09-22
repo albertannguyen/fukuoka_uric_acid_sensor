@@ -2,7 +2,7 @@
  ****************************************************************************************
  * @file user_custs1_def.h
  * @brief Custom Server 1 (CUSTS1) profile database definitions.
- * @note Albert Nguyen
+ * @author Albert Nguyen
  ****************************************************************************************
  */
 
@@ -47,7 +47,7 @@
 // Define sensor voltage
 #define DEF_SVC1_SENSOR_VOLTAGE_UUID_128 {0x35,0x8c,0x68,0x30,0xbb,0x00,0xec,0x89,0x46,0x4b,0x67,0xf2,0xc4,0xa7,0xf4,0xfe}
 #define DEF_SVC1_SENSOR_VOLTAGE_CHAR_LEN 2 // 2 bytes for 10-bit ADC
-#define DEF_SVC1_SENSOR_VOLTAGE_USER_DESC "Sensor Voltage (little-endian bytes)"
+#define DEF_SVC1_SENSOR_VOLTAGE_USER_DESC "Sensor Voltage (little-endian bytes to mV)"
 
 // Define PWM freq
 #define DEF_SVC1_PWM_FREQ_UUID_128 {0xf0,0x5d,0x4d,0x6f,0xb6,0x6a,0x9b,0x98,0x33,0x42,0xb3,0xf2,0xf6,0x0f,0x2f,0xc8}
@@ -64,7 +64,10 @@
 #define DEF_SVC1_PWM_STATE_CHAR_LEN 1
 #define DEF_SVC1_PWM_STATE_USER_DESC "Timer2 PWM State On/Off"
 
-// WIP: Define standard bluetooth battery service to report battery voltage level to app below, ideally in a separate service
+// Define battery voltage
+#define DEF_SVC1_BATTERY_VOLTAGE_UUID_128 {0xb8,0x6d,0x36,0xff,0xea,0x30,0xb9,0xa7,0xbe,0x41,0x48,0xee,0x96,0x44,0xff,0xfe}
+#define DEF_SVC1_BATTERY_VOLTAGE_CHAR_LEN 2
+#define DEF_SVC1_BATTERY_VOLTAGE_USER_DESC "Battery Voltage (little-endian bytes to mV)"
 
 /// Custom1 Service Data Base Characteristic enum
 enum
@@ -90,6 +93,11 @@ enum
 		SVC1_IDX_PWM_STATE_CHAR,
 		SVC1_IDX_PWM_STATE_VAL,
 		SVC1_IDX_PWM_STATE_USER_DESC,
+		
+		SVC1_IDX_BATTERY_VOLTAGE_CHAR,
+		SVC1_IDX_BATTERY_VOLTAGE_VAL,
+		SVC1_IDX_BATTERY_VOLTAGE_NTF_CFG,
+		SVC1_IDX_BATTERY_VOLTAGE_USER_DESC,
 	
 		// Saves total number of enumeration (SDK line)
     CUSTS1_IDX_NB

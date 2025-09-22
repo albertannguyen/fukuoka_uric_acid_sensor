@@ -2,7 +2,7 @@
  ****************************************************************************************
  * @file user_callback_config.h
  * @brief Callback functions configuration file.
- * @note Albert Nguyen
+ * @note Albert Nguyen: Rerouted app_on_init and app_on_system_powered to user space
  ****************************************************************************************
  */
 
@@ -78,9 +78,6 @@ static const struct app_suotar_cb user_app_suotar_cb = {
 };
 #endif
 
-// Albert: not sure why there are a bunch of errors here, does not stop from building correctly
-// The default functions are all template code
-// callback functions for general BLE events
 static const struct app_callbacks user_app_callbacks = {
     .app_on_connection                  = user_on_connection,
     .app_on_disconnect                  = user_on_disconnect,
@@ -142,8 +139,6 @@ static const struct default_app_operations user_default_app_operations = {
 };
 
 static const struct arch_main_loop_callbacks user_app_main_loop_callbacks = {
-		// Albert: rerouted init to user space
-	
     // .app_on_init            = default_app_on_init,
 		.app_on_init            = user_app_on_init,
 

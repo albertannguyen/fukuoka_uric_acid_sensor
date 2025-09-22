@@ -2,7 +2,7 @@
  ****************************************************************************************
  * @file user_modules_config.h
  * @brief User modules configuration file.
- * @note Albert Nguyen enabled custom profile.
+ * @note Albert Nguyen: enabled custom profile.
  ****************************************************************************************
  */
 
