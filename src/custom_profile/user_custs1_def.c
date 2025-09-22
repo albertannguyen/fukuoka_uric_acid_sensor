@@ -2,7 +2,7 @@
  ****************************************************************************************
  * @file user_custs1_def.c
  * @brief Custom Server 1 (CUSTS1) profile database definitions.
- * @note Albert Nguyen
+ * @author Albert Nguyen
  ****************************************************************************************
  */
 
@@ -43,7 +43,7 @@ static const uint16_t att_decl_char      = ATT_DECL_CHARACTERISTIC;
 static const uint16_t att_desc_cfg       = ATT_DESC_CLIENT_CHAR_CFG;
 static const uint16_t att_desc_user_desc = ATT_DESC_CHAR_USER_DESCRIPTION;
 
- /*
+/*
 ----------------------------------
 - Characteristics UUID
 ----------------------------------
@@ -115,7 +115,7 @@ const struct attm_desc_128 custs1_att_db[CUSTS1_IDX_NB] =
 		SVC1_SENSOR_VOLTAGE_UUID_128, // custom
 		ATT_UUID_128_LEN,
 		PERM(RD, ENABLE) | PERM(NTF, ENABLE), // custom
-		DEF_SVC1_SENSOR_VOLTAGE_CHAR_LEN, // custom
+		PERM(RI, ENABLE) | DEF_SVC1_SENSOR_VOLTAGE_CHAR_LEN, // custom
 		0,
 		NULL
 	},
@@ -270,7 +270,7 @@ const struct attm_desc_128 custs1_att_db[CUSTS1_IDX_NB] =
 		SVC1_BATTERY_VOLTAGE_UUID_128,
 		ATT_UUID_128_LEN,
 		PERM(RD, ENABLE) | PERM(NTF, ENABLE),
-		DEF_SVC1_BATTERY_VOLTAGE_CHAR_LEN,
+		PERM(RI, ENABLE) | DEF_SVC1_BATTERY_VOLTAGE_CHAR_LEN,
 		0,
 		NULL
 	},

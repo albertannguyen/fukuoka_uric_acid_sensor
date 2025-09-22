@@ -2,7 +2,7 @@
  ****************************************************************************************
  * @file user_periph_setup.h
  * @brief Peripherals setup header file.
- * @note Albert Nguyen
+ * @author Albert Nguyen
  ****************************************************************************************
  */
 
@@ -73,6 +73,7 @@
  ****************************************************************************************
  */
 
+// TODO: validate pins for custom PCB
 // Define SPI Pads
 #if defined (__DA14531__)
 		#define SPI_EN_PORT             GPIO_PORT_0

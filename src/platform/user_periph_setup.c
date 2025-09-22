@@ -2,7 +2,8 @@
  ****************************************************************************************
  * @file user_periph_setup.c
  * @brief Peripherals setup and initialization.
- * @note Albert Nguyen: this file run multiple times due to wake up from sleep.
+ * @author Albert Nguyen
+ * @note This file run multiple times due to wake up from sleep.
  ****************************************************************************************
  */
 
@@ -83,7 +84,7 @@ void set_pad_functions(void)
 			GPIO_ConfigurePin(UART2_TX_PORT, UART2_TX_PIN, OUTPUT, PID_UART2_TX, false);
 	#endif
 	
-	// FIXME: set pin 9 (UVP_MAX_SHDN) as digital output high
+	// FIXME: set pin 9 (UVP_MAX_SHDN) as digital output high, needs bench testing
 	if(flag_gpio_uvp){
 		GPIO_ConfigurePin(UVP_MAX_SHDN_PORT, UVP_MAX_SHDN_PIN, OUTPUT, PID_GPIO, true);
 		flag_gpio_uvp = false; 	// flag is so that it only runs once at startup

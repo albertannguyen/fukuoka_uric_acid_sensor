@@ -2,7 +2,7 @@
  ****************************************************************************************
  * @file user_custs1_def.h
  * @brief Custom Server 1 (CUSTS1) profile database definitions.
- * @note Albert Nguyen
+ * @author Albert Nguyen
  ****************************************************************************************
  */
 
