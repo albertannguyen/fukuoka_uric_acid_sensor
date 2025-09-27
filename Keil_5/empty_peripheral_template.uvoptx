@@ -489,7 +489,17 @@
         <Ww>
           <count>0</count>
           <WinNumber>1</WinNumber>
-          <ItemText>flag_gpio_uvp</ItemText>
+          <ItemText>clk_div</ItemText>
+        </Ww>
+        <Ww>
+          <count>1</count>
+          <WinNumber>1</WinNumber>
+          <ItemText>clk_src</ItemText>
+        </Ww>
+        <Ww>
+          <count>2</count>
+          <WinNumber>1</WinNumber>
+          <ItemText>pwm_div</ItemText>
         </Ww>
       </WatchWindow1>
       <Tracepoint>

@@ -142,6 +142,55 @@ void uvp_wireless_timer_cb(void)
 	arch_printf("---------------------------------------------------------------------\n\r");
 	#endif
 	
+	// FIXME: ChatGPT fetch code for DCDC converter
+	syscntl_dcdc_level_t vbat_low = syscntl_dcdc_get_level();
+
+	#ifdef CFG_PRINTF
+	const char *voltage_str = NULL;
+
+	switch (vbat_low) {
+			case SYSCNTL_DCDC_LEVEL_1V025: voltage_str = "1.025 V"; break;
+			case SYSCNTL_DCDC_LEVEL_1V05:  voltage_str = "1.050 V"; break;
+			case SYSCNTL_DCDC_LEVEL_1V075: voltage_str = "1.075 V"; break;
+			case SYSCNTL_DCDC_LEVEL_1V1:   voltage_str = "1.100 V"; break;
+			case SYSCNTL_DCDC_LEVEL_1V125: voltage_str = "1.125 V"; break;
+			case SYSCNTL_DCDC_LEVEL_1V150: voltage_str = "1.150 V"; break;
+			case SYSCNTL_DCDC_LEVEL_1V175: voltage_str = "1.175 V"; break;
+			case SYSCNTL_DCDC_LEVEL_1V2:   voltage_str = "1.200 V"; break;
+
+			case SYSCNTL_DCDC_LEVEL_1V725: voltage_str = "1.725 V"; break;
+			case SYSCNTL_DCDC_LEVEL_1V75:  voltage_str = "1.750 V"; break;
+			case SYSCNTL_DCDC_LEVEL_1V775: voltage_str = "1.775 V"; break;
+			case SYSCNTL_DCDC_LEVEL_1V8:   voltage_str = "1.800 V"; break;
+			case SYSCNTL_DCDC_LEVEL_1V825: voltage_str = "1.825 V"; break;
+			case SYSCNTL_DCDC_LEVEL_1V850: voltage_str = "1.850 V"; break;
+			case SYSCNTL_DCDC_LEVEL_1V875: voltage_str = "1.875 V"; break;
+			case SYSCNTL_DCDC_LEVEL_1V9:   voltage_str = "1.900 V"; break;
+
+			case SYSCNTL_DCDC_LEVEL_2V425: voltage_str = "2.425 V"; break;
+			case SYSCNTL_DCDC_LEVEL_2V45:  voltage_str = "2.450 V"; break;
+			case SYSCNTL_DCDC_LEVEL_2V475: voltage_str = "2.475 V"; break;
+			case SYSCNTL_DCDC_LEVEL_2V5:   voltage_str = "2.500 V"; break;
+			case SYSCNTL_DCDC_LEVEL_2V525: voltage_str = "2.525 V"; break;
+			case SYSCNTL_DCDC_LEVEL_2V550: voltage_str = "2.550 V"; break;
+			case SYSCNTL_DCDC_LEVEL_2V575: voltage_str = "2.575 V"; break;
+			case SYSCNTL_DCDC_LEVEL_2V6:   voltage_str = "2.600 V"; break;
+
+			case SYSCNTL_DCDC_LEVEL_2V925: voltage_str = "2.925 V"; break;
+			case SYSCNTL_DCDC_LEVEL_2V95:  voltage_str = "2.950 V"; break;
+			case SYSCNTL_DCDC_LEVEL_2V975: voltage_str = "2.975 V"; break;
+			case SYSCNTL_DCDC_LEVEL_3V0:   voltage_str = "3.000 V"; break;
+			case SYSCNTL_DCDC_LEVEL_3V025: voltage_str = "3.025 V"; break;
+			case SYSCNTL_DCDC_LEVEL_3V050: voltage_str = "3.050 V"; break;
+			case SYSCNTL_DCDC_LEVEL_3V075: voltage_str = "3.075 V"; break;
+			case SYSCNTL_DCDC_LEVEL_3V1:   voltage_str = "3.100 V"; break;
+
+			default: voltage_str = "Unknown"; break;
+	}
+
+	arch_printf("[DCDC] VBAT_LOW voltage level: %s\n\r", voltage_str);
+	#endif
+	
 	// Disable ADC to conserve power
 	adc_disable();
 	
@@ -268,6 +317,13 @@ uint16_t gpadc_sample_to_mv(uint16_t sample)
 
 void timer2_pwm_set_frequency(tim0_2_clk_div_t clk_div, tim2_clk_src_t clk_src, uint16_t pwm_div)
 {
+	#ifdef CFG_PRINTF
+	arch_printf("[PWM FREQ] Function called.\n\r");
+	arch_printf("[PWM FREQ] clk_div (enum)   = %u (0x%02X)\n\r", clk_div, clk_div);
+	arch_printf("[PWM FREQ] clk_src (enum)   = %u (0x%02X)\n\r", clk_src, clk_src);
+	arch_printf("[PWM FREQ] pwm_div (value) = %u (0x%04X)\n\r", pwm_div, pwm_div);
+	#endif
+	
 	// Create config structures for clock division and timer2 config
 	tim0_2_clk_div_config_t clk_cfg = {
 		.clk_div = clk_div
@@ -290,6 +346,10 @@ void timer2_pwm_set_frequency(tim0_2_clk_div_t clk_div, tim2_clk_src_t clk_src, 
 
 	// Clamp pwm_div to datasheet allowed range
 	pwm_div = CLAMP(pwm_div, MIN_PWM_DIV, MAX_PWM_DIV);
+	
+	#ifdef CFG_PRINTF
+	arch_printf("[PWM FREQ] pwm_div (clamped value) = %u (0x%04X)\n\r", pwm_div, pwm_div);
+	#endif
 
 	// Set PWM frequency based on formula from datasheet for Timer 2
 	timer2_pwm_freq_set(input_freq / pwm_div, input_freq); // pwm_div promoted to 32 bits
@@ -736,9 +796,6 @@ void user_app_on_init(void)
 	
 	sensor_adc_sample_raw = 0;
 	sensor_adc_sample_mv = 0;
-	
-	// TODO: make changes to DCDC converter and observe how it changes output of GPIOs
-	// syscntl_dcdc_level_t vdd = syscntl_dcdc_get_level();
 	
 	// Start the default initialization process for BLE user application
 	// SDK doc states that this should be the last line called in this function

@@ -1,0 +1,53 @@
+\doxysection{C\+:/\+Users/alber/\+Documents/\+DA145xx\+\_\+\+SDK/6.0.24.1464/projects/target\+\_\+apps/template/fukuoka\+\_\+uric\+\_\+acid\+\_\+sensor/src/platform/user\+\_\+periph\+\_\+setup.c File Reference}
+\hypertarget{user__periph__setup_8c}{}\label{user__periph__setup_8c}\index{C:/Users/alber/Documents/DA145xx\_SDK/6.0.24.1464/projects/target\_apps/template/fukuoka\_uric\_acid\_sensor/src/platform/user\_periph\_setup.c@{C:/Users/alber/Documents/DA145xx\_SDK/6.0.24.1464/projects/target\_apps/template/fukuoka\_uric\_acid\_sensor/src/platform/user\_periph\_setup.c}}
+
+
+Peripherals setup and initialization.  
+
+
+{\ttfamily \#include "{}user\+\_\+periph\+\_\+setup.\+h"{}}\newline
+{\ttfamily \#include "{}datasheet.\+h"{}}\newline
+{\ttfamily \#include "{}system\+\_\+library.\+h"{}}\newline
+{\ttfamily \#include "{}rwip\+\_\+config.\+h"{}}\newline
+{\ttfamily \#include "{}gpio.\+h"{}}\newline
+{\ttfamily \#include "{}uart.\+h"{}}\newline
+{\ttfamily \#include "{}syscntl.\+h"{}}\newline
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{user__periph__setup_8c_ac55a7e5121b9797ba36f63cb1f2f6d7f}{set\+\_\+pad\+\_\+functions}} (void)
+\begin{DoxyCompactList}\small\item\em Sets the functionality of application pads. \end{DoxyCompactList}\item 
+\Hypertarget{user__periph__setup_8c_a2cd4bdd061501508fe71aa672f690e81}\label{user__periph__setup_8c_a2cd4bdd061501508fe71aa672f690e81} 
+void {\bfseries periph\+\_\+init} (void)
+\begin{DoxyCompactList}\small\item\em Initializes application\textquotesingle{}s peripherals and pins. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{user__periph__setup_8c_aceede9682d4b16293603898e58619658}\label{user__periph__setup_8c_aceede9682d4b16293603898e58619658} 
+bool {\bfseries flag\+\_\+gpio\+\_\+uvp} = true
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Peripherals setup and initialization. 
+
+\begin{DoxyAuthor}{Author}
+Albert Nguyen 
+\end{DoxyAuthor}
+\begin{DoxyNote}{Note}
+This file run multiple times due to wake up from sleep. 
+\end{DoxyNote}
+
+
+\doxysubsection{Function Documentation}
+\Hypertarget{user__periph__setup_8c_ac55a7e5121b9797ba36f63cb1f2f6d7f}\index{user\_periph\_setup.c@{user\_periph\_setup.c}!set\_pad\_functions@{set\_pad\_functions}}
+\index{set\_pad\_functions@{set\_pad\_functions}!user\_periph\_setup.c@{user\_periph\_setup.c}}
+\doxysubsubsection{\texorpdfstring{set\_pad\_functions()}{set\_pad\_functions()}}
+{\footnotesize\ttfamily \label{user__periph__setup_8c_ac55a7e5121b9797ba36f63cb1f2f6d7f} 
+void set\+\_\+pad\+\_\+functions (\begin{DoxyParamCaption}\item[{void}]{}{}\end{DoxyParamCaption})}
+
+
+
+Sets the functionality of application pads. 
+
+i.\+e. to set P0\+\_\+1 as Generic purpose Output\+: GPIO\+\_\+\+Configure\+Pin(\+GPIO\+\_\+\+PORT\+\_\+0, GPIO\+\_\+\+PIN\+\_\+1, OUTPUT, PID\+\_\+\+GPIO, false); 

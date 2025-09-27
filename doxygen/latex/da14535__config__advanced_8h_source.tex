@@ -1,0 +1,231 @@
+\doxysection{da14535\+\_\+config\+\_\+advanced.\+h}
+\hypertarget{da14535__config__advanced_8h_source}{}\label{da14535__config__advanced_8h_source}\index{C:/Users/alber/Documents/DA145xx\_SDK/6.0.24.1464/projects/target\_apps/template/fukuoka\_uric\_acid\_sensor/src/config/da14535\_config\_advanced.h@{C:/Users/alber/Documents/DA145xx\_SDK/6.0.24.1464/projects/target\_apps/template/fukuoka\_uric\_acid\_sensor/src/config/da14535\_config\_advanced.h}}
+\mbox{\hyperlink{da14535__config__advanced_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ }
+\DoxyCodeLine{00033\ }
+\DoxyCodeLine{00034\ \textcolor{preprocessor}{\#ifndef\ \_DA14535\_CONFIG\_ADVANCED\_H\_}}
+\DoxyCodeLine{00035\ \textcolor{preprocessor}{\#define\ \_DA14535\_CONFIG\_ADVANCED\_H\_}}
+\DoxyCodeLine{00036\ }
+\DoxyCodeLine{00037\ \textcolor{preprocessor}{\#include\ "{}da1458x\_stack\_config.h"{}}}
+\DoxyCodeLine{00038\ }
+\DoxyCodeLine{00039\ \textcolor{comment}{/****************************************************************************************************************/}}
+\DoxyCodeLine{00040\ \textcolor{comment}{/*\ Low\ Power\ clock\ selection.\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ */}}
+\DoxyCodeLine{00041\ \textcolor{comment}{/*\ \ \ \ \ \ -\/LP\_CLK\_XTAL32\ \ \ \ \ \ External\ XTAL32K\ oscillator\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ */}}
+\DoxyCodeLine{00042\ \textcolor{comment}{/*\ \ \ \ \ \ -\/LP\_CLK\_RCX20\ \ \ \ \ \ \ Internal\ RCX\ clock\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ */}}
+\DoxyCodeLine{00043\ \textcolor{comment}{/*\ \ \ \ \ \ -\/LP\_CLK\_FROM\_OTP\ \ \ \ Use\ the\ selection\ in\ the\ corresponding\ field\ of\ OTP\ Header\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ */}}
+\DoxyCodeLine{00044\ \textcolor{comment}{/****************************************************************************************************************/}}
+\DoxyCodeLine{00045\ \textcolor{preprocessor}{\#define\ CFG\_LP\_CLK\ \ \ \ \ \ \ \ \ \ \ \ \ \ LP\_CLK\_RCX20}}
+\DoxyCodeLine{00046\ }
+\DoxyCodeLine{00047\ \textcolor{comment}{/****************************************************************************************************************/}}
+\DoxyCodeLine{00048\ \textcolor{comment}{/*\ Periodic\ wakeup\ period\ to\ poll\ GTL\ iface.\ Time\ in\ msec.\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ */}}
+\DoxyCodeLine{00049\ \textcolor{comment}{/****************************************************************************************************************/}}
+\DoxyCodeLine{00050\ \textcolor{preprocessor}{\#define\ CFG\_MAX\_SLEEP\_DURATION\_PERIODIC\_WAKEUP\_MS\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ 500\ \ }\textcolor{comment}{//\ 0.5s}}
+\DoxyCodeLine{00051\ }
+\DoxyCodeLine{00052\ \textcolor{comment}{/****************************************************************************************************************/}}
+\DoxyCodeLine{00053\ \textcolor{comment}{/*\ Periodic\ wakeup\ period\ if\ GTL\ iface\ is\ not\ enabled.\ Time\ in\ msec.\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ */}}
+\DoxyCodeLine{00054\ \textcolor{comment}{/****************************************************************************************************************/}}
+\DoxyCodeLine{00055\ \textcolor{preprocessor}{\#define\ CFG\_MAX\_SLEEP\_DURATION\_EXTERNAL\_WAKEUP\_MS\ \ \ \ \ \ \ \ \ \ \ \ \ \ 600000\ \ }\textcolor{comment}{//\ 600s}}
+\DoxyCodeLine{00056\ }
+\DoxyCodeLine{00057\ \textcolor{comment}{/****************************************************************************************************************/}}
+\DoxyCodeLine{00058\ \textcolor{comment}{/*\ Wakeup\ from\ external\ processor\ running\ host\ application.\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ */}}
+\DoxyCodeLine{00059\ \textcolor{comment}{/****************************************************************************************************************/}}
+\DoxyCodeLine{00060\ \textcolor{preprocessor}{\#undef\ CFG\_EXTERNAL\_WAKEUP}}
+\DoxyCodeLine{00061\ }
+\DoxyCodeLine{00062\ \textcolor{comment}{/****************************************************************************************************************/}}
+\DoxyCodeLine{00063\ \textcolor{comment}{/*\ Wakeup\ external\ processor\ when\ a\ message\ is\ sent\ to\ GTL\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ */}}
+\DoxyCodeLine{00064\ \textcolor{comment}{/****************************************************************************************************************/}}
+\DoxyCodeLine{00065\ \textcolor{preprocessor}{\#undef\ CFG\_WAKEUP\_EXT\_PROCESSOR}}
+\DoxyCodeLine{00066\ }
+\DoxyCodeLine{00067\ \textcolor{comment}{/****************************************************************************************************************/}}
+\DoxyCodeLine{00068\ \textcolor{comment}{/*\ Enables\ True\ Random\ Number\ Generator.\ A\ true\ random\ number,\ generated\ at\ system\ initialization,\ is\ used\ to\ \ \ */}}
+\DoxyCodeLine{00069\ \textcolor{comment}{/*\ seed\ any\ random\ number\ generator\ (C\ standard\ library,\ ChaCha20,\ etc.).\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ */}}
+\DoxyCodeLine{00070\ \textcolor{comment}{/****************************************************************************************************************/}}
+\DoxyCodeLine{00071\ \textcolor{preprocessor}{\#define\ CFG\_TRNG}}
+\DoxyCodeLine{00072\ }
+\DoxyCodeLine{00073\ \textcolor{comment}{/****************************************************************************************************************/}}
+\DoxyCodeLine{00074\ \textcolor{comment}{/*\ Secure\ connections\ support.\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ */}}
+\DoxyCodeLine{00075\ \textcolor{comment}{/*\ If\ the\ secure\ connections\ mode\ is\ to\ be\ used\ the\ macro\ must\ be\ defined.\ The\ secure\ connections\ mode\ uses\ \ \ \ \ */}}
+\DoxyCodeLine{00076\ \textcolor{comment}{/*\ private/public\ keys\ which\ have\ been\ created\ based\ on\ the\ Elliptic-\/curve\ Diffie-\/Hellman\ (ECDH)\ protocol.\ \ \ \ \ \ */}}
+\DoxyCodeLine{00077\ \textcolor{comment}{/*\ Note\ for\ DA14585/586/531:\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ */}}
+\DoxyCodeLine{00078\ \textcolor{comment}{/*\ If\ the\ macro\ is\ defined,\ the\ ECDH\ keys\ will\ be\ created\ only\ once\ after\ the\ system\ start-\/up.\ If\ the\ legacy\ \ \ \ */}}
+\DoxyCodeLine{00079\ \textcolor{comment}{/*\ pairing\ is\ to\ be\ used,\ it\ is\ recommended\ to\ undefine\ the\ macro\ in\ order\ to\ gain\ faster\ start-\/up\ time\ and\ \ \ \ \ */}}
+\DoxyCodeLine{00080\ \textcolor{comment}{/*\ reduce\ the\ RAM\ footprint.\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ */}}
+\DoxyCodeLine{00081\ \textcolor{comment}{/*\ Note\ for\ DA14531-\/01,\ DA14535:\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ */}}
+\DoxyCodeLine{00082\ \textcolor{comment}{/*\ The\ ECDH\ keys\ are\ always\ created\ after\ a\ pairing\ request.\ If\ the\ legacy\ pairing\ is\ to\ be\ used,\ it\ is\ \ \ \ \ \ \ \ \ */}}
+\DoxyCodeLine{00083\ \textcolor{comment}{/*\ recommended\ to\ undefine\ the\ macro\ in\ order\ to\ reduce\ the\ RAM\ footprint.\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ */}}
+\DoxyCodeLine{00084\ \textcolor{comment}{/****************************************************************************************************************/}}
+\DoxyCodeLine{00085\ \textcolor{preprocessor}{\#define\ CFG\_ENABLE\_SMP\_SECURE}}
+\DoxyCodeLine{00086\ }
+\DoxyCodeLine{00087\ \textcolor{comment}{/****************************************************************************************************************/}}
+\DoxyCodeLine{00088\ \textcolor{comment}{/*\ Uses\ ChaCha20\ random\ number\ generator\ instead\ of\ the\ C\ standard\ library\ random\ number\ generator.\ \ \ \ \ \ \ \ \ \ \ \ \ */}}
+\DoxyCodeLine{00089\ \textcolor{comment}{/****************************************************************************************************************/}}
+\DoxyCodeLine{00090\ \textcolor{preprocessor}{\#define\ CFG\_USE\_CHACHA20\_RAND}}
+\DoxyCodeLine{00091\ }
+\DoxyCodeLine{00092\ \textcolor{comment}{/****************************************************************************************************************/}}
+\DoxyCodeLine{00093\ \textcolor{comment}{/*\ Custom\ heap\ sizes\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ */}}
+\DoxyCodeLine{00094\ \textcolor{comment}{/****************************************************************************************************************/}}
+\DoxyCodeLine{00095\ \textcolor{comment}{//\ \#define\ DB\_HEAP\_SZ\ \ \ \ \ \ \ \ \ \ \ \ \ \ 1024}}
+\DoxyCodeLine{00096\ \textcolor{comment}{//\ \#define\ ENV\_HEAP\_SZ\ \ \ \ \ \ \ \ \ \ \ \ \ 4928}}
+\DoxyCodeLine{00097\ \textcolor{comment}{//\ \#define\ MSG\_HEAP\_SZ\ \ \ \ \ \ \ \ \ \ \ \ \ 6880}}
+\DoxyCodeLine{00098\ \textcolor{comment}{//\ \#define\ NON\_RET\_HEAP\_SZ\ \ \ \ \ \ \ \ \ 2048}}
+\DoxyCodeLine{00099\ }
+\DoxyCodeLine{00100\ \textcolor{comment}{/****************************************************************************************************************/}}
+\DoxyCodeLine{00101\ \textcolor{comment}{/*\ NVDS\ configuration\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ */}}
+\DoxyCodeLine{00102\ \textcolor{comment}{/*\ -\/\ CFG\_NVDS\_TAG\_BD\_ADDRESS\ \ \ \ \ \ \ \ \ \ \ \ Default\ bdaddress.\ If\ bdaddress\ is\ written\ in\ OTP\ header\ this\ value\ is\ \ */}}
+\DoxyCodeLine{00103\ \textcolor{comment}{/*\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ ignored\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ */}}
+\DoxyCodeLine{00104\ \textcolor{comment}{/*\ -\/\ CFG\_NVDS\_TAG\_LPCLK\_DRIFT\ \ \ \ \ \ \ \ \ \ \ Low\ power\ clock\ drift.\ Permitted\ values\ in\ ppm\ are:\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ */}}
+\DoxyCodeLine{00105\ \textcolor{comment}{/*\ \ \ \ \ \ +\ DRIFT\_20PPM\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ */}}
+\DoxyCodeLine{00106\ \textcolor{comment}{/*\ \ \ \ \ \ +\ DRIFT\_30PPM\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ */}}
+\DoxyCodeLine{00107\ \textcolor{comment}{/*\ \ \ \ \ \ +\ DRIFT\_50PPM\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ */}}
+\DoxyCodeLine{00108\ \textcolor{comment}{/*\ \ \ \ \ \ +\ DRIFT\_75PPM\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ */}}
+\DoxyCodeLine{00109\ \textcolor{comment}{/*\ \ \ \ \ \ +\ DRIFT\_100PPM\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ */}}
+\DoxyCodeLine{00110\ \textcolor{comment}{/*\ \ \ \ \ \ +\ DRIFT\_150PPM\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ */}}
+\DoxyCodeLine{00111\ \textcolor{comment}{/*\ \ \ \ \ \ +\ DRIFT\_250PPM\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ */}}
+\DoxyCodeLine{00112\ \textcolor{comment}{/*\ \ \ \ \ \ +\ DRIFT\_500PPM\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ Default\ value\ (500\ ppm)\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ */}}
+\DoxyCodeLine{00113\ \textcolor{comment}{/*\ -\/\ CFG\_NVDS\_TAG\_BLE\_CA\_TIMER\_DUR\ \ \ \ \ \ Channel\ Assessment\ Timer\ duration\ (Multiple\ of\ 10ms)\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ */}}
+\DoxyCodeLine{00114\ \textcolor{comment}{/*\ -\/\ CFG\_NVDS\_TAG\_BLE\_CRA\_TIMER\_DUR\ \ \ \ \ Channel\ Reassessment\ Timer\ duration\ (Multiple\ of\ CA\ timer\ duration)\ \ \ \ \ */}}
+\DoxyCodeLine{00115\ \textcolor{comment}{/*\ -\/\ CFG\_NVDS\_TAG\_BLE\_CA\_MIN\_RSSI\ \ \ \ \ \ \ Minimum\ RSSI\ Threshold\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ */}}
+\DoxyCodeLine{00116\ \textcolor{comment}{/*\ -\/\ CFG\_NVDS\_TAG\_BLE\_CA\_NB\_PKT\ \ \ \ \ \ \ \ \ Number\ of\ packets\ to\ receive\ for\ statistics\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ */}}
+\DoxyCodeLine{00117\ \textcolor{comment}{/*\ -\/\ CFG\_NVDS\_TAG\_BLE\_CA\_NB\_BAD\_PKT\ \ \ \ \ Number\ \ of\ bad\ packets\ needed\ to\ remove\ a\ channel\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ */}}
+\DoxyCodeLine{00118\ \textcolor{comment}{/****************************************************************************************************************/}}
+\DoxyCodeLine{00119\ \textcolor{preprocessor}{\#define\ CFG\_NVDS\_TAG\_BD\_ADDRESS\ \ \ \ \ \ \ \ \ \ \ \ \ \{0x17,\ 0x00,\ 0xF4,\ 0x35,\ 0x23,\ 0x48\}}}
+\DoxyCodeLine{00120\ }
+\DoxyCodeLine{00121\ \textcolor{preprocessor}{\#define\ CFG\_NVDS\_TAG\_LPCLK\_DRIFT\ \ \ \ \ \ \ \ \ \ \ \ DRIFT\_500PPM}}
+\DoxyCodeLine{00122\ \textcolor{preprocessor}{\#define\ CFG\_NVDS\_TAG\_BLE\_CA\_TIMER\_DUR\ \ \ \ \ \ \ (500)}}
+\DoxyCodeLine{00123\ \textcolor{preprocessor}{\#define\ CFG\_NVDS\_TAG\_BLE\_CRA\_TIMER\_DUR\ \ \ \ \ \ (8)}}
+\DoxyCodeLine{00124\ \textcolor{preprocessor}{\#define\ CFG\_NVDS\_TAG\_BLE\_CA\_MIN\_RSSI\ \ \ \ \ \ \ \ (-\/60)}}
+\DoxyCodeLine{00125\ \textcolor{preprocessor}{\#define\ CFG\_NVDS\_TAG\_BLE\_CA\_NB\_PKT\ \ \ \ \ \ \ \ \ \ (20)}}
+\DoxyCodeLine{00126\ \textcolor{preprocessor}{\#define\ CFG\_NVDS\_TAG\_BLE\_CA\_NB\_BAD\_PKT\ \ \ \ \ \ (CFG\_NVDS\_TAG\_BLE\_CA\_NB\_PKT/2)}}
+\DoxyCodeLine{00127\ }
+\DoxyCodeLine{00128\ \textcolor{comment}{/****************************************************************************************************************/}}
+\DoxyCodeLine{00129\ \textcolor{comment}{/*\ Enables\ the\ BLE\ statistics\ measurement\ feature.\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ */}}
+\DoxyCodeLine{00130\ \textcolor{comment}{/****************************************************************************************************************/}}
+\DoxyCodeLine{00131\ \textcolor{preprocessor}{\#undef\ CFG\_BLE\_METRICS}}
+\DoxyCodeLine{00132\ }
+\DoxyCodeLine{00133\ \textcolor{comment}{/****************************************************************************************************************/}}
+\DoxyCodeLine{00134\ \textcolor{comment}{/*\ Output\ the\ Hardfault\ arguments\ to\ serial/UART\ interface.\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ */}}
+\DoxyCodeLine{00135\ \textcolor{comment}{/****************************************************************************************************************/}}
+\DoxyCodeLine{00136\ \textcolor{preprocessor}{\#undef\ CFG\_PRODUCTION\_DEBUG\_OUTPUT}}
+\DoxyCodeLine{00137\ }
+\DoxyCodeLine{00138\ \textcolor{comment}{/****************************************************************************************************************/}}
+\DoxyCodeLine{00139\ \textcolor{comment}{/*\ Maximum\ supported\ TX\ data\ packet\ length\ (supportedMaxTxOctets\ value,\ as\ defined\ in\ 4.2\ Specification).\ \ \ \ \ \ \ */}}
+\DoxyCodeLine{00140\ \textcolor{comment}{/*\ Range:\ 27\ -\/\ 251\ octets.\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ */}}
+\DoxyCodeLine{00141\ \textcolor{comment}{/*\ NOTE\ 1:\ Even\ number\ of\ octets\ are\ not\ supported.\ A\ selected\ even\ number\ will\ be\ automatically\ converted\ to\ \ \ */}}
+\DoxyCodeLine{00142\ \textcolor{comment}{/*\ \ \ \ \ \ \ \ \ the\ next\ odd\ one.\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ */}}
+\DoxyCodeLine{00143\ \textcolor{comment}{/*\ NOTE\ 2:\ The\ supportedMaxTxTime\ value\ is\ automatically\ calculated\ by\ the\ ROM\ code,\ according\ to\ the\ following\ */}}
+\DoxyCodeLine{00144\ \textcolor{comment}{/*\ \ \ \ \ \ \ \ \ equation:\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ */}}
+\DoxyCodeLine{00145\ \textcolor{comment}{/*\ \ \ \ \ \ \ \ \ \ \ \ \ supportedMaxTxTime\ =\ (supportedMaxTxOctets\ +\ 11\ +\ 3\ )\ *\ 8\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ */}}
+\DoxyCodeLine{00146\ \textcolor{comment}{/*\ \ \ \ \ \ \ \ \ Range:\ 328\ -\/\ 2120\ usec.\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ */}}
+\DoxyCodeLine{00147\ \textcolor{comment}{/****************************************************************************************************************/}}
+\DoxyCodeLine{00148\ \textcolor{preprocessor}{\#define\ CFG\_MAX\_TX\_PACKET\_LENGTH\ \ \ \ \ \ \ \ (251)}}
+\DoxyCodeLine{00149\ }
+\DoxyCodeLine{00150\ \textcolor{comment}{/****************************************************************************************************************/}}
+\DoxyCodeLine{00151\ \textcolor{comment}{/*\ Maximum\ supported\ RX\ data\ packet\ length\ (supportedMaxRxOctets\ value,\ as\ defined\ in\ 4.2\ Specification).\ \ \ \ \ \ \ */}}
+\DoxyCodeLine{00152\ \textcolor{comment}{/*\ Range:\ 27\ -\/\ 251\ octets.\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ */}}
+\DoxyCodeLine{00153\ \textcolor{comment}{/*\ NOTE\ 1:\ Even\ number\ of\ octets\ are\ not\ supported.\ A\ selected\ even\ number\ will\ be\ automatically\ converted\ to\ \ \ */}}
+\DoxyCodeLine{00154\ \textcolor{comment}{/*\ \ \ \ \ \ \ \ \ the\ next\ odd\ one.\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ */}}
+\DoxyCodeLine{00155\ \textcolor{comment}{/*\ NOTE\ 2:\ The\ supportedMaxRxTime\ value\ is\ automatically\ calculated\ by\ the\ ROM\ code,\ according\ to\ the\ following\ */}}
+\DoxyCodeLine{00156\ \textcolor{comment}{/*\ \ \ \ \ \ \ \ \ equation:\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ */}}
+\DoxyCodeLine{00157\ \textcolor{comment}{/*\ \ \ \ \ \ \ \ \ \ \ \ \ supportedMaxRxTime\ =\ (supportedMaxRxOctets\ +\ 11\ +\ 3\ )\ *\ 8\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ */}}
+\DoxyCodeLine{00158\ \textcolor{comment}{/*\ \ \ \ \ \ \ \ \ Range:\ 328\ -\/\ 2120\ usec.\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ */}}
+\DoxyCodeLine{00159\ \textcolor{comment}{/****************************************************************************************************************/}}
+\DoxyCodeLine{00160\ \textcolor{preprocessor}{\#define\ CFG\_MAX\_RX\_PACKET\_LENGTH\ \ \ \ \ \ \ \ (251)}}
+\DoxyCodeLine{00161\ }
+\DoxyCodeLine{00162\ \textcolor{comment}{/****************************************************************************************************************/}}
+\DoxyCodeLine{00163\ \textcolor{comment}{/*\ Select\ external\ application/host\ transport\ layer:\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ */}}
+\DoxyCodeLine{00164\ \textcolor{comment}{/*\ \ \ \ \ -\/\ 0\ =\ GTL\ (auto)\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ */}}
+\DoxyCodeLine{00165\ \textcolor{comment}{/*\ \ \ \ \ -\/\ 1\ =\ HCI\ (auto)\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ */}}
+\DoxyCodeLine{00166\ \textcolor{comment}{/*\ \ \ \ \ -\/\ 8\ =\ GTL\ (fixed)\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ */}}
+\DoxyCodeLine{00167\ \textcolor{comment}{/*\ \ \ \ \ -\/\ 9\ =\ HCI\ (fixed)\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ */}}
+\DoxyCodeLine{00168\ \textcolor{comment}{/****************************************************************************************************************/}}
+\DoxyCodeLine{00169\ \textcolor{preprocessor}{\#define\ CFG\_USE\_H4TL\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ (0)}}
+\DoxyCodeLine{00170\ }
+\DoxyCodeLine{00171\ \textcolor{comment}{/****************************************************************************************************************/}}
+\DoxyCodeLine{00172\ \textcolor{comment}{/*\ Duplicate\ filter\ max\ value\ for\ the\ scan\ report\ list.\ The\ maximum\ value\ shall\ be\ 100.\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ */}}
+\DoxyCodeLine{00173\ \textcolor{comment}{/****************************************************************************************************************/}}
+\DoxyCodeLine{00174\ \textcolor{preprocessor}{\#define\ CFG\_BLE\_DUPLICATE\_FILTER\_MAX\ \ \ \ (10)}}
+\DoxyCodeLine{00175\ }
+\DoxyCodeLine{00176\ \textcolor{comment}{/****************************************************************************************************************/}}
+\DoxyCodeLine{00177\ \textcolor{comment}{/*\ Duplicate\ filter\ flag\ for\ the\ scan\ report\ list.\ This\ flag\ controls\ what\ will\ be\ reported\ if\ the\ \ \ \ \ \ \ \ \ \ \ \ \ \ */}}
+\DoxyCodeLine{00178\ \textcolor{comment}{/*\ CFG\_BLE\_DUPLICATE\_FILTER\_MAX\ number\ is\ exceeded.\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ */}}
+\DoxyCodeLine{00179\ \textcolor{comment}{/*\ \ \ \ \ -\/\ If\ the\ flag\ is\ defined,\ the\ extra\ devices\ are\ considered\ to\ be\ in\ the\ list\ and\ will\ not\ be\ reported.\ \ \ */}}
+\DoxyCodeLine{00180\ \textcolor{comment}{/****************************************************************************************************************/}}
+\DoxyCodeLine{00181\ \textcolor{preprocessor}{\#undef\ CFG\_BLE\_DUPLICATE\_FILTER\_FOUND}}
+\DoxyCodeLine{00182\ }
+\DoxyCodeLine{00183\ \textcolor{comment}{/****************************************************************************************************************/}}
+\DoxyCodeLine{00184\ \textcolor{comment}{/*\ Enables\ automatic\ data\ packet\ length\ negotiation.\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ */}}
+\DoxyCodeLine{00185\ \textcolor{comment}{/*\ NOTE:\ Enable\ only\ if\ peer\ device\ supports\ data\ length\ extension!!\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ */}}
+\DoxyCodeLine{00186\ \textcolor{comment}{/****************************************************************************************************************/}}
+\DoxyCodeLine{00187\ \textcolor{preprocessor}{\#undef\ AUTO\_DATA\_LENGTH\_NEGOTIATION\_UPON\_NEW\_CONNECTION}}
+\DoxyCodeLine{00188\ }
+\DoxyCodeLine{00189\ \textcolor{comment}{/****************************************************************************************************************/}}
+\DoxyCodeLine{00190\ \textcolor{comment}{/*\ Maximum\ retention\ memory\ in\ bytes.\ The\ base\ address\ of\ the\ retention\ data\ is\ calculated\ from\ the\ selected\ \ \ \ */}}
+\DoxyCodeLine{00191\ \textcolor{comment}{/*\ size.\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ */}}
+\DoxyCodeLine{00192\ \textcolor{comment}{/****************************************************************************************************************/}}
+\DoxyCodeLine{00193\ \textcolor{preprocessor}{\#define\ CFG\_RET\_DATA\_SIZE\ \ \ \ (2048)}}
+\DoxyCodeLine{00194\ }
+\DoxyCodeLine{00195\ \textcolor{comment}{/****************************************************************************************************************/}}
+\DoxyCodeLine{00196\ \textcolor{comment}{/*\ Maximum\ uninitialized\ retained\ data\ required\ by\ the\ application.\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ */}}
+\DoxyCodeLine{00197\ \textcolor{comment}{/****************************************************************************************************************/}}
+\DoxyCodeLine{00198\ \textcolor{preprocessor}{\#define\ CFG\_RET\_DATA\_UNINIT\_SIZE\ (0)}}
+\DoxyCodeLine{00199\ }
+\DoxyCodeLine{00200\ \textcolor{comment}{/****************************************************************************************************************/}}
+\DoxyCodeLine{00201\ \textcolor{comment}{/*\ RAM\ cell(s)\ retention\ mode\ handling.\ The\ user\ has\ to\ select\ which\ RAM\ cells\ must\ be\ retained\ during\ the\ \ \ \ \ \ */}}
+\DoxyCodeLine{00202\ \textcolor{comment}{/*\ extended\ sleep,\ based\ on\ his/her\ application\ RAM\ layout.\ The\ last\ RAM\ block\ is\ always\ retained,\ since\ it\ \ \ \ \ */}}
+\DoxyCodeLine{00203\ \textcolor{comment}{/*\ contains\ the\ BLE\ state\ and\ ROM\ data.\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ */}}
+\DoxyCodeLine{00204\ \textcolor{comment}{/*\ \ \ \ \ -\/\ CFG\_RETAIN\_RAM\_1\_BLOCK:\ if\ defined,\ the\ 1st\ RAM\ block\ must\ be\ retained.\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ */}}
+\DoxyCodeLine{00205\ \textcolor{comment}{/*\ By\ default,\ the\ SDK\ keeps\ all\ RAM\ cells\ retained.\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ */}}
+\DoxyCodeLine{00206\ \textcolor{comment}{/****************************************************************************************************************/}}
+\DoxyCodeLine{00207\ \textcolor{preprocessor}{\#define\ CFG\_RETAIN\_RAM\_1\_BLOCK}}
+\DoxyCodeLine{00208\ }
+\DoxyCodeLine{00209\ \textcolor{comment}{/****************************************************************************************************************/}}
+\DoxyCodeLine{00210\ \textcolor{comment}{/*\ Non-\/retained\ heap\ handling.\ The\ non-\/retained\ heap\ is\ either\ empty\ or\ not,\ and\ it\ may\ fill\ with\ messages\ \ \ \ \ \ */}}
+\DoxyCodeLine{00211\ \textcolor{comment}{/*\ during\ the\ application\ runtime.\ If\ it\ is\ not\ empty\ while\ the\ system\ is\ going\ to\ extended\ sleep,\ it\ must\ be\ \ \ */}}
+\DoxyCodeLine{00212\ \textcolor{comment}{/*\ retained.\ Macro\ state:\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ */}}
+\DoxyCodeLine{00213\ \textcolor{comment}{/*\ \ \ \ \ \ -\/\ If\ the\ macro\ is\ defined\ then\ the\ retention\ mode\ of\ the\ RAM\ cell(s),\ where\ the\ non-\/ret\ heap\ resides,\ \ \ */}}
+\DoxyCodeLine{00214\ \textcolor{comment}{/*\ \ \ \ \ \ \ \ is\ automatically\ controlled\ by\ the\ SDK.\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ */}}
+\DoxyCodeLine{00215\ \textcolor{comment}{/*\ \ \ \ \ \ -\/\ If\ the\ macro\ is\ undefined\ then\ the\ retention\ mode\ of\ the\ RAM\ cell(s),\ where\ the\ non-\/ret\ heap\ resides,\ */}}
+\DoxyCodeLine{00216\ \textcolor{comment}{/*\ \ \ \ \ \ \ \ is\ controlled\ by\ the\ following\ macros:\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ */}}
+\DoxyCodeLine{00217\ \textcolor{comment}{/*\ \ \ \ \ \ \ \ \ \ \ *\ CFG\_RETAIN\_RAM\_1\_BLOCK\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ */}}
+\DoxyCodeLine{00218\ \textcolor{comment}{/****************************************************************************************************************/}}
+\DoxyCodeLine{00219\ \textcolor{preprocessor}{\#define\ CFG\_AUTO\_DETECT\_NON\_RET\_HEAP}}
+\DoxyCodeLine{00220\ }
+\DoxyCodeLine{00221\ \textcolor{comment}{/****************************************************************************************************************/}}
+\DoxyCodeLine{00222\ \textcolor{comment}{/*\ Code\ location\ selection.\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ */}}
+\DoxyCodeLine{00223\ \textcolor{comment}{/*\ \ \ \ \ -\/\ CFG\_CODE\_LOCATION\_EXT:\ Code\ is\ loaded\ from\ SPI\ flash\ /\ I2C\ EEPROM\ /\ UART\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ */}}
+\DoxyCodeLine{00224\ \textcolor{comment}{/*\ \ \ \ \ -\/\ CFG\_CODE\_LOCATION\_OTP:\ Code\ is\ burned\ in\ the\ OTP\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ */}}
+\DoxyCodeLine{00225\ \textcolor{comment}{/*\ The\ above\ options\ are\ mutually\ exclusive\ and\ exactly\ one\ of\ them\ must\ be\ enabled.\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ */}}
+\DoxyCodeLine{00226\ \textcolor{comment}{/****************************************************************************************************************/}}
+\DoxyCodeLine{00227\ \textcolor{preprocessor}{\#define\ CFG\_CODE\_LOCATION\_EXT}}
+\DoxyCodeLine{00228\ \textcolor{preprocessor}{\#undef\ CFG\_CODE\_LOCATION\_OTP}}
+\DoxyCodeLine{00229\ }
+\DoxyCodeLine{00230\ \textcolor{comment}{/****************************************************************************************************************/}}
+\DoxyCodeLine{00231\ \textcolor{comment}{/*\ Code\ size\ for\ OTP\ copy\ on\ (extended\ sleep\ with\ OTP\ copy\ on).\ If\ the\ OTP\ copy\ is\ on\ and\ the\ default\ SDK\ \ \ \ \ \ \ */}}
+\DoxyCodeLine{00232\ \textcolor{comment}{/*\ scatter\ file\ is\ not\ used\ the\ following\ macro\ must\ define\ the\ code\ size\ in\ bytes\ for\ the\ OTP\ copy.\ \ \ \ \ \ \ \ \ \ \ \ */}}
+\DoxyCodeLine{00233\ \textcolor{comment}{/****************************************************************************************************************/}}
+\DoxyCodeLine{00234\ \textcolor{preprocessor}{\#undef\ CFG\_CODE\_SIZE\_FOR\_OTP\_COPY\_ON}}
+\DoxyCodeLine{00235\ }
+\DoxyCodeLine{00236\ \textcolor{comment}{/****************************************************************************************************************/}}
+\DoxyCodeLine{00237\ \textcolor{comment}{/*\ Temperature\ range\ selection\ (it\ applies\ to\ hibernation\ mode\ only).\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ */}}
+\DoxyCodeLine{00238\ \textcolor{comment}{/*\ -\/\ CFG\_HIGH\_TEMPERATURE:\ \ \ \ \ \ \ \ \ Device\ is\ configured\ to\ operate\ at\ high\ temperature\ range\ (-\/40C\ to\ +105C).\ \ \ */}}
+\DoxyCodeLine{00239\ \textcolor{comment}{/*\ -\/\ CFG\_AMB\_TEMPERATURE:\ \ \ \ \ \ \ \ \ \ Device\ is\ configured\ to\ operate\ at\ ambient\ temperature\ range\ (-\/40C\ to\ +40C).\ */}}
+\DoxyCodeLine{00240\ \textcolor{comment}{/*\ -\/\ CFG\_MID\_TEMPERATURE:\ \ \ \ \ \ \ \ \ \ Device\ is\ configured\ to\ operate\ at\ mid\ temperature\ range\ (-\/40C\ to\ +60C).\ \ \ \ \ */}}
+\DoxyCodeLine{00241\ \textcolor{comment}{/*\ -\/\ CFG\_EXT\_TEMPERATURE:\ \ \ \ \ \ \ \ \ \ Device\ is\ configured\ to\ operate\ at\ ext\ temperature\ range\ (-\/40C\ to\ +85C).\ \ \ \ \ */}}
+\DoxyCodeLine{00242\ \textcolor{comment}{/****************************************************************************************************************/}}
+\DoxyCodeLine{00243\ \textcolor{preprocessor}{\#define\ CFG\_AMB\_TEMPERATURE}}
+\DoxyCodeLine{00244\ }
+\DoxyCodeLine{00245\ \textcolor{comment}{/****************************************************************************************************************/}}
+\DoxyCodeLine{00246\ \textcolor{comment}{/*\ Disable\ quadrature\ decoder\ on\ start\ up.\ The\ quadrature\ decoder\ is\ by\ default\ enabled\ on\ system\ power\ up\ and\ \ */}}
+\DoxyCodeLine{00247\ \textcolor{comment}{/*\ it\ may\ count\ events.\ This\ leads\ to\ WKUP\_QUADEC\_IRQn\ pending\ interrupts.\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ */}}
+\DoxyCodeLine{00248\ \textcolor{comment}{/****************************************************************************************************************/}}
+\DoxyCodeLine{00249\ \textcolor{preprocessor}{\#define\ CFG\_DISABLE\_QUADEC\_ON\_START\_UP}}
+\DoxyCodeLine{00250\ }
+\DoxyCodeLine{00251\ \textcolor{comment}{/****************************************************************************************************************/}}
+\DoxyCodeLine{00252\ \textcolor{comment}{/*\ Enables\ the\ XTAL32M\ dynamic\ frequency\ trimming\ based\ on\ the\ temperature\ changes.\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ */}}
+\DoxyCodeLine{00253\ \textcolor{comment}{/****************************************************************************************************************/}}
+\DoxyCodeLine{00254\ \textcolor{preprocessor}{\#undef\ CFG\_XTAL32M\_DYN\_FREQ\_TRIMMING}}
+\DoxyCodeLine{00255\ }
+\DoxyCodeLine{00256\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{//\ \_DA14535\_CONFIG\_ADVANCED\_H\_}}
+
+\end{DoxyCode}

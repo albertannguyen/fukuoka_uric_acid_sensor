@@ -25,22 +25,53 @@
  ****************************************************************************************
  */
 
-// pins are formatted as P0_X in datasheet
+/*
+----------------------------------
+- Board Selection
+----------------------------------
+*/
 
-// define UVP circuit pins
-// note that P0_9 is the LED pin for USB devkit by default
-#define UVP_MAX_SHDN_PORT           GPIO_PORT_0
-#define UVP_MAX_SHDN_PIN            GPIO_PIN_9 // PWM on MikroBus
+// #define BOARD_CUSTOM_PCB // define this line if running on custom PCB
 
-// define ADC pins
-#define ADC_INPUT_PORT              GPIO_PORT_0
-#define ADC_INPUT_PIN               GPIO_PIN_6 // RX on MikroBus
+/*
+----------------------------------
+- Pin Configuration
+----------------------------------
+*/
 
-// define PWM pins
-#define PWM2_PORT               GPIO_PORT_0
-#define PWM2_PIN                GPIO_PIN_7 // CS on MikroBus
-#define PWM3_PORT               GPIO_PORT_0
-#define PWM3_PIN                GPIO_PIN_11 // INT on MikroBus
+// pins are labeled as P0_X in datasheet
+// else preprocessor branch configs the pins for the DA14531 USB Devkit
+
+// for UVP circuit
+#ifdef BOARD_CUSTOM_PCB
+    #define UVP_MAX_SHDN_PORT           GPIO_PORT_0
+    #define UVP_MAX_SHDN_PIN            GPIO_PIN_11
+#else
+    #define UVP_MAX_SHDN_PORT           GPIO_PORT_0
+    #define UVP_MAX_SHDN_PIN            GPIO_PIN_9  // PWM on MikroBus (also is the red LED pin)
+#endif
+
+// for ADC
+#ifdef BOARD_CUSTOM_PCB
+    #define ADC_INPUT_PORT              GPIO_PORT_0
+    #define ADC_INPUT_PIN               GPIO_PIN_7
+#else
+    #define ADC_INPUT_PORT              GPIO_PORT_0
+    #define ADC_INPUT_PIN               GPIO_PIN_6 // RX on MikroBus
+#endif
+
+// for PWM
+#ifdef BOARD_CUSTOM_PCB
+    #define PWM2_PORT                   GPIO_PORT_0
+    #define PWM2_PIN                    GPIO_PIN_8
+    #define PWM3_PORT                   GPIO_PORT_0
+    #define PWM3_PIN                    GPIO_PIN_9
+#else
+    #define PWM2_PORT                   GPIO_PORT_0
+    #define PWM2_PIN                    GPIO_PIN_7 // CS on MikroBus
+    #define PWM3_PORT                   GPIO_PORT_0
+    #define PWM3_PIN                    GPIO_PIN_11 // INT on MikroBus
+#endif
 
 /*
  ****************************************************************************************
@@ -73,7 +104,6 @@
  ****************************************************************************************
  */
 
-// TODO: validate pins for custom PCB
 // Define SPI Pads
 #if defined (__DA14531__)
 		#define SPI_EN_PORT             GPIO_PORT_0
