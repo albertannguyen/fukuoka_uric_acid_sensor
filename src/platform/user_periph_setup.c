@@ -21,8 +21,8 @@
 #include "uart.h"
 #include "syscntl.h"
 
-// set flag for UVP GPIO with initial value of true
-bool flag_gpio_uvp = true;
+// Needed for flag_gpio_uvp
+#include "user_empty_peripheral_template.h"
 
 /*
  ****************************************************************************************
@@ -84,11 +84,16 @@ void set_pad_functions(void)
 			GPIO_ConfigurePin(UART2_TX_PORT, UART2_TX_PIN, OUTPUT, PID_UART2_TX, false);
 	#endif
 	
-	// FIXME: needs bench testing with test values from software
-	// set pin 9 (UVP_MAX_SHDN) as digital output high
-	if(flag_gpio_uvp){
+	// set pin 9 (UVP_MAX_SHDN) as digital output high or low based on flag in user_empty_peripheral_template.c
+	if(flag_gpio_uvp)
+	{
+		// GPIO_SetInactive(UVP_MAX_SHDN_PORT, UVP_MAX_SHDN_PIN); // shutdown amplifiers
+		GPIO_ConfigurePin(UVP_MAX_SHDN_PORT, UVP_MAX_SHDN_PIN, OUTPUT, PID_GPIO, false);
+	}
+	else
+	{
+		// GPIO_SetActive(UVP_MAX_SHDN_PORT, UVP_MAX_SHDN_PIN); // enable amplifiers
 		GPIO_ConfigurePin(UVP_MAX_SHDN_PORT, UVP_MAX_SHDN_PIN, OUTPUT, PID_GPIO, true);
-		flag_gpio_uvp = false; 	// flag is so that it only runs once at startup
 	}
 	
 	// set ADC pin as input

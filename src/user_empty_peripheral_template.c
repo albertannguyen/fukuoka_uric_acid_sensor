@@ -69,6 +69,7 @@ bool uvp_timer_initialized __SECTION_ZERO("retention_mem_area0");
 uint16_t uvp_cccd_value __SECTION_ZERO("retention_mem_area0");
 uint16_t uvp_adc_sample_raw __SECTION_ZERO("retention_mem_area0");
 uint16_t uvp_adc_sample_mv __SECTION_ZERO("retention_mem_area0");
+bool flag_gpio_uvp __SECTION_ZERO("retention_mem_area0");
 
 // Sensor voltage variables
 timer_hnd sensor_timer __SECTION_ZERO("retention_mem_area0");
@@ -87,7 +88,7 @@ void uvp_wireless_timer_cb(void)
 	bool uvp_result;
 	
 	// Initialize and enable ADC for a single conversion of VBAT HIGH rail
-	// FIXME: change settings once implementing on custom PCB, ensure ADC reads VBAT HIGH
+	// gpadc_init_se(ADC_INPUT_SE_P0_6, 2, false, 0, ADC_INPUT_ATTN_4X, false, 0); // for devkit testing with ADC input
 	gpadc_init_se(ADC_INPUT_SE_VBAT_HIGH, 2, false, 0, ADC_INPUT_ATTN_4X, false, 0);
 	adc_enable();
 	
@@ -98,12 +99,12 @@ void uvp_wireless_timer_cb(void)
 	// Compare ADC value to see if it is less than chosen UVP threshold (1900 mV)
 	if(uvp_adc_sample_mv < (uint16_t)1900)
 	{
-		GPIO_SetInactive(UVP_MAX_SHDN_PORT, UVP_MAX_SHDN_PIN); // shutdown amplifiers
+		flag_gpio_uvp = true;
 		uvp_result = true;
 	}
 	else
 	{
-		GPIO_SetActive(UVP_MAX_SHDN_PORT, UVP_MAX_SHDN_PIN); // enable amplifiers
+		flag_gpio_uvp = false;
 		uvp_result = false;
 	}
 	
@@ -111,6 +112,7 @@ void uvp_wireless_timer_cb(void)
 	arch_printf("---------------------------------------------------------------------\n\r");
 	arch_printf("[UVP] Register Value: %u | Battery Voltage: %u mV \n\r", uvp_adc_sample_raw, uvp_adc_sample_mv);
 	arch_printf("[UVP] System undervoltage status: %s \n\r", uvp_result ? "YES" : "NO");
+	arch_printf("[UVP] flag_gpio_uvp = %s \n\r", flag_gpio_uvp ? "true" : "false");
 	#endif
 	
 	if (uvp_cccd_value == 0x0001 && (ke_state_get(TASK_APP) == APP_CONNECTED)) // notifications enabled and phone connected
@@ -789,6 +791,7 @@ arch_main_loop_callback_ret_t user_app_on_system_powered(void)
 void user_app_on_init(void)
 {
 	// Initialize user retained variables to safe defaults
+	flag_gpio_uvp = false;
 	uvp_timer_initialized = false;
 	uvp_cccd_value = 0;
 	uvp_adc_sample_raw = 0;

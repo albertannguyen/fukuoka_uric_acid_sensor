@@ -40,20 +40,24 @@ i.e.
 #endif
 *****************************************************************************/
 
-// for user callback functions
+// For user callback functions
 #include "arch_api.h"
 
-// for ADC functions
+// For ADC functions
 #include "adc_531.h"
 
-// for PWM functions
+// For PWM functions
 #include "timer0_2.h"
 #include "timer2.h"
 
-// for BLE handler functions
+// For BLE handler functions
 #include "gapc_task.h" // gap functions and messages
 #include "gapm_task.h" // gap functions and messages
 #include "custs1_task.h"
+
+// For user_periph_setup.c
+#include <stdbool.h>
+extern bool flag_gpio_uvp;
 
 /*
  ****************************************************************************************
@@ -161,7 +165,7 @@ uint16_t gpadc_sample_to_mv(uint16_t sample);
  * @brief Configure Timer2 PWM frequency.
  *
  * @param[in] clk_div    Clock divider enum (tim0_2_clk_div_t). Encoded as shift (1 << clk_div).
- * @param[in] clk_src 	 Timer2 clock source enum (tim2_clk_src_t): LP (32 kHz) or SYS (FIXME: 32 MHz).
+ * @param[in] clk_src 	 Timer2 clock source enum (tim2_clk_src_t): LP (32 kHz) or SYS (32 MHz).
  * @param[in] pwm_div	 	 PWM divider (2 to 16383). This function clamps out-of-range values.
  *
  * @details

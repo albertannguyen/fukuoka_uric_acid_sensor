@@ -78,4 +78,11 @@
   ..\src\config\user_periph_setup.h \
   ..\..\..\..\..\sdk\platform\driver\uart\uart.h \
   ..\..\..\..\..\sdk\platform\driver\dma\dma.h \
-  ..\..\..\..\..\sdk\platform\driver\syscntl\syscntl.h
+  ..\..\..\..\..\sdk\platform\driver\syscntl\syscntl.h \
+  ..\src\user_empty_peripheral_template.h \
+  ..\..\..\..\..\sdk\app_modules\api\app_task.h \
+  ..\..\..\..\..\sdk\platform\driver\adc\adc_531.h \
+  ..\..\..\..\..\sdk\platform\driver\timer\timer0_2.h \
+  ..\..\..\..\..\sdk\platform\driver\timer\timer2.h \
+  ..\..\..\..\..\sdk\ble_stack\profiles\custom\custs\api\custs1_task.h \
+  ..\..\..\..\..\sdk\ble_stack\host\att\attm\attm_db_128.h
