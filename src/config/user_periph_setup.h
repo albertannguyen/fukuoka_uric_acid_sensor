@@ -31,7 +31,7 @@
 ----------------------------------
 */
 
-// #define BOARD_CUSTOM_PCB // define this line if running on custom PCB
+#define BOARD_CUSTOM_PCB // define this line if running on custom PCB
 
 /*
 ----------------------------------
@@ -40,12 +40,12 @@
 */
 
 // pins are labeled as P0_X in datasheet
-// else preprocessor branch configs the pins for the DA14531 USB Devkit
+// if-else preprocessor branch configs the pins for the DA14531 USB Devkit
 
 // for UVP circuit
 #ifdef BOARD_CUSTOM_PCB
     #define UVP_MAX_SHDN_PORT           GPIO_PORT_0
-    #define UVP_MAX_SHDN_PIN            GPIO_PIN_11
+    #define UVP_MAX_SHDN_PIN            GPIO_PIN_7
 #else
     #define UVP_MAX_SHDN_PORT           GPIO_PORT_0
     #define UVP_MAX_SHDN_PIN            GPIO_PIN_9  // PWM on MikroBus (also is the red LED pin)
@@ -54,7 +54,7 @@
 // for ADC
 #ifdef BOARD_CUSTOM_PCB
     #define ADC_INPUT_PORT              GPIO_PORT_0
-    #define ADC_INPUT_PIN               GPIO_PIN_7
+    #define ADC_INPUT_PIN               GPIO_PIN_6
 #else
     #define ADC_INPUT_PORT              GPIO_PORT_0
     #define ADC_INPUT_PIN               GPIO_PIN_6 // RX on MikroBus
@@ -63,9 +63,9 @@
 // for PWM
 #ifdef BOARD_CUSTOM_PCB
     #define PWM2_PORT                   GPIO_PORT_0
-    #define PWM2_PIN                    GPIO_PIN_8
+    #define PWM2_PIN                    GPIO_PIN_8 // SDA on MikroBus
     #define PWM3_PORT                   GPIO_PORT_0
-    #define PWM3_PIN                    GPIO_PIN_9
+    #define PWM3_PIN                    GPIO_PIN_9 // PWM on MikroBus
 #else
     #define PWM2_PORT                   GPIO_PORT_0
     #define PWM2_PIN                    GPIO_PIN_7 // CS on MikroBus

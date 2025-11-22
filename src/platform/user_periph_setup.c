@@ -124,16 +124,12 @@ void periph_init(void)
 	#if defined (__DA14531__)
 	// In Boost mode enable the DCDC converter to supply VBAT_HIGH for the used GPIOs
 	// Assumption: The connected external peripheral is powered by 3V
-	// template code
+	
+	// template code (old)
 	// syscntl_dcdc_turn_on_in_boost(SYSCNTL_DCDC_LEVEL_3V0);
 	
-	// USB devkit supplies 3.3 V to DA14531 chip in buck mode via an LDO
-	
-	// FIXME:
-	// Set converter to buck mode and generate VBAT_LOW = 1.8 V
-	syscntl_dcdc_turn_on_in_buck(SYSCNTL_DCDC_LEVEL_1V8);
-	
-	// TODO: System should be shut down at VBAT_HIGH = 1.9 V since reverse current protection fails at 1.8 V
+	// Set converter to buck mode and generate VBAT_LOW = 1.1V typical value
+	syscntl_dcdc_turn_on_in_buck(SYSCNTL_DCDC_LEVEL_1V1);
 	
 	#else
 			// Power up peripherals' power domain

@@ -40,6 +40,9 @@
 // For BLE notifications
 #include "user_custs1_def.h"
 
+// For PWM and sleep management
+#include "arch_api.h"
+
 /*
  ****************************************************************************************
  * DEFINITIONS
@@ -48,6 +51,13 @@
 
 // Macro that clamps value to the range [min, max]
 #define CLAMP(value, min, max) ((value) < (min) ? (min) : ((value) > (max) ? (max) : (value)))
+
+// Define ADC pin based on preprocessor toggle for gpadc_init_se()
+#if defined(BOARD_CUSTOM_PCB)
+    #define ADC_ENUM_INPUT ADC_INPUT_SE_P0_6   // custom PCB ADC pin
+#else
+    #define ADC_ENUM_INPUT ADC_INPUT_SE_P0_6   // default USB devkit ADC pin
+#endif
 
 // Constants from datasheet
 static const uint16_t MIN_PWM_DIV     = 2U;
@@ -88,7 +98,6 @@ void uvp_wireless_timer_cb(void)
 	bool uvp_result;
 	
 	// Initialize and enable ADC for a single conversion of VBAT HIGH rail
-	// gpadc_init_se(ADC_INPUT_SE_P0_6, 2, false, 0, ADC_INPUT_ATTN_4X, false, 0); // for devkit testing with ADC input
 	gpadc_init_se(ADC_INPUT_SE_VBAT_HIGH, 2, false, 0, ADC_INPUT_ATTN_4X, false, 0);
 	adc_enable();
 	
@@ -144,7 +153,13 @@ void uvp_wireless_timer_cb(void)
 	arch_printf("---------------------------------------------------------------------\n\r");
 	#endif
 	
-	// FIXME: ChatGPT fetch code for DCDC converter
+	/*
+   ****************************************************************************************
+   * UART test prints
+   ****************************************************************************************
+	 */
+	
+	// ChatGPT fetch code for DCDC converter, prints VBAT_LOW voltage
 	syscntl_dcdc_level_t vbat_low = syscntl_dcdc_get_level();
 
 	#ifdef CFG_PRINTF
@@ -193,6 +208,30 @@ void uvp_wireless_timer_cb(void)
 	arch_printf("[DCDC] VBAT_LOW voltage level: %s\n\r", voltage_str);
 	#endif
 	
+	// Prints current sleep mode of system
+	#ifdef CFG_PRINTF
+	sleep_state_t current_mode = arch_get_sleep_mode();
+	const char *mode_str;
+
+	switch (current_mode) {
+			case ARCH_SLEEP_OFF:
+					mode_str = "ARCH_SLEEP_OFF (Active Mode)";
+					break;
+			case ARCH_EXT_SLEEP_ON:
+					mode_str = "ARCH_EXT_SLEEP_ON (Extended Sleep)";
+					break;
+			case ARCH_EXT_SLEEP_OTP_COPY_ON:
+					mode_str = "ARCH_EXT_SLEEP_OTP_COPY_ON";
+					break;
+			default:
+					mode_str = "UNKNOWN MODE";
+					break;
+	}
+
+	// Print the status using the retrieved string and raw numeric value
+	arch_printf("[SLEEP] Current Mode: %s (Value: %u) \n\r", mode_str, (uint8_t)current_mode);
+	#endif
+	
 	// Disable ADC to conserve power
 	adc_disable();
 	
@@ -209,8 +248,8 @@ void uvp_wireless_timer_cb(void)
 void gpadc_wireless_timer_cb(void)
 {
 	// Initialize and enable ADC for a single conversion of sensor voltage
-	// FIXME: change settings once implementing on custom PCB
-	gpadc_init_se(ADC_INPUT_SE_P0_6, 2, false, 0, ADC_INPUT_ATTN_4X, false, 0);
+	// FIXME: change ADC PIN once implementing on custom PCB
+	gpadc_init_se(ADC_ENUM_INPUT, 2, false, 0, ADC_INPUT_ATTN_4X, false, 0);
 	adc_enable();
 	
 	// Read ADC and convert results to millivolts
@@ -390,6 +429,9 @@ void timer2_pwm_enable(void)
 	
 	// Enable PWM outputs
 	timer2_start();
+	
+	// Prevent SoC from sleeping
+	arch_set_sleep_mode(ARCH_SLEEP_OFF);
 }
 
 void timer2_pwm_disable(void)
@@ -399,6 +441,9 @@ void timer2_pwm_disable(void)
 
 	// Disable timer input clock
 	timer0_2_clk_disable();
+	
+	// Return sleep mode to default
+	arch_set_sleep_mode(ARCH_EXT_SLEEP_ON);
 }
 
 /*
