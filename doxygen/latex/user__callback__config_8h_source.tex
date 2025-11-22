@@ -1,0 +1,162 @@
+\doxysection{user\+\_\+callback\+\_\+config.\+h}
+\hypertarget{user__callback__config_8h_source}{}\label{user__callback__config_8h_source}\index{C:/Users/alber/Documents/DA145xx\_SDK/6.0.24.1464/projects/target\_apps/template/fukuoka\_uric\_acid\_sensor/src/config/user\_callback\_config.h@{C:/Users/alber/Documents/DA145xx\_SDK/6.0.24.1464/projects/target\_apps/template/fukuoka\_uric\_acid\_sensor/src/config/user\_callback\_config.h}}
+\mbox{\hyperlink{user__callback__config_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ }
+\DoxyCodeLine{00008\ }
+\DoxyCodeLine{00009\ \textcolor{preprocessor}{\#ifndef\ \_USER\_CALLBACK\_CONFIG\_H\_}}
+\DoxyCodeLine{00010\ \textcolor{preprocessor}{\#define\ \_USER\_CALLBACK\_CONFIG\_H\_}}
+\DoxyCodeLine{00011\ }
+\DoxyCodeLine{00012\ \textcolor{comment}{/*}}
+\DoxyCodeLine{00013\ \textcolor{comment}{\ *\ INCLUDE\ FILES}}
+\DoxyCodeLine{00014\ \textcolor{comment}{\ ****************************************************************************************}}
+\DoxyCodeLine{00015\ \textcolor{comment}{\ */}}
+\DoxyCodeLine{00016\ }
+\DoxyCodeLine{00017\ \textcolor{preprocessor}{\#include\ "{}app\_api.h"{}}}
+\DoxyCodeLine{00018\ \textcolor{preprocessor}{\#include\ "{}app\_bass.h"{}}}
+\DoxyCodeLine{00019\ \textcolor{preprocessor}{\#include\ "{}app\_findme.h"{}}}
+\DoxyCodeLine{00020\ \textcolor{preprocessor}{\#include\ "{}app\_proxr.h"{}}}
+\DoxyCodeLine{00021\ \textcolor{preprocessor}{\#include\ "{}app\_suotar.h"{}}}
+\DoxyCodeLine{00022\ \textcolor{preprocessor}{\#include\ "{}app\_callback.h"{}}}
+\DoxyCodeLine{00023\ \textcolor{preprocessor}{\#include\ "{}app\_prf\_types.h"{}}}
+\DoxyCodeLine{00024\ \textcolor{preprocessor}{\#if\ (BLE\_APP\_SEC)}}
+\DoxyCodeLine{00025\ \textcolor{preprocessor}{\#include\ "{}app\_bond\_db.h"{}}}
+\DoxyCodeLine{00026\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{//\ (BLE\_APP\_SEC)}}
+\DoxyCodeLine{00027\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{user__empty__peripheral__template_8h}{user\_empty\_peripheral\_template.h}}"{}}}
+\DoxyCodeLine{00028\ }
+\DoxyCodeLine{00029\ \textcolor{comment}{/*}}
+\DoxyCodeLine{00030\ \textcolor{comment}{\ *\ FUNCTION\ DECLARATIONS}}
+\DoxyCodeLine{00031\ \textcolor{comment}{\ ****************************************************************************************}}
+\DoxyCodeLine{00032\ \textcolor{comment}{\ */}}
+\DoxyCodeLine{00033\ }
+\DoxyCodeLine{00040\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{user__callback__config_8h_a333ba051b56b2538535a1e1b1e1c0640}{app\_advertise\_complete}}(\textcolor{keyword}{const}\ uint8\_t);}
+\DoxyCodeLine{00041\ }
+\DoxyCodeLine{00048\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{user__callback__config_8h_ab75fd65a1d33c7ed4755c49678a1cadb}{on\_suotar\_status\_change}}(\textcolor{keyword}{const}\ uint8\_t\ suotar\_event);}
+\DoxyCodeLine{00049\ }
+\DoxyCodeLine{00050\ }
+\DoxyCodeLine{00051\ \textcolor{comment}{/*}}
+\DoxyCodeLine{00052\ \textcolor{comment}{\ *\ LOCAL\ VARIABLE\ DEFINITIONS}}
+\DoxyCodeLine{00053\ \textcolor{comment}{\ ****************************************************************************************}}
+\DoxyCodeLine{00054\ \textcolor{comment}{\ */}}
+\DoxyCodeLine{00055\ }
+\DoxyCodeLine{00056\ \textcolor{preprocessor}{\#if\ (BLE\_BATT\_SERVER)}}
+\DoxyCodeLine{00057\ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ \textcolor{keyword}{struct\ }app\_bass\_cb\ user\_app\_bass\_cb\ =\ \{}
+\DoxyCodeLine{00058\ \ \ \ \ .on\_batt\_level\_upd\_rsp\ \ \ \ \ \ =\ NULL,}
+\DoxyCodeLine{00059\ \ \ \ \ .on\_batt\_level\_ntf\_cfg\_ind\ \ =\ NULL,}
+\DoxyCodeLine{00060\ \};}
+\DoxyCodeLine{00061\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{00062\ }
+\DoxyCodeLine{00063\ \textcolor{preprocessor}{\#if\ (BLE\_FINDME\_TARGET)}}
+\DoxyCodeLine{00064\ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ \textcolor{keyword}{struct\ }app\_findt\_cb\ user\_app\_findt\_cb\ =\ \{}
+\DoxyCodeLine{00065\ \ \ \ \ .on\_findt\_alert\_ind\ \ \ \ \ \ \ \ \ =\ default\_findt\_alert\_ind\_handler,}
+\DoxyCodeLine{00066\ \};}
+\DoxyCodeLine{00067\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{00068\ }
+\DoxyCodeLine{00069\ \textcolor{preprocessor}{\#if\ (BLE\_PROX\_REPORTER)}}
+\DoxyCodeLine{00070\ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ \textcolor{keyword}{struct\ }app\_proxr\_cb\ user\_app\_proxr\_cb\ =\ \{}
+\DoxyCodeLine{00071\ \ \ \ \ .on\_proxr\_alert\_ind\ \ \ \ \ \ =\ default\_proxr\_alert\_ind\_handler,}
+\DoxyCodeLine{00072\ \};}
+\DoxyCodeLine{00073\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{00074\ }
+\DoxyCodeLine{00075\ \textcolor{preprocessor}{\#if\ (BLE\_SUOTA\_RECEIVER)}}
+\DoxyCodeLine{00076\ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ \textcolor{keyword}{struct\ }app\_suotar\_cb\ user\_app\_suotar\_cb\ =\ \{}
+\DoxyCodeLine{00077\ \ \ \ \ .on\_suotar\_status\_change\ =\ \mbox{\hyperlink{user__callback__config_8h_ab75fd65a1d33c7ed4755c49678a1cadb}{on\_suotar\_status\_change}},}
+\DoxyCodeLine{00078\ \};}
+\DoxyCodeLine{00079\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{00080\ }
+\DoxyCodeLine{00081\ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ \textcolor{keyword}{struct\ }app\_callbacks\ user\_app\_callbacks\ =\ \{}
+\DoxyCodeLine{00082\ \ \ \ \ .app\_on\_connection\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ =\ \mbox{\hyperlink{group___a_p_p_ga097fccef82db4a9dfdc1cb542a9e9e20}{user\_on\_connection}},}
+\DoxyCodeLine{00083\ \ \ \ \ .app\_on\_disconnect\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ =\ \mbox{\hyperlink{group___a_p_p_ga2b05ace9fab6a68b42379e8a17d91d43}{user\_on\_disconnect}},}
+\DoxyCodeLine{00084\ \ \ \ \ .app\_on\_update\_params\_rejected\ \ \ \ \ \ =\ NULL,}
+\DoxyCodeLine{00085\ \ \ \ \ .app\_on\_update\_params\_complete\ \ \ \ \ \ =\ NULL,}
+\DoxyCodeLine{00086\ \ \ \ \ .app\_on\_set\_dev\_config\_complete\ \ \ \ \ =\ default\_app\_on\_set\_dev\_config\_complete,}
+\DoxyCodeLine{00087\ \ \ \ \ .app\_on\_adv\_nonconn\_complete\ \ \ \ \ \ \ \ =\ NULL,}
+\DoxyCodeLine{00088\ \ \ \ \ .app\_on\_adv\_undirect\_complete\ \ \ \ \ \ \ =\ NULL,}
+\DoxyCodeLine{00089\ \ \ \ \ .app\_on\_adv\_direct\_complete\ \ \ \ \ \ \ \ \ =\ NULL,}
+\DoxyCodeLine{00090\ \ \ \ \ .app\_on\_db\_init\_complete\ \ \ \ \ \ \ \ \ \ \ \ =\ default\_app\_on\_db\_init\_complete,}
+\DoxyCodeLine{00091\ \ \ \ \ .app\_on\_scanning\_completed\ \ \ \ \ \ \ \ \ \ =\ NULL,}
+\DoxyCodeLine{00092\ \ \ \ \ .app\_on\_adv\_report\_ind\ \ \ \ \ \ \ \ \ \ \ \ \ \ =\ NULL,}
+\DoxyCodeLine{00093\ \ \ \ \ .app\_on\_get\_dev\_name\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ =\ default\_app\_on\_get\_dev\_name,}
+\DoxyCodeLine{00094\ \ \ \ \ .app\_on\_get\_dev\_appearance\ \ \ \ \ \ \ \ \ \ =\ default\_app\_on\_get\_dev\_appearance,}
+\DoxyCodeLine{00095\ \ \ \ \ .app\_on\_get\_dev\_slv\_pref\_params\ \ \ \ \ =\ default\_app\_on\_get\_dev\_slv\_pref\_params,}
+\DoxyCodeLine{00096\ \ \ \ \ .app\_on\_set\_dev\_info\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ =\ default\_app\_on\_set\_dev\_info,}
+\DoxyCodeLine{00097\ \ \ \ \ .app\_on\_data\_length\_change\ \ \ \ \ \ \ \ \ \ =\ NULL,}
+\DoxyCodeLine{00098\ \ \ \ \ .app\_on\_update\_params\_request\ \ \ \ \ \ \ =\ default\_app\_update\_params\_request,}
+\DoxyCodeLine{00099\ \ \ \ \ .app\_on\_generate\_static\_random\_addr\ =\ default\_app\_generate\_static\_random\_addr,}
+\DoxyCodeLine{00100\ \ \ \ \ .app\_on\_svc\_changed\_cfg\_ind\ \ \ \ \ \ \ \ \ =\ NULL,}
+\DoxyCodeLine{00101\ \ \ \ \ .app\_on\_get\_peer\_features\ \ \ \ \ \ \ \ \ \ \ =\ NULL,}
+\DoxyCodeLine{00102\ \textcolor{preprocessor}{\#if\ (BLE\_APP\_SEC)}}
+\DoxyCodeLine{00103\ \ \ \ \ .app\_on\_pairing\_request\ \ \ \ \ \ \ \ \ \ \ \ \ =\ default\_app\_on\_pairing\_request,}
+\DoxyCodeLine{00104\ \ \ \ \ .app\_on\_tk\_exch\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ =\ default\_app\_on\_tk\_exch,}
+\DoxyCodeLine{00105\ \ \ \ \ .app\_on\_irk\_exch\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ =\ NULL,}
+\DoxyCodeLine{00106\ \ \ \ \ .app\_on\_csrk\_exch\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ =\ NULL,}
+\DoxyCodeLine{00107\ \ \ \ \ .app\_on\_ltk\_exch\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ =\ default\_app\_on\_ltk\_exch,}
+\DoxyCodeLine{00108\ \ \ \ \ .app\_on\_pairing\_succeeded\ \ \ \ \ \ \ \ \ \ \ =\ NULL,}
+\DoxyCodeLine{00109\ \ \ \ \ .app\_on\_encrypt\_ind\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ =\ NULL,}
+\DoxyCodeLine{00110\ \ \ \ \ .app\_on\_encrypt\_req\_ind\ \ \ \ \ \ \ \ \ \ \ \ \ =\ NULL,}
+\DoxyCodeLine{00111\ \ \ \ \ .app\_on\_security\_req\_ind\ \ \ \ \ \ \ \ \ \ \ \ =\ NULL,}
+\DoxyCodeLine{00112\ \ \ \ \ .app\_on\_addr\_solved\_ind\ \ \ \ \ \ \ \ \ \ \ \ \ =\ NULL,}
+\DoxyCodeLine{00113\ \ \ \ \ .app\_on\_addr\_resolve\_failed\ \ \ \ \ \ \ \ \ =\ NULL,}
+\DoxyCodeLine{00114\ \textcolor{preprocessor}{\#if\ !defined\ (\_\_DA14531\_01\_\_)\ \&\&\ !defined\ (\_\_DA14535\_\_)}}
+\DoxyCodeLine{00115\ \ \ \ \ .app\_on\_ral\_cmp\_evt\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ =\ NULL,}
+\DoxyCodeLine{00116\ \ \ \ \ .app\_on\_ral\_size\_ind\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ =\ NULL,}
+\DoxyCodeLine{00117\ \ \ \ \ .app\_on\_ral\_addr\_ind\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ =\ NULL,}
+\DoxyCodeLine{00118\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{//\ not\ for\ DA14531-\/01,\ DA14535}}
+\DoxyCodeLine{00119\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{//\ (BLE\_APP\_SEC)}}
+\DoxyCodeLine{00120\ \};}
+\DoxyCodeLine{00121\ }
+\DoxyCodeLine{00122\ \textcolor{preprocessor}{\#if\ (BLE\_APP\_SEC)}}
+\DoxyCodeLine{00123\ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ \textcolor{keyword}{struct\ }app\_bond\_db\_callbacks\ user\_app\_bond\_db\_callbacks\ =\ \{}
+\DoxyCodeLine{00124\ \ \ \ \ .app\_bdb\_init\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ =\ NULL,}
+\DoxyCodeLine{00125\ \ \ \ \ .app\_bdb\_get\_size\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ =\ NULL,}
+\DoxyCodeLine{00126\ \ \ \ \ .app\_bdb\_add\_entry\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ =\ NULL,}
+\DoxyCodeLine{00127\ \ \ \ \ .app\_bdb\_remove\_entry\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ =\ NULL,}
+\DoxyCodeLine{00128\ \ \ \ \ .app\_bdb\_search\_entry\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ =\ NULL,}
+\DoxyCodeLine{00129\ \ \ \ \ .app\_bdb\_get\_number\_of\_stored\_irks\ \ =\ NULL,}
+\DoxyCodeLine{00130\ \ \ \ \ .app\_bdb\_get\_stored\_irks\ \ \ \ \ \ \ \ \ \ \ \ =\ NULL,}
+\DoxyCodeLine{00131\ \ \ \ \ .app\_bdb\_get\_device\_info\_from\_slot\ \ =\ NULL,}
+\DoxyCodeLine{00132\ \};}
+\DoxyCodeLine{00133\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{//\ (BLE\_APP\_SEC)}}
+\DoxyCodeLine{00134\ }
+\DoxyCodeLine{00135\ \textcolor{preprocessor}{\#define\ app\_process\_catch\_rest\_cb\ \ \ \ \ \ \ user\_catch\_rest\_hndl}}
+\DoxyCodeLine{00136\ }
+\DoxyCodeLine{00137\ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ \textcolor{keyword}{struct\ }default\_app\_operations\ user\_default\_app\_operations\ =\ \{}
+\DoxyCodeLine{00138\ \ \ \ \ .default\_operation\_adv\ =\ default\_advertise\_operation,}
+\DoxyCodeLine{00139\ \};}
+\DoxyCodeLine{00140\ }
+\DoxyCodeLine{00141\ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ \textcolor{keyword}{struct\ }arch\_main\_loop\_callbacks\ user\_app\_main\_loop\_callbacks\ =\ \{}
+\DoxyCodeLine{00142\ \ \ \ \ \textcolor{comment}{//\ .app\_on\_init\ \ \ \ \ \ \ \ \ \ \ \ =\ default\_app\_on\_init,}}
+\DoxyCodeLine{00143\ \ \ \ \ \ \ \ \ .app\_on\_init\ \ \ \ \ \ \ \ \ \ \ \ =\ \mbox{\hyperlink{group___a_p_p_ga8d69ab99f9504092fa8ae723a6ab4cfa}{user\_app\_on\_init}},}
+\DoxyCodeLine{00144\ }
+\DoxyCodeLine{00145\ \ \ \ \ \textcolor{comment}{//\ By\ default\ the\ watchdog\ timer\ is\ reloaded\ and\ resumed\ when\ the\ system\ wakes\ up.}}
+\DoxyCodeLine{00146\ \ \ \ \ \textcolor{comment}{//\ The\ user\ has\ to\ take\ into\ account\ the\ watchdog\ timer\ handling\ (keep\ it\ running,}}
+\DoxyCodeLine{00147\ \ \ \ \ \textcolor{comment}{//\ freeze\ it,\ reload\ it,\ resume\ it,\ etc),\ when\ the\ app\_on\_ble\_powered()\ is\ being}}
+\DoxyCodeLine{00148\ \ \ \ \ \textcolor{comment}{//\ called\ and\ may\ potentially\ affect\ the\ main\ loop.}}
+\DoxyCodeLine{00149\ \ \ \ \ .app\_on\_ble\_powered\ \ \ \ \ =\ NULL,}
+\DoxyCodeLine{00150\ }
+\DoxyCodeLine{00151\ \ \ \ \ \textcolor{comment}{//\ By\ default\ the\ watchdog\ timer\ is\ reloaded\ and\ resumed\ when\ the\ system\ wakes\ up.}}
+\DoxyCodeLine{00152\ \ \ \ \ \textcolor{comment}{//\ The\ user\ has\ to\ take\ into\ account\ the\ watchdog\ timer\ handling\ (keep\ it\ running,}}
+\DoxyCodeLine{00153\ \ \ \ \ \textcolor{comment}{//\ freeze\ it,\ reload\ it,\ resume\ it,\ etc),\ when\ the\ app\_on\_system\_powered()\ is\ being}}
+\DoxyCodeLine{00154\ \ \ \ \ \textcolor{comment}{//\ called\ and\ may\ potentially\ affect\ the\ main\ loop.}}
+\DoxyCodeLine{00155\ \ \ \ \ }
+\DoxyCodeLine{00156\ \ \ \ \ \textcolor{comment}{//\ .app\_on\_system\_powered\ \ =\ NULL,}}
+\DoxyCodeLine{00157\ \ \ \ \ \ \ \ \ .app\_on\_system\_powered\ \ =\ \mbox{\hyperlink{group___a_p_p_ga868f1e60544dc2092df4c6a7110f461b}{user\_app\_on\_system\_powered}},}
+\DoxyCodeLine{00158\ }
+\DoxyCodeLine{00159\ \ \ \ \ .app\_before\_sleep\ \ \ \ \ \ \ =\ NULL,}
+\DoxyCodeLine{00160\ \ \ \ \ .app\_validate\_sleep\ \ \ \ \ =\ NULL,}
+\DoxyCodeLine{00161\ \ \ \ \ .app\_going\_to\_sleep\ \ \ \ \ =\ NULL,}
+\DoxyCodeLine{00162\ \ \ \ \ .app\_resume\_from\_sleep\ \ =\ NULL,}
+\DoxyCodeLine{00163\ \};}
+\DoxyCodeLine{00164\ }
+\DoxyCodeLine{00165\ \textcolor{comment}{//place\ in\ this\ structure\ the\ app\_<profile>\_db\_create\ and\ app\_<profile>\_enable\ functions}}
+\DoxyCodeLine{00166\ \textcolor{comment}{//for\ SIG\ profiles\ that\ do\ not\ have\ this\ function\ already\ implemented\ in\ the\ SDK}}
+\DoxyCodeLine{00167\ \textcolor{comment}{//or\ if\ you\ want\ to\ override\ the\ functionality.\ Check\ the\ prf\_func\ array\ in\ the\ SDK}}
+\DoxyCodeLine{00168\ \textcolor{comment}{//for\ your\ reference\ of\ which\ profiles\ are\ supported.}}
+\DoxyCodeLine{00169\ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ \textcolor{keyword}{struct\ }prf\_func\_callbacks\ user\_prf\_funcs[]\ =}
+\DoxyCodeLine{00170\ \{}
+\DoxyCodeLine{00171\ \ \ \ \ \{TASK\_ID\_INVALID,\ \ \ \ NULL,\ NULL\}\ \ \ \textcolor{comment}{//\ DO\ NOT\ MOVE.\ Must\ always\ be\ last}}
+\DoxyCodeLine{00172\ \};}
+\DoxyCodeLine{00173\ }
+\DoxyCodeLine{00174\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{//\ \_USER\_CALLBACK\_CONFIG\_H\_}}
+
+\end{DoxyCode}

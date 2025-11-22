@@ -1,0 +1,69 @@
+\doxysection{C\+:/\+Users/alber/\+Documents/\+DA145xx\+\_\+\+SDK/6.0.24.1464/projects/target\+\_\+apps/template/fukuoka\+\_\+uric\+\_\+acid\+\_\+sensor/src/config/user\+\_\+config.h File Reference}
+\hypertarget{user__config_8h}{}\label{user__config_8h}\index{C:/Users/alber/Documents/DA145xx\_SDK/6.0.24.1464/projects/target\_apps/template/fukuoka\_uric\_acid\_sensor/src/config/user\_config.h@{C:/Users/alber/Documents/DA145xx\_SDK/6.0.24.1464/projects/target\_apps/template/fukuoka\_uric\_acid\_sensor/src/config/user\_config.h}}
+
+
+User configuration file.  
+
+
+{\ttfamily \#include "{}app\+\_\+user\+\_\+config.\+h"{}}\newline
+{\ttfamily \#include "{}arch\+\_\+api.\+h"{}}\newline
+{\ttfamily \#include "{}app\+\_\+default\+\_\+handlers.\+h"{}}\newline
+{\ttfamily \#include "{}app\+\_\+adv\+\_\+data.\+h"{}}\newline
+{\ttfamily \#include "{}co\+\_\+bt.\+h"{}}\newline
+\doxysubsubsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{user__config_8h_a344924c34779563b954075edf77ffd6d}\label{user__config_8h_a344924c34779563b954075edf77ffd6d} 
+\#define {\bfseries USER\+\_\+\+CFG\+\_\+\+ADDRESS\+\_\+\+MODE}~APP\+\_\+\+CFG\+\_\+\+ADDR\+\_\+\+PUB
+\item 
+\Hypertarget{user__config_8h_aa86588d032acd5e56113f94d2a8b5f7f}\label{user__config_8h_aa86588d032acd5e56113f94d2a8b5f7f} 
+\#define {\bfseries USER\+\_\+\+CFG\+\_\+\+CNTL\+\_\+\+PRIV\+\_\+\+MODE}~APP\+\_\+\+CFG\+\_\+\+CNTL\+\_\+\+PRIV\+\_\+\+MODE\+\_\+\+NETWORK
+\item 
+\#define \mbox{\hyperlink{user__config_8h_a60855e10cc120cdf573a09de6895cae1}{USER\+\_\+\+ADVERTISE\+\_\+\+DATA}}
+\begin{DoxyCompactList}\small\item\em Define Custom Advertising data. \end{DoxyCompactList}\item 
+\Hypertarget{user__config_8h_a567a16d876f57ca277f72b25392e5a94}\label{user__config_8h_a567a16d876f57ca277f72b25392e5a94} 
+\#define {\bfseries USER\+\_\+\+ADVERTISE\+\_\+\+DATA\+\_\+\+LEN}~(sizeof(\mbox{\hyperlink{user__config_8h_a60855e10cc120cdf573a09de6895cae1}{USER\+\_\+\+ADVERTISE\+\_\+\+DATA}})-\/1)
+\begin{DoxyCompactList}\small\item\em Advertising data length -\/ maximum 28 bytes, 3 bytes are reserved to set. \end{DoxyCompactList}\item 
+\Hypertarget{user__config_8h_a9aeced462c57be5db291504c9dcef3ea}\label{user__config_8h_a9aeced462c57be5db291504c9dcef3ea} 
+\#define {\bfseries USER\+\_\+\+ADVERTISE\+\_\+\+SCAN\+\_\+\+RESPONSE\+\_\+\+DATA}~"{}"{}
+\begin{DoxyCompactList}\small\item\em Scan response data. \end{DoxyCompactList}\item 
+\Hypertarget{user__config_8h_a736ac7a3b4c242a931bdbff53f686ced}\label{user__config_8h_a736ac7a3b4c242a931bdbff53f686ced} 
+\#define {\bfseries USER\+\_\+\+ADVERTISE\+\_\+\+SCAN\+\_\+\+RESPONSE\+\_\+\+DATA\+\_\+\+LEN}~(sizeof(\mbox{\hyperlink{user__config_8h_a9aeced462c57be5db291504c9dcef3ea}{USER\+\_\+\+ADVERTISE\+\_\+\+SCAN\+\_\+\+RESPONSE\+\_\+\+DATA}})-\/1)
+\begin{DoxyCompactList}\small\item\em Scan response data length-\/ maximum 31 bytes. \end{DoxyCompactList}\item 
+\Hypertarget{user__config_8h_a607f564f4e00b267ecba5bcb131f8518}\label{user__config_8h_a607f564f4e00b267ecba5bcb131f8518} 
+\#define {\bfseries USER\+\_\+\+DEVICE\+\_\+\+NAME}~"{}FUKUOKA\+\_\+\+URIC\+\_\+\+ACID\+\_\+\+SENSOR"{}
+\begin{DoxyCompactList}\small\item\em Device name. \end{DoxyCompactList}\item 
+\Hypertarget{user__config_8h_a33f3189d8be868461938cf75ac71938d}\label{user__config_8h_a33f3189d8be868461938cf75ac71938d} 
+\#define {\bfseries USER\+\_\+\+DEVICE\+\_\+\+NAME\+\_\+\+LEN}~(sizeof(\mbox{\hyperlink{user__config_8h_a607f564f4e00b267ecba5bcb131f8518}{USER\+\_\+\+DEVICE\+\_\+\+NAME}})-\/1)
+\begin{DoxyCompactList}\small\item\em Device name length. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+User configuration file. 
+
+\begin{DoxyNote}{Note}
+Albert Nguyen\+: enabled ARCH\+\_\+\+EXT\+\_\+\+SLEEP\+\_\+\+ON and custom advertisement data. 
+\end{DoxyNote}
+
+
+\doxysubsection{Macro Definition Documentation}
+\Hypertarget{user__config_8h_a60855e10cc120cdf573a09de6895cae1}\index{user\_config.h@{user\_config.h}!USER\_ADVERTISE\_DATA@{USER\_ADVERTISE\_DATA}}
+\index{USER\_ADVERTISE\_DATA@{USER\_ADVERTISE\_DATA}!user\_config.h@{user\_config.h}}
+\doxysubsubsection{\texorpdfstring{USER\_ADVERTISE\_DATA}{USER\_ADVERTISE\_DATA}}
+{\footnotesize\ttfamily \label{user__config_8h_a60855e10cc120cdf573a09de6895cae1} 
+\#define USER\+\_\+\+ADVERTISE\+\_\+\+DATA}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ (\textcolor{stringliteral}{"{}\(\backslash\)x03"{}}\(\backslash\)}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ ADV\_TYPE\_COMPLETE\_LIST\_16BIT\_SERVICE\_IDS\(\backslash\)}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ ADV\_UUID\_DEVICE\_INFORMATION\_SERVICE\(\backslash\)}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}\(\backslash\)x11"{}}\(\backslash\)}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ ADV\_TYPE\_COMPLETE\_LIST\_128BIT\_SERVICE\_IDS\(\backslash\)}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}\(\backslash\)xEE\(\backslash\)x8F\(\backslash\)x7A\(\backslash\)x37\(\backslash\)xCC\(\backslash\)x56\(\backslash\)x5D\(\backslash\)xAA\(\backslash\)xED\(\backslash\)x40\(\backslash\)xA0\(\backslash\)xF0\(\backslash\)xC2\(\backslash\)x94\(\backslash\)xE0\(\backslash\)xD6"{}})}
+
+\end{DoxyCode}
+
+
+Define Custom Advertising data. 
+

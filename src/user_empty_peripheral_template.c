@@ -40,6 +40,9 @@
 // For BLE notifications
 #include "user_custs1_def.h"
 
+// For PWM and sleep management
+#include "arch_api.h"
+
 /*
  ****************************************************************************************
  * DEFINITIONS
@@ -48,6 +51,13 @@
 
 // Macro that clamps value to the range [min, max]
 #define CLAMP(value, min, max) ((value) < (min) ? (min) : ((value) > (max) ? (max) : (value)))
+
+// Define ADC pin based on preprocessor toggle in user_periph_setup.h for gpadc_init_se()
+#if defined(BOARD_CUSTOM_PCB)
+    #define ADC_ENUM_INPUT ADC_INPUT_SE_P0_6   // custom PCB ADC pin
+#else
+    #define ADC_ENUM_INPUT ADC_INPUT_SE_P0_6   // default USB devkit ADC pin
+#endif
 
 // Constants from datasheet
 static const uint16_t MIN_PWM_DIV     = 2U;
@@ -69,6 +79,7 @@ bool uvp_timer_initialized __SECTION_ZERO("retention_mem_area0");
 uint16_t uvp_cccd_value __SECTION_ZERO("retention_mem_area0");
 uint16_t uvp_adc_sample_raw __SECTION_ZERO("retention_mem_area0");
 uint16_t uvp_adc_sample_mv __SECTION_ZERO("retention_mem_area0");
+bool flag_gpio_uvp __SECTION_ZERO("retention_mem_area0");
 
 // Sensor voltage variables
 timer_hnd sensor_timer __SECTION_ZERO("retention_mem_area0");
@@ -87,7 +98,6 @@ void uvp_wireless_timer_cb(void)
 	bool uvp_result;
 	
 	// Initialize and enable ADC for a single conversion of VBAT HIGH rail
-	// FIXME: change settings once implementing on custom PCB, ensure ADC reads VBAT HIGH
 	gpadc_init_se(ADC_INPUT_SE_VBAT_HIGH, 2, false, 0, ADC_INPUT_ATTN_4X, false, 0);
 	adc_enable();
 	
@@ -98,12 +108,12 @@ void uvp_wireless_timer_cb(void)
 	// Compare ADC value to see if it is less than chosen UVP threshold (1900 mV)
 	if(uvp_adc_sample_mv < (uint16_t)1900)
 	{
-		GPIO_SetInactive(UVP_MAX_SHDN_PORT, UVP_MAX_SHDN_PIN); // shutdown amplifiers
+		flag_gpio_uvp = true;
 		uvp_result = true;
 	}
 	else
 	{
-		GPIO_SetActive(UVP_MAX_SHDN_PORT, UVP_MAX_SHDN_PIN); // enable amplifiers
+		flag_gpio_uvp = false;
 		uvp_result = false;
 	}
 	
@@ -111,6 +121,7 @@ void uvp_wireless_timer_cb(void)
 	arch_printf("---------------------------------------------------------------------\n\r");
 	arch_printf("[UVP] Register Value: %u | Battery Voltage: %u mV \n\r", uvp_adc_sample_raw, uvp_adc_sample_mv);
 	arch_printf("[UVP] System undervoltage status: %s \n\r", uvp_result ? "YES" : "NO");
+	arch_printf("[UVP] flag_gpio_uvp = %s \n\r", flag_gpio_uvp ? "true" : "false");
 	#endif
 	
 	if (uvp_cccd_value == 0x0001 && (ke_state_get(TASK_APP) == APP_CONNECTED)) // notifications enabled and phone connected
@@ -142,6 +153,85 @@ void uvp_wireless_timer_cb(void)
 	arch_printf("---------------------------------------------------------------------\n\r");
 	#endif
 	
+	/*
+   ****************************************************************************************
+   * UART test prints
+   ****************************************************************************************
+	 */
+	
+	// ChatGPT fetch code for DCDC converter, prints VBAT_LOW voltage
+	syscntl_dcdc_level_t vbat_low = syscntl_dcdc_get_level();
+
+	#ifdef CFG_PRINTF
+	const char *voltage_str = NULL;
+
+	switch (vbat_low) {
+			case SYSCNTL_DCDC_LEVEL_1V025: voltage_str = "1.025 V"; break;
+			case SYSCNTL_DCDC_LEVEL_1V05:  voltage_str = "1.050 V"; break;
+			case SYSCNTL_DCDC_LEVEL_1V075: voltage_str = "1.075 V"; break;
+			case SYSCNTL_DCDC_LEVEL_1V1:   voltage_str = "1.100 V"; break;
+			case SYSCNTL_DCDC_LEVEL_1V125: voltage_str = "1.125 V"; break;
+			case SYSCNTL_DCDC_LEVEL_1V150: voltage_str = "1.150 V"; break;
+			case SYSCNTL_DCDC_LEVEL_1V175: voltage_str = "1.175 V"; break;
+			case SYSCNTL_DCDC_LEVEL_1V2:   voltage_str = "1.200 V"; break;
+
+			case SYSCNTL_DCDC_LEVEL_1V725: voltage_str = "1.725 V"; break;
+			case SYSCNTL_DCDC_LEVEL_1V75:  voltage_str = "1.750 V"; break;
+			case SYSCNTL_DCDC_LEVEL_1V775: voltage_str = "1.775 V"; break;
+			case SYSCNTL_DCDC_LEVEL_1V8:   voltage_str = "1.800 V"; break;
+			case SYSCNTL_DCDC_LEVEL_1V825: voltage_str = "1.825 V"; break;
+			case SYSCNTL_DCDC_LEVEL_1V850: voltage_str = "1.850 V"; break;
+			case SYSCNTL_DCDC_LEVEL_1V875: voltage_str = "1.875 V"; break;
+			case SYSCNTL_DCDC_LEVEL_1V9:   voltage_str = "1.900 V"; break;
+
+			case SYSCNTL_DCDC_LEVEL_2V425: voltage_str = "2.425 V"; break;
+			case SYSCNTL_DCDC_LEVEL_2V45:  voltage_str = "2.450 V"; break;
+			case SYSCNTL_DCDC_LEVEL_2V475: voltage_str = "2.475 V"; break;
+			case SYSCNTL_DCDC_LEVEL_2V5:   voltage_str = "2.500 V"; break;
+			case SYSCNTL_DCDC_LEVEL_2V525: voltage_str = "2.525 V"; break;
+			case SYSCNTL_DCDC_LEVEL_2V550: voltage_str = "2.550 V"; break;
+			case SYSCNTL_DCDC_LEVEL_2V575: voltage_str = "2.575 V"; break;
+			case SYSCNTL_DCDC_LEVEL_2V6:   voltage_str = "2.600 V"; break;
+
+			case SYSCNTL_DCDC_LEVEL_2V925: voltage_str = "2.925 V"; break;
+			case SYSCNTL_DCDC_LEVEL_2V95:  voltage_str = "2.950 V"; break;
+			case SYSCNTL_DCDC_LEVEL_2V975: voltage_str = "2.975 V"; break;
+			case SYSCNTL_DCDC_LEVEL_3V0:   voltage_str = "3.000 V"; break;
+			case SYSCNTL_DCDC_LEVEL_3V025: voltage_str = "3.025 V"; break;
+			case SYSCNTL_DCDC_LEVEL_3V050: voltage_str = "3.050 V"; break;
+			case SYSCNTL_DCDC_LEVEL_3V075: voltage_str = "3.075 V"; break;
+			case SYSCNTL_DCDC_LEVEL_3V1:   voltage_str = "3.100 V"; break;
+
+			default: voltage_str = "Unknown"; break;
+	}
+
+	arch_printf("[DCDC] VBAT_LOW voltage level: %s\n\r", voltage_str);
+	#endif
+	
+	// Prints current sleep mode of system
+	#ifdef CFG_PRINTF
+	sleep_state_t current_mode = arch_get_sleep_mode();
+	const char *mode_str;
+
+	switch (current_mode) {
+			case ARCH_SLEEP_OFF:
+					mode_str = "ARCH_SLEEP_OFF (Active Mode)";
+					break;
+			case ARCH_EXT_SLEEP_ON:
+					mode_str = "ARCH_EXT_SLEEP_ON (Extended Sleep)";
+					break;
+			case ARCH_EXT_SLEEP_OTP_COPY_ON:
+					mode_str = "ARCH_EXT_SLEEP_OTP_COPY_ON";
+					break;
+			default:
+					mode_str = "UNKNOWN MODE";
+					break;
+	}
+
+	// Print the status using the retrieved string and raw numeric value
+	arch_printf("[SLEEP] Current Mode: %s (Value: %u) \n\r", mode_str, (uint8_t)current_mode);
+	#endif
+	
 	// Disable ADC to conserve power
 	adc_disable();
 	
@@ -158,8 +248,7 @@ void uvp_wireless_timer_cb(void)
 void gpadc_wireless_timer_cb(void)
 {
 	// Initialize and enable ADC for a single conversion of sensor voltage
-	// FIXME: change settings once implementing on custom PCB
-	gpadc_init_se(ADC_INPUT_SE_P0_6, 2, false, 0, ADC_INPUT_ATTN_4X, false, 0);
+	gpadc_init_se(ADC_ENUM_INPUT, 2, false, 0, ADC_INPUT_ATTN_4X, false, 0);
 	adc_enable();
 	
 	// Read ADC and convert results to millivolts
@@ -268,6 +357,13 @@ uint16_t gpadc_sample_to_mv(uint16_t sample)
 
 void timer2_pwm_set_frequency(tim0_2_clk_div_t clk_div, tim2_clk_src_t clk_src, uint16_t pwm_div)
 {
+	#ifdef CFG_PRINTF
+	arch_printf("[PWM FREQ] Function called.\n\r");
+	arch_printf("[PWM FREQ] clk_div (enum)   = %u (0x%02X)\n\r", clk_div, clk_div);
+	arch_printf("[PWM FREQ] clk_src (enum)   = %u (0x%02X)\n\r", clk_src, clk_src);
+	arch_printf("[PWM FREQ] pwm_div (value) = %u (0x%04X)\n\r", pwm_div, pwm_div);
+	#endif
+	
 	// Create config structures for clock division and timer2 config
 	tim0_2_clk_div_config_t clk_cfg = {
 		.clk_div = clk_div
@@ -290,6 +386,10 @@ void timer2_pwm_set_frequency(tim0_2_clk_div_t clk_div, tim2_clk_src_t clk_src, 
 
 	// Clamp pwm_div to datasheet allowed range
 	pwm_div = CLAMP(pwm_div, MIN_PWM_DIV, MAX_PWM_DIV);
+	
+	#ifdef CFG_PRINTF
+	arch_printf("[PWM FREQ] pwm_div (clamped value) = %u (0x%04X)\n\r", pwm_div, pwm_div);
+	#endif
 
 	// Set PWM frequency based on formula from datasheet for Timer 2
 	timer2_pwm_freq_set(input_freq / pwm_div, input_freq); // pwm_div promoted to 32 bits
@@ -328,6 +428,9 @@ void timer2_pwm_enable(void)
 	
 	// Enable PWM outputs
 	timer2_start();
+	
+	// Prevent SoC from sleeping
+	arch_set_sleep_mode(ARCH_SLEEP_OFF);
 }
 
 void timer2_pwm_disable(void)
@@ -337,6 +440,9 @@ void timer2_pwm_disable(void)
 
 	// Disable timer input clock
 	timer0_2_clk_disable();
+	
+	// Return sleep mode to default
+	arch_set_sleep_mode(ARCH_EXT_SLEEP_ON);
 }
 
 /*
@@ -729,6 +835,7 @@ arch_main_loop_callback_ret_t user_app_on_system_powered(void)
 void user_app_on_init(void)
 {
 	// Initialize user retained variables to safe defaults
+	flag_gpio_uvp = false;
 	uvp_timer_initialized = false;
 	uvp_cccd_value = 0;
 	uvp_adc_sample_raw = 0;
@@ -736,9 +843,6 @@ void user_app_on_init(void)
 	
 	sensor_adc_sample_raw = 0;
 	sensor_adc_sample_mv = 0;
-	
-	// TODO: make changes to DCDC converter and observe how it changes output of GPIOs
-	// syscntl_dcdc_level_t vdd = syscntl_dcdc_get_level();
 	
 	// Start the default initialization process for BLE user application
 	// SDK doc states that this should be the last line called in this function

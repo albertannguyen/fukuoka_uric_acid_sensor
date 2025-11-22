@@ -40,20 +40,24 @@ i.e.
 #endif
 *****************************************************************************/
 
-// for user callback functions
+// For user callback functions
 #include "arch_api.h"
 
-// for ADC functions
+// For ADC functions
 #include "adc_531.h"
 
-// for PWM functions
+// For PWM functions
 #include "timer0_2.h"
 #include "timer2.h"
 
-// for BLE handler functions
+// For BLE handler functions
 #include "gapc_task.h" // gap functions and messages
 #include "gapm_task.h" // gap functions and messages
 #include "custs1_task.h"
+
+// For user_periph_setup.c
+#include <stdbool.h>
+extern bool flag_gpio_uvp;
 
 /*
  ****************************************************************************************
@@ -161,7 +165,7 @@ uint16_t gpadc_sample_to_mv(uint16_t sample);
  * @brief Configure Timer2 PWM frequency.
  *
  * @param[in] clk_div    Clock divider enum (tim0_2_clk_div_t). Encoded as shift (1 << clk_div).
- * @param[in] clk_src 	 Timer2 clock source enum (tim2_clk_src_t): LP (32 kHz) or SYS (FIXME: 32 MHz).
+ * @param[in] clk_src 	 Timer2 clock source enum (tim2_clk_src_t): LP (32 kHz) or SYS (32 MHz).
  * @param[in] pwm_div	 	 PWM divider (2 to 16383). This function clamps out-of-range values.
  *
  * @details
@@ -335,7 +339,7 @@ void user_svc1_pwm_dc_and_offset_wr_ind_handler(ke_msg_id_t const msgid,
  *  - If OFF: calls timer2_pwm_disable() to stop outputs and disable timer clock.
  *  - Ignores invalid writes (values > 1).
  *
- * @notes
+ * @note
  *  - Ensure PWM frequency and duty are configured before enabling output to avoid unexpected signals.
  *  - timer2_pwm_disable() does not clear configurations; re-enable preserves settings.
  * @sa timer2_pwm_enable, timer2_pwm_disable
@@ -360,9 +364,8 @@ void user_svc1_pwm_state_wr_ind_handler(ke_msg_id_t const msgid,
  *  - uvp_wireless_timer_cb() checks uvp_cccd_value and the connection state to decide whether to
  *    build and send periodic battery notifications.
  *
- * @notes
- *  - The handler itself does not start/stop the UVP timer,
- *		it only determines whether notifications will be sent
+ * @note The handler itself does not start/stop the UVP timer,
+ *			 it only determines whether notifications will be sent
  * @sa uvp_wireless_timer_cb, KE_MSG_ALLOC_DYN, app_easy_timer
  ****************************************************************************************
  */
@@ -384,8 +387,7 @@ void user_svc1_battery_voltage_cfg_ind_handler(ke_msg_id_t const msgid,
  *  - Allocates a dynamic message response.
  *  - Copies sensor voltage into payload (2 bytes, little-endian) and sends message.
  *
- * @notes
- *  - Uses retained sensor_adc_sample_mv so reads succeed even if sampling timer is stopped.
+ * @note Uses retained sensor_adc_sample_mv so reads succeed even if sampling timer is stopped.
  * @sa KE_MSG_ALLOC_DYN, KE_MSG_SEND, app_env
  ****************************************************************************************
  */

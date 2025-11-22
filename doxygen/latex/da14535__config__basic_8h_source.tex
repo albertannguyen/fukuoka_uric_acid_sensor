@@ -1,0 +1,104 @@
+\doxysection{da14535\+\_\+config\+\_\+basic.\+h}
+\hypertarget{da14535__config__basic_8h_source}{}\label{da14535__config__basic_8h_source}\index{C:/Users/alber/Documents/DA145xx\_SDK/6.0.24.1464/projects/target\_apps/template/fukuoka\_uric\_acid\_sensor/src/config/da14535\_config\_basic.h@{C:/Users/alber/Documents/DA145xx\_SDK/6.0.24.1464/projects/target\_apps/template/fukuoka\_uric\_acid\_sensor/src/config/da14535\_config\_basic.h}}
+\mbox{\hyperlink{da14535__config__basic_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ }
+\DoxyCodeLine{00033\ }
+\DoxyCodeLine{00034\ \textcolor{preprocessor}{\#ifndef\ \_DA14535\_CONFIG\_BASIC\_H\_}}
+\DoxyCodeLine{00035\ \textcolor{preprocessor}{\#define\ \_DA14535\_CONFIG\_BASIC\_H\_}}
+\DoxyCodeLine{00036\ }
+\DoxyCodeLine{00037\ \textcolor{preprocessor}{\#include\ "{}da1458x\_stack\_config.h"{}}}
+\DoxyCodeLine{00038\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{user__profiles__config_8h}{user\_profiles\_config.h}}"{}}}
+\DoxyCodeLine{00039\ }
+\DoxyCodeLine{00040\ \textcolor{comment}{/***************************************************************************************************************/}}
+\DoxyCodeLine{00041\ \textcolor{comment}{/*\ Integrated\ or\ external\ processor\ configuration\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ */}}
+\DoxyCodeLine{00042\ \textcolor{comment}{/*\ \ \ \ -\/defined\ \ \ \ \ \ Integrated\ processor\ mode.\ Host\ application\ runs\ in\ DA14535\ processor.\ Host\ application\ \ \ \ */}}
+\DoxyCodeLine{00043\ \textcolor{comment}{/*\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ is\ the\ TASK\_APP\ kernel\ task.\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ */}}
+\DoxyCodeLine{00044\ \textcolor{comment}{/*\ \ \ \ -\/undefined\ \ \ \ External\ processor\ mode.\ Host\ application\ runs\ on\ an\ external\ processor.\ Communicates\ with\ */}}
+\DoxyCodeLine{00045\ \textcolor{comment}{/*\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ BLE\ application\ through\ GTL\ protocol\ over\ a\ signalling\ iface\ (UART,\ SPI\ etc)\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ */}}
+\DoxyCodeLine{00046\ \textcolor{comment}{/***************************************************************************************************************/}}
+\DoxyCodeLine{00047\ \textcolor{preprocessor}{\#define\ CFG\_APP}}
+\DoxyCodeLine{00048\ }
+\DoxyCodeLine{00049\ \textcolor{comment}{/****************************************************************************************************************/}}
+\DoxyCodeLine{00050\ \textcolor{comment}{/*\ Enables\ the\ BLE\ security\ functionality\ in\ TASK\_APP.\ If\ not\ defined\ BLE\ security\ related\ code\ is\ compiled\ out.*/}}
+\DoxyCodeLine{00051\ \textcolor{comment}{/****************************************************************************************************************/}}
+\DoxyCodeLine{00052\ \textcolor{preprocessor}{\#define\ CFG\_APP\_SECURITY}}
+\DoxyCodeLine{00053\ }
+\DoxyCodeLine{00054\ \textcolor{comment}{/****************************************************************************************************************/}}
+\DoxyCodeLine{00055\ \textcolor{comment}{/*\ Enables\ WatchDog\ timer.\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ */}}
+\DoxyCodeLine{00056\ \textcolor{comment}{/****************************************************************************************************************/}}
+\DoxyCodeLine{00057\ \textcolor{preprocessor}{\#define\ CFG\_WDOG}}
+\DoxyCodeLine{00058\ }
+\DoxyCodeLine{00059\ \textcolor{comment}{/****************************************************************************************************************/}}
+\DoxyCodeLine{00060\ \textcolor{comment}{/*\ Watchdog\ timer\ behavior\ in\ production\ mode:\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ */}}
+\DoxyCodeLine{00061\ \textcolor{comment}{/*\ \ \ \ \ Flag\ is\ not\ defined:\ Watchdog\ timer\ generates\ NMI\ at\ value\ 0.\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ */}}
+\DoxyCodeLine{00062\ \textcolor{comment}{/*\ \ \ \ \ Flag\ is\ defined\ \ \ \ :\ Watchdog\ timer\ generates\ a\ WDOG\ (SYS)\ reset\ at\ value\ 0.\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ */}}
+\DoxyCodeLine{00063\ \textcolor{comment}{/****************************************************************************************************************/}}
+\DoxyCodeLine{00064\ \textcolor{preprocessor}{\#undef\ CFG\_WDG\_TRIGGER\_HW\_RESET\_IN\_PRODUCTION\_MODE}}
+\DoxyCodeLine{00065\ }
+\DoxyCodeLine{00066\ \textcolor{comment}{/****************************************************************************************************************/}}
+\DoxyCodeLine{00067\ \textcolor{comment}{/*\ Determines\ maximum\ concurrent\ connections\ supported\ by\ application.\ It\ configures\ the\ heap\ memory\ allocated\ \ */}}
+\DoxyCodeLine{00068\ \textcolor{comment}{/*\ to\ service\ multiple\ connections.\ It\ is\ used\ for\ GAP\ central\ role\ applications.\ For\ GAP\ peripheral\ role\ it\ \ \ \ */}}
+\DoxyCodeLine{00069\ \textcolor{comment}{/*\ should\ be\ set\ to\ 1\ for\ optimizing\ memory\ utilization.\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ */}}
+\DoxyCodeLine{00070\ \textcolor{comment}{/*\ \ \ \ \ \ -\/\ MAX\ value\ for\ DA14535:\ 3\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ */}}
+\DoxyCodeLine{00071\ \textcolor{comment}{/****************************************************************************************************************/}}
+\DoxyCodeLine{00072\ \textcolor{preprocessor}{\#define\ CFG\_MAX\_CONNECTIONS\ \ \ \ \ (1)}}
+\DoxyCodeLine{00073\ }
+\DoxyCodeLine{00074\ \textcolor{comment}{/****************************************************************************************************************/}}
+\DoxyCodeLine{00075\ \textcolor{comment}{/*\ Enables\ development/debug\ mode.\ For\ production\ mode\ builds\ it\ must\ be\ disabled.\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ */}}
+\DoxyCodeLine{00076\ \textcolor{comment}{/*\ When\ enabled\ the\ following\ debugging\ features\ are\ enabled\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ */}}
+\DoxyCodeLine{00077\ \textcolor{comment}{/*\ \ \ \ \ \ -\/\ \ \ Allows\ the\ emulation\ of\ the\ OTP\ mirroring\ to\ System\ RAM.\ No\ actual\ writing\ to\ RAM\ is\ done,\ but\ the\ \ */}}
+\DoxyCodeLine{00078\ \textcolor{comment}{/*\ \ \ \ \ \ \ \ \ \ exact\ same\ amount\ of\ time\ is\ spend\ as\ if\ the\ mirroring\ would\ take\ place.\ This\ is\ to\ mimic\ the\ \ \ \ \ \ \ */}}
+\DoxyCodeLine{00079\ \textcolor{comment}{/*\ \ \ \ \ \ \ \ \ \ behavior\ as\ if\ the\ System\ Code\ is\ already\ in\ OTP,\ and\ the\ mirroring\ takes\ place\ after\ waking\ up,\ \ \ \ */}}
+\DoxyCodeLine{00080\ \textcolor{comment}{/*\ \ \ \ \ \ \ \ \ \ but\ the\ (development)\ code\ still\ resides\ in\ an\ external\ source.\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ */}}
+\DoxyCodeLine{00081\ \textcolor{comment}{/*\ \ \ \ \ \ -\/\ \ \ Validation\ of\ GPIO\ reservations.\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ */}}
+\DoxyCodeLine{00082\ \textcolor{comment}{/*\ \ \ \ \ \ -\/\ \ \ Enables\ Debug\ module\ and\ sets\ code\ execution\ in\ breakpoint\ in\ Hardfault\ and\ NMI\ (Watchdog)\ handlers.*/}}
+\DoxyCodeLine{00083\ \textcolor{comment}{/*\ \ \ \ \ \ \ \ \ \ It\ allows\ developer\ to\ hot\ attach\ debugger\ and\ get\ debug\ information\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ */}}
+\DoxyCodeLine{00084\ \textcolor{comment}{/****************************************************************************************************************/}}
+\DoxyCodeLine{00085\ \textcolor{preprocessor}{\#define\ CFG\_DEVELOPMENT\_DEBUG}}
+\DoxyCodeLine{00086\ }
+\DoxyCodeLine{00087\ \textcolor{comment}{/****************************************************************************************************************/}}
+\DoxyCodeLine{00088\ \textcolor{comment}{/*\ UART\ Console\ Print.\ If\ CFG\_PRINTF\ is\ defined,\ serial\ interface\ logging\ mechanism\ will\ be\ enabled.\ \ \ \ \ \ \ \ \ \ \ \ */}}
+\DoxyCodeLine{00089\ \textcolor{comment}{/*\ If\ CFG\_PRINTF\_UART2\ is\ defined,\ then\ serial\ interface\ logging\ mechanism\ is\ implented\ using\ UART2,\ else\ UART1\ */}}
+\DoxyCodeLine{00090\ \textcolor{comment}{/*\ will\ be\ used.\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ */}}
+\DoxyCodeLine{00091\ \textcolor{comment}{/****************************************************************************************************************/}}
+\DoxyCodeLine{00092\ \textcolor{preprocessor}{\#undef\ CFG\_PRINTF}}
+\DoxyCodeLine{00093\ \textcolor{preprocessor}{\#ifdef\ CFG\_PRINTF}}
+\DoxyCodeLine{00094\ \textcolor{preprocessor}{\ \ \ \ \#define\ CFG\_PRINTF\_UART2}}
+\DoxyCodeLine{00095\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{00096\ }
+\DoxyCodeLine{00097\ \textcolor{comment}{/****************************************************************************************************************/}}
+\DoxyCodeLine{00098\ \textcolor{comment}{/*\ UART1\ Driver\ Implementation.\ If\ CFG\_UART1\_SDK\ is\ defined,\ UART1\ ROM\ driver\ will\ be\ overriden\ and\ UART\ SDK\ \ \ \ */}}
+\DoxyCodeLine{00099\ \textcolor{comment}{/*\ driver\ will\ be\ used,\ else\ ROM\ driver\ will\ be\ used\ for\ UART1\ module.\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ */}}
+\DoxyCodeLine{00100\ \textcolor{comment}{/****************************************************************************************************************/}}
+\DoxyCodeLine{00101\ \textcolor{preprocessor}{\#undef\ CFG\_UART1\_SDK}}
+\DoxyCodeLine{00102\ }
+\DoxyCodeLine{00103\ \textcolor{comment}{/****************************************************************************************************************/}}
+\DoxyCodeLine{00104\ \textcolor{comment}{/*\ Select\ external\ memory\ device\ for\ data\ storage\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ */}}
+\DoxyCodeLine{00105\ \textcolor{comment}{/*\ SPI\ FLASH\ \ (\#define\ CFG\_SPI\_FLASH\_ENABLE)\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ */}}
+\DoxyCodeLine{00106\ \textcolor{comment}{/*\ I2C\ EEPROM\ (\#define\ CFG\_I2C\_EEPROM\_ENABLE)\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ */}}
+\DoxyCodeLine{00107\ \textcolor{comment}{/****************************************************************************************************************/}}
+\DoxyCodeLine{00108\ \textcolor{preprocessor}{\#undef\ CFG\_SPI\_FLASH\_ENABLE}}
+\DoxyCodeLine{00109\ \textcolor{preprocessor}{\#undef\ CFG\_I2C\_EEPROM\_ENABLE}}
+\DoxyCodeLine{00110\ }
+\DoxyCodeLine{00111\ \textcolor{comment}{/****************************************************************************************************************/}}
+\DoxyCodeLine{00112\ \textcolor{comment}{/*\ Enables/Disables\ the\ DMA\ Support\ for\ the\ following\ interfaces:\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ */}}
+\DoxyCodeLine{00113\ \textcolor{comment}{/*\ \ \ \ \ -\/\ UART\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ */}}
+\DoxyCodeLine{00114\ \textcolor{comment}{/*\ \ \ \ \ -\/\ SPI\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ */}}
+\DoxyCodeLine{00115\ \textcolor{comment}{/*\ \ \ \ \ -\/\ I2C\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ */}}
+\DoxyCodeLine{00116\ \textcolor{comment}{/*\ \ \ \ \ -\/\ ADC\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ */}}
+\DoxyCodeLine{00117\ \textcolor{comment}{/****************************************************************************************************************/}}
+\DoxyCodeLine{00118\ \textcolor{preprocessor}{\#undef\ CFG\_UART\_DMA\_SUPPORT}}
+\DoxyCodeLine{00119\ \textcolor{preprocessor}{\#undef\ CFG\_SPI\_DMA\_SUPPORT}}
+\DoxyCodeLine{00120\ \textcolor{preprocessor}{\#undef\ CFG\_I2C\_DMA\_SUPPORT}}
+\DoxyCodeLine{00121\ \textcolor{preprocessor}{\#undef\ CFG\_ADC\_DMA\_SUPPORT}}
+\DoxyCodeLine{00122\ }
+\DoxyCodeLine{00123\ \textcolor{comment}{/****************************************************************************************************************/}}
+\DoxyCodeLine{00124\ \textcolor{comment}{/*\ Notify\ the\ SDK\ about\ the\ fixed\ power\ mode\ (currently\ used\ only\ for\ Bypass):\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ */}}
+\DoxyCodeLine{00125\ \textcolor{comment}{/*\ \ \ \ \ -\/\ CFG\_POWER\_MODE\_BYPASS\ =\ Bypass\ mode\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ */}}
+\DoxyCodeLine{00126\ \textcolor{comment}{/****************************************************************************************************************/}}
+\DoxyCodeLine{00127\ \textcolor{preprocessor}{\#undef\ CFG\_POWER\_MODE\_BYPASS}}
+\DoxyCodeLine{00128\ }
+\DoxyCodeLine{00129\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{//\ \_DA14535\_CONFIG\_BASIC\_H\_}}
+
+\end{DoxyCode}

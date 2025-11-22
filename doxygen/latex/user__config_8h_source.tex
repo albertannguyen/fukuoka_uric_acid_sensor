@@ -1,0 +1,390 @@
+\doxysection{user\+\_\+config.\+h}
+\hypertarget{user__config_8h_source}{}\label{user__config_8h_source}\index{C:/Users/alber/Documents/DA145xx\_SDK/6.0.24.1464/projects/target\_apps/template/fukuoka\_uric\_acid\_sensor/src/config/user\_config.h@{C:/Users/alber/Documents/DA145xx\_SDK/6.0.24.1464/projects/target\_apps/template/fukuoka\_uric\_acid\_sensor/src/config/user\_config.h}}
+\mbox{\hyperlink{user__config_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ }
+\DoxyCodeLine{00008\ }
+\DoxyCodeLine{00009\ \textcolor{preprocessor}{\#ifndef\ \_USER\_CONFIG\_H\_}}
+\DoxyCodeLine{00010\ \textcolor{preprocessor}{\#define\ \_USER\_CONFIG\_H\_}}
+\DoxyCodeLine{00011\ }
+\DoxyCodeLine{00012\ \textcolor{comment}{/*}}
+\DoxyCodeLine{00013\ \textcolor{comment}{\ ****************************************************************************************}}
+\DoxyCodeLine{00014\ \textcolor{comment}{\ *\ INCLUDE\ FILES}}
+\DoxyCodeLine{00015\ \textcolor{comment}{\ ****************************************************************************************}}
+\DoxyCodeLine{00016\ \textcolor{comment}{\ */}}
+\DoxyCodeLine{00017\ }
+\DoxyCodeLine{00018\ \textcolor{preprocessor}{\#include\ "{}app\_user\_config.h"{}}}
+\DoxyCodeLine{00019\ \textcolor{preprocessor}{\#include\ "{}arch\_api.h"{}}}
+\DoxyCodeLine{00020\ \textcolor{preprocessor}{\#include\ "{}app\_default\_handlers.h"{}}}
+\DoxyCodeLine{00021\ \textcolor{preprocessor}{\#include\ "{}app\_adv\_data.h"{}}}
+\DoxyCodeLine{00022\ \textcolor{preprocessor}{\#include\ "{}co\_bt.h"{}}}
+\DoxyCodeLine{00023\ }
+\DoxyCodeLine{00024\ \textcolor{comment}{/*}}
+\DoxyCodeLine{00025\ \textcolor{comment}{\ ****************************************************************************************}}
+\DoxyCodeLine{00026\ \textcolor{comment}{\ *\ LOCAL\ VARIABLES}}
+\DoxyCodeLine{00027\ \textcolor{comment}{\ ****************************************************************************************}}
+\DoxyCodeLine{00028\ \textcolor{comment}{\ */}}
+\DoxyCodeLine{00029\ }
+\DoxyCodeLine{00030\ \textcolor{comment}{/*}}
+\DoxyCodeLine{00031\ \textcolor{comment}{\ ****************************************************************************************}}
+\DoxyCodeLine{00032\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00033\ \textcolor{comment}{\ *\ Privacy\ /\ Addressing\ configuration}}
+\DoxyCodeLine{00034\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00035\ \textcolor{comment}{\ ****************************************************************************************}}
+\DoxyCodeLine{00036\ \textcolor{comment}{\ */}}
+\DoxyCodeLine{00037\ }
+\DoxyCodeLine{00038\ \textcolor{comment}{/*************************************************************************}}
+\DoxyCodeLine{00039\ \textcolor{comment}{\ *\ Privacy\ Capabilities\ and\ address\ configuration\ of\ local\ device:}}
+\DoxyCodeLine{00040\ \textcolor{comment}{\ *\ -\/\ APP\_CFG\_ADDR\_PUB\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ No\ Privacy,\ Public\ BDA}}
+\DoxyCodeLine{00041\ \textcolor{comment}{\ *\ -\/\ APP\_CFG\_ADDR\_STATIC\ \ \ \ \ \ \ \ \ \ \ \ No\ Privacy,\ Random\ Static\ BDA}}
+\DoxyCodeLine{00042\ \textcolor{comment}{\ *\ -\/\ APP\_CFG\_HOST\_PRIV\_RPA\ \ \ \ \ \ \ \ \ \ Host\ Privacy,\ RPA,\ Public\ Identity}}
+\DoxyCodeLine{00043\ \textcolor{comment}{\ *\ -\/\ APP\_CFG\_HOST\_PRIV\_NRPA\ \ \ \ \ \ \ \ \ Host\ Privacy,\ NRPA\ (non-\/connectable\ ONLY)}}
+\DoxyCodeLine{00044\ \textcolor{comment}{\ *\ -\/\ APP\_CFG\_CNTL\_PRIV\_RPA\_PUB\ \ \ \ \ \ Controller\ Privacy,\ RPA\ or\ PUB,\ Public\ Identity}}
+\DoxyCodeLine{00045\ \textcolor{comment}{\ *\ -\/\ APP\_CFG\_CNTL\_PRIV\_RPA\_RAND\ \ \ \ \ Controller\ Privacy,\ RPA,\ Public\ Identity}}
+\DoxyCodeLine{00046\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00047\ \textcolor{comment}{\ *\ Select\ only\ one\ option\ for\ privacy\ /\ addressing\ configuration.}}
+\DoxyCodeLine{00048\ \textcolor{comment}{\ **************************************************************************}}
+\DoxyCodeLine{00049\ \textcolor{comment}{\ */}}
+\DoxyCodeLine{00050\ \textcolor{preprocessor}{\#define\ USER\_CFG\_ADDRESS\_MODE\ \ \ \ \ \ \ APP\_CFG\_ADDR\_PUB}}
+\DoxyCodeLine{00051\ }
+\DoxyCodeLine{00052\ \textcolor{comment}{/*************************************************************************}}
+\DoxyCodeLine{00053\ \textcolor{comment}{\ *\ Controller\ Privacy\ Mode:}}
+\DoxyCodeLine{00054\ \textcolor{comment}{\ *\ -\/\ APP\_CFG\_CNTL\_PRIV\_MODE\_NETWORK\ Controler\ Privacy\ Network\ mode\ (default)}}
+\DoxyCodeLine{00055\ \textcolor{comment}{\ *\ -\/\ APP\_CFG\_CNTL\_PRIV\_MODE\_DEVICE\ \ Controler\ Privacy\ Device\ mode}}
+\DoxyCodeLine{00056\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00057\ \textcolor{comment}{\ *\ Select\ only\ one\ option\ for\ controller\ privacy\ mode\ configuration.}}
+\DoxyCodeLine{00058\ \textcolor{comment}{\ **************************************************************************}}
+\DoxyCodeLine{00059\ \textcolor{comment}{\ */}}
+\DoxyCodeLine{00060\ \textcolor{preprocessor}{\#define\ USER\_CFG\_CNTL\_PRIV\_MODE\ \ \ \ \ APP\_CFG\_CNTL\_PRIV\_MODE\_NETWORK}}
+\DoxyCodeLine{00061\ }
+\DoxyCodeLine{00062\ }
+\DoxyCodeLine{00063\ \textcolor{comment}{/******************************************}}
+\DoxyCodeLine{00064\ \textcolor{comment}{\ *\ Default\ sleep\ mode.\ Possible\ values\ are:}}
+\DoxyCodeLine{00065\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00066\ \textcolor{comment}{\ *\ -\/\ ARCH\_SLEEP\_OFF}}
+\DoxyCodeLine{00067\ \textcolor{comment}{\ *\ -\/\ ARCH\_EXT\_SLEEP\_ON}}
+\DoxyCodeLine{00068\ \textcolor{comment}{\ *\ -\/\ ARCH\_EXT\_SLEEP\_OTP\_COPY\_ON}}
+\DoxyCodeLine{00069\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00070\ \textcolor{comment}{\ ******************************************}}
+\DoxyCodeLine{00071\ \textcolor{comment}{\ */}}
+\DoxyCodeLine{00072\ \ }
+\DoxyCodeLine{00073\ \textcolor{comment}{//\ enabled\ extended\ sleep\ mode}}
+\DoxyCodeLine{00074\ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ sleep\_state\_t\ app\_default\_sleep\_mode\ =\ ARCH\_EXT\_SLEEP\_ON;}
+\DoxyCodeLine{00075\ }
+\DoxyCodeLine{00076\ \textcolor{comment}{/*}}
+\DoxyCodeLine{00077\ \textcolor{comment}{\ ****************************************************************************************}}
+\DoxyCodeLine{00078\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00079\ \textcolor{comment}{\ *\ Advertising\ configuration}}
+\DoxyCodeLine{00080\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00081\ \textcolor{comment}{\ ****************************************************************************************}}
+\DoxyCodeLine{00082\ \textcolor{comment}{\ */}}
+\DoxyCodeLine{00083\ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ \textcolor{keyword}{struct\ }advertise\_configuration\ user\_adv\_conf\ =\ \{}
+\DoxyCodeLine{00084\ }
+\DoxyCodeLine{00085\ \ \ \ \ .addr\_src\ =\ APP\_CFG\_ADDR\_SRC(USER\_CFG\_ADDRESS\_MODE),}
+\DoxyCodeLine{00086\ }
+\DoxyCodeLine{00088\ \ \ \ \ .intv\_min\ =\ MS\_TO\_BLESLOTS(687.5),\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 687.5ms}}
+\DoxyCodeLine{00089\ }
+\DoxyCodeLine{00091\ \ \ \ \ .intv\_max\ =\ MS\_TO\_BLESLOTS(687.5),\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 687.5ms}}
+\DoxyCodeLine{00092\ }
+\DoxyCodeLine{00100\ \ \ \ \ .channel\_map\ =\ ADV\_ALL\_CHNLS\_EN,}
+\DoxyCodeLine{00101\ }
+\DoxyCodeLine{00102\ \textcolor{comment}{\ \ \ \ /*************************}}
+\DoxyCodeLine{00103\ \textcolor{comment}{\ \ \ \ \ *\ Advertising\ information}}
+\DoxyCodeLine{00104\ \textcolor{comment}{\ \ \ \ \ *************************}}
+\DoxyCodeLine{00105\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00106\ }
+\DoxyCodeLine{00113\ \ \ \ \ .mode\ =\ GAP\_GEN\_DISCOVERABLE,}
+\DoxyCodeLine{00114\ }
+\DoxyCodeLine{00119\ \ \ \ \ .adv\_filt\_policy\ =\ ADV\_ALLOW\_SCAN\_ANY\_CON\_ANY,}
+\DoxyCodeLine{00120\ }
+\DoxyCodeLine{00123\ \ \ \ \ .peer\_addr\ =\ \{0x1,\ 0x2,\ 0x3,\ 0x4,\ 0x5,\ 0x6\},}
+\DoxyCodeLine{00124\ }
+\DoxyCodeLine{00127\ \ \ \ \ .peer\_addr\_type\ =\ 0,}
+\DoxyCodeLine{00128\ \};}
+\DoxyCodeLine{00129\ }
+\DoxyCodeLine{00130\ \textcolor{comment}{/*}}
+\DoxyCodeLine{00131\ \textcolor{comment}{\ ****************************************************************************************}}
+\DoxyCodeLine{00132\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00133\ \textcolor{comment}{\ *\ Advertising\ or\ scan\ response\ data\ for\ the\ following\ cases:}}
+\DoxyCodeLine{00134\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00135\ \textcolor{comment}{\ *\ -\/\ ADV\_IND:\ Connectable\ undirected\ advertising\ event.}}
+\DoxyCodeLine{00136\ \textcolor{comment}{\ *\ \ \ \ -\/\ The\ maximum\ length\ of\ the\ user\ defined\ advertising\ data\ shall\ be\ 28\ bytes.}}
+\DoxyCodeLine{00137\ \textcolor{comment}{\ *\ \ \ \ -\/\ The\ Flags\ data\ type\ are\ written\ by\ the\ related\ ROM\ function,\ hence\ the\ user\ shall}}
+\DoxyCodeLine{00138\ \textcolor{comment}{\ *\ \ \ \ \ \ not\ include\ them\ in\ the\ advertising\ data.\ The\ related\ ROM\ function\ adds\ 3\ bytes\ in\ }}
+\DoxyCodeLine{00139\ \textcolor{comment}{\ *\ \ \ \ \ \ the\ start\ of\ the\ advertising\ data\ that\ are\ to\ be\ transmitted\ over\ the\ air.}}
+\DoxyCodeLine{00140\ \textcolor{comment}{\ *\ \ \ \ -\/\ The\ maximum\ length\ of\ the\ user\ defined\ response\ data\ shall\ be\ 31\ bytes.}}
+\DoxyCodeLine{00141\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00142\ \textcolor{comment}{\ *\ -\/\ ADV\_NONCONN\_IND:\ Non-\/connectable\ undirected\ advertising\ event.}}
+\DoxyCodeLine{00143\ \textcolor{comment}{\ *\ \ \ \ -\/\ The\ maximum\ length\ of\ the\ user\ defined\ advertising\ data\ shall\ be\ 31\ bytes.}}
+\DoxyCodeLine{00144\ \textcolor{comment}{\ *\ \ \ \ -\/\ The\ Flags\ data\ type\ may\ be\ omitted,\ hence\ the\ user\ can\ use\ all\ the\ 31\ bytes\ for\ }}
+\DoxyCodeLine{00145\ \textcolor{comment}{\ *\ \ \ \ \ \ data.}}
+\DoxyCodeLine{00146\ \textcolor{comment}{\ *\ \ \ \ -\/\ The\ scan\ response\ data\ shall\ be\ empty.}}
+\DoxyCodeLine{00147\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00148\ \textcolor{comment}{\ *\ -\/\ ADV\_SCAN\_IND:\ Scannable\ undirected\ advertising\ event.}}
+\DoxyCodeLine{00149\ \textcolor{comment}{\ *\ \ \ \ -\/\ The\ maximum\ length\ of\ the\ user\ defined\ advertising\ data\ shall\ be\ 31\ bytes.}}
+\DoxyCodeLine{00150\ \textcolor{comment}{\ *\ \ \ \ -\/\ The\ Flags\ data\ type\ may\ be\ omitted,\ hence\ the\ user\ can\ use\ all\ the\ 31\ bytes\ for\ }}
+\DoxyCodeLine{00151\ \textcolor{comment}{\ *\ \ \ \ \ \ data.}}
+\DoxyCodeLine{00152\ \textcolor{comment}{\ *\ \ \ \ -\/\ The\ maximum\ length\ of\ the\ user\ defined\ response\ data\ shall\ be\ 31\ bytes.}}
+\DoxyCodeLine{00153\ \textcolor{comment}{\ ****************************************************************************************}}
+\DoxyCodeLine{00154\ \textcolor{comment}{\ */}}
+\DoxyCodeLine{00156\ \textcolor{preprocessor}{\#define\ USER\_ADVERTISE\_DATA\ \ \ \ \ \ ("{}\(\backslash\)x03"{}\(\backslash\)}}
+\DoxyCodeLine{00157\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ ADV\_TYPE\_COMPLETE\_LIST\_16BIT\_SERVICE\_IDS\(\backslash\)}}
+\DoxyCodeLine{00158\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ ADV\_UUID\_DEVICE\_INFORMATION\_SERVICE\(\backslash\)}}
+\DoxyCodeLine{00159\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ "{}\(\backslash\)x11"{}\(\backslash\)}}
+\DoxyCodeLine{00160\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ ADV\_TYPE\_COMPLETE\_LIST\_128BIT\_SERVICE\_IDS\(\backslash\)}}
+\DoxyCodeLine{00161\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ "{}\(\backslash\)xEE\(\backslash\)x8F\(\backslash\)x7A\(\backslash\)x37\(\backslash\)xCC\(\backslash\)x56\(\backslash\)x5D\(\backslash\)xAA\(\backslash\)xED\(\backslash\)x40\(\backslash\)xA0\(\backslash\)xF0\(\backslash\)xC2\(\backslash\)x94\(\backslash\)xE0\(\backslash\)xD6"{})}}
+\DoxyCodeLine{00162\ }
+\DoxyCodeLine{00164\ \textcolor{preprocessor}{\#define\ USER\_ADVERTISE\_DATA\_LEN\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ (sizeof(USER\_ADVERTISE\_DATA)-\/1)}}
+\DoxyCodeLine{00165\ }
+\DoxyCodeLine{00167\ \textcolor{preprocessor}{\#define\ USER\_ADVERTISE\_SCAN\_RESPONSE\_DATA\ \ \ \ \ "{}"{}}}
+\DoxyCodeLine{00168\ }
+\DoxyCodeLine{00170\ \textcolor{preprocessor}{\#define\ USER\_ADVERTISE\_SCAN\_RESPONSE\_DATA\_LEN\ (sizeof(USER\_ADVERTISE\_SCAN\_RESPONSE\_DATA)-\/1)}}
+\DoxyCodeLine{00171\ }
+\DoxyCodeLine{00172\ \textcolor{comment}{/*}}
+\DoxyCodeLine{00173\ \textcolor{comment}{\ ****************************************************************************************}}
+\DoxyCodeLine{00174\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00175\ \textcolor{comment}{\ *\ Device\ name.}}
+\DoxyCodeLine{00176\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00177\ \textcolor{comment}{\ *\ -\/\ If\ there\ is\ space\ left\ in\ the\ advertising\ or\ scan\ response\ data\ the\ device\ name\ is}}
+\DoxyCodeLine{00178\ \textcolor{comment}{\ *\ \ \ copied\ there.\ The\ device\ name\ can\ be\ anytime\ read\ by\ a\ connected\ peer,\ if\ the}}
+\DoxyCodeLine{00179\ \textcolor{comment}{\ *\ \ \ application\ supports\ it.}}
+\DoxyCodeLine{00180\ \textcolor{comment}{\ *\ -\/\ The\ Bluetooth\ device\ name\ can\ be\ up\ to\ 248\ bytes.}}
+\DoxyCodeLine{00181\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00182\ \textcolor{comment}{\ ****************************************************************************************}}
+\DoxyCodeLine{00183\ \textcolor{comment}{\ */}}
+\DoxyCodeLine{00185\ }
+\DoxyCodeLine{00186\ \textcolor{comment}{//\ custom:\ changed\ name\ to\ match\ project}}
+\DoxyCodeLine{00187\ \textcolor{preprocessor}{\#define\ USER\_DEVICE\_NAME\ \ \ \ \ \ \ \ "{}FUKUOKA\_URIC\_ACID\_SENSOR"{}}}
+\DoxyCodeLine{00188\ }
+\DoxyCodeLine{00190\ \textcolor{preprocessor}{\#define\ USER\_DEVICE\_NAME\_LEN\ \ \ \ (sizeof(USER\_DEVICE\_NAME)-\/1)}}
+\DoxyCodeLine{00191\ }
+\DoxyCodeLine{00192\ \textcolor{comment}{/*}}
+\DoxyCodeLine{00193\ \textcolor{comment}{\ ****************************************************************************************}}
+\DoxyCodeLine{00194\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00195\ \textcolor{comment}{\ *\ GAPM\ configuration}}
+\DoxyCodeLine{00196\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00197\ \textcolor{comment}{\ ****************************************************************************************}}
+\DoxyCodeLine{00198\ \textcolor{comment}{\ */}}
+\DoxyCodeLine{00199\ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ \textcolor{keyword}{struct\ }gapm\_configuration\ user\_gapm\_conf\ =\ \{}
+\DoxyCodeLine{00201\ \ \ \ \ .role\ =\ GAP\_ROLE\_PERIPHERAL,}
+\DoxyCodeLine{00202\ }
+\DoxyCodeLine{00205\ \ \ \ \ .max\_mtu\ =\ 23,}
+\DoxyCodeLine{00206\ }
+\DoxyCodeLine{00208\ \ \ \ \ .addr\_type\ =\ APP\_CFG\_ADDR\_TYPE(USER\_CFG\_ADDRESS\_MODE),}
+\DoxyCodeLine{00210\ \ \ \ \ .renew\_dur\ =\ 15000,\ \ \ \ \textcolor{comment}{//\ 15000\ *\ 10ms\ =\ 150s\ is\ the\ minimum\ value}}
+\DoxyCodeLine{00211\ }
+\DoxyCodeLine{00212\ \textcolor{comment}{\ \ \ \ /***********************}}
+\DoxyCodeLine{00213\ \textcolor{comment}{\ \ \ \ \ *\ Privacy\ configuration}}
+\DoxyCodeLine{00214\ \textcolor{comment}{\ \ \ \ \ ***********************}}
+\DoxyCodeLine{00215\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00216\ }
+\DoxyCodeLine{00218\ \ \ \ \ \textcolor{comment}{//\ NOTE:\ The\ address\ shall\ comply\ with\ the\ following\ requirements:}}
+\DoxyCodeLine{00219\ \ \ \ \ \textcolor{comment}{//\ -\/\ the\ two\ most\ significant\ bits\ of\ the\ address\ shall\ be\ equal\ to\ 1,}}
+\DoxyCodeLine{00220\ \ \ \ \ \textcolor{comment}{//\ -\/\ all\ the\ remaining\ bits\ of\ the\ address\ shall\ NOT\ be\ equal\ to\ 1,}}
+\DoxyCodeLine{00221\ \ \ \ \ \textcolor{comment}{//\ -\/\ all\ the\ remaining\ bits\ of\ the\ address\ shall\ NOT\ be\ equal\ to\ 0.}}
+\DoxyCodeLine{00222\ \ \ \ \ \textcolor{comment}{//\ In\ case\ the\ \{0x00,\ 0x00,\ 0x00,\ 0x00,\ 0x00,\ 0x00\}\ null\ address\ is\ used,\ a}}
+\DoxyCodeLine{00223\ \ \ \ \ \textcolor{comment}{//\ random\ static\ address\ will\ be\ automatically\ generated.}}
+\DoxyCodeLine{00224\ \ \ \ \ .addr\ =\ \{0x00,\ 0x00,\ 0x00,\ 0x00,\ 0x00,\ 0x00\},}
+\DoxyCodeLine{00225\ }
+\DoxyCodeLine{00227\ \ \ \ \ .irk\ =\ \{0x00,\ 0x01,\ 0x02,\ 0x03,\ 0x04,\ 0x05,\ 0x06,\ 0x07,\ 0x08,\ 0x09,\ 0x0a,\ 0x0b,\ 0x0c,\ 0x0d,\ 0x0e,\ 0x0f\},}
+\DoxyCodeLine{00228\ }
+\DoxyCodeLine{00229\ \textcolor{comment}{\ \ \ \ /****************************}}
+\DoxyCodeLine{00230\ \textcolor{comment}{\ \ \ \ \ *\ ATT\ database\ configuration}}
+\DoxyCodeLine{00231\ \textcolor{comment}{\ \ \ \ \ ****************************}}
+\DoxyCodeLine{00232\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00233\ }
+\DoxyCodeLine{00245\ \ \ \ \ .att\_cfg\ =\ GAPM\_MASK\_ATT\_SVC\_CHG\_EN,}
+\DoxyCodeLine{00246\ }
+\DoxyCodeLine{00248\ \ \ \ \ .gap\_start\_hdl\ =\ 0,}
+\DoxyCodeLine{00249\ }
+\DoxyCodeLine{00251\ \ \ \ \ .gatt\_start\_hdl\ =\ 0,}
+\DoxyCodeLine{00252\ }
+\DoxyCodeLine{00253\ \textcolor{comment}{\ \ \ \ /**************************************************}}
+\DoxyCodeLine{00254\ \textcolor{comment}{\ \ \ \ \ *\ Data\ packet\ length\ extension\ configuration\ (4.2)}}
+\DoxyCodeLine{00255\ \textcolor{comment}{\ \ \ \ \ **************************************************}}
+\DoxyCodeLine{00256\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00257\ }
+\DoxyCodeLine{00259\ \ \ \ \ .max\_mps\ =\ 0,}
+\DoxyCodeLine{00260\ }
+\DoxyCodeLine{00262\ \ \ \ \ .max\_txoctets\ =\ 0,}
+\DoxyCodeLine{00263\ }
+\DoxyCodeLine{00265\ \ \ \ \ .max\_txtime\ =\ 0,}
+\DoxyCodeLine{00266\ \};}
+\DoxyCodeLine{00267\ }
+\DoxyCodeLine{00268\ \textcolor{comment}{/*}}
+\DoxyCodeLine{00269\ \textcolor{comment}{\ ****************************************************************************************}}
+\DoxyCodeLine{00270\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00271\ \textcolor{comment}{\ *\ Parameter\ update\ configuration}}
+\DoxyCodeLine{00272\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00273\ \textcolor{comment}{\ ****************************************************************************************}}
+\DoxyCodeLine{00274\ \textcolor{comment}{\ */}}
+\DoxyCodeLine{00275\ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ \textcolor{keyword}{struct\ }connection\_param\_configuration\ user\_connection\_param\_conf\ =\ \{}
+\DoxyCodeLine{00278\ \ \ \ \ .intv\_min\ =\ MS\_TO\_DOUBLESLOTS(10),}
+\DoxyCodeLine{00279\ }
+\DoxyCodeLine{00282\ \ \ \ \ .intv\_max\ =\ MS\_TO\_DOUBLESLOTS(20),}
+\DoxyCodeLine{00283\ }
+\DoxyCodeLine{00285\ \ \ \ \ .latency\ =\ 0,}
+\DoxyCodeLine{00286\ }
+\DoxyCodeLine{00289\ \ \ \ \ .time\_out\ =\ MS\_TO\_TIMERUNITS(1250),}
+\DoxyCodeLine{00290\ }
+\DoxyCodeLine{00293\ \ \ \ \ .ce\_len\_min\ =\ MS\_TO\_DOUBLESLOTS(0),}
+\DoxyCodeLine{00294\ }
+\DoxyCodeLine{00297\ \ \ \ \ .ce\_len\_max\ =\ MS\_TO\_DOUBLESLOTS(0),}
+\DoxyCodeLine{00298\ \};}
+\DoxyCodeLine{00299\ }
+\DoxyCodeLine{00300\ \textcolor{comment}{/*}}
+\DoxyCodeLine{00301\ \textcolor{comment}{\ ****************************************************************************************}}
+\DoxyCodeLine{00302\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00303\ \textcolor{comment}{\ *\ Default\ handlers\ configuration\ (applies\ only\ for\ @app\_default\_handlers.c)}}
+\DoxyCodeLine{00304\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00305\ \textcolor{comment}{\ ****************************************************************************************}}
+\DoxyCodeLine{00306\ \textcolor{comment}{\ */}}
+\DoxyCodeLine{00307\ }
+\DoxyCodeLine{00308\ \textcolor{comment}{//\ Ignore\ red\ build\ errors\ in\ this\ code\ block}}
+\DoxyCodeLine{00309\ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ \textcolor{keyword}{struct\ }default\_handlers\_configuration\ \ user\_default\_hnd\_conf\ =\ \{}
+\DoxyCodeLine{00310\ \ \ \ \ \textcolor{comment}{//\ Configure\ the\ advertise\ operation\ used\ by\ the\ default\ handlers}}
+\DoxyCodeLine{00311\ \ \ \ \ \textcolor{comment}{//\ Possible\ values:}}
+\DoxyCodeLine{00312\ \ \ \ \ \textcolor{comment}{//\ \ -\/\ DEF\_ADV\_FOREVER}}
+\DoxyCodeLine{00313\ \ \ \ \ \textcolor{comment}{//\ \ -\/\ DEF\_ADV\_WITH\_TIMEOUT}}
+\DoxyCodeLine{00314\ \ \ \ \ .adv\_scenario\ =\ DEF\_ADV\_FOREVER,}
+\DoxyCodeLine{00315\ }
+\DoxyCodeLine{00316\ \ \ \ \ \textcolor{comment}{//\ Configure\ the\ advertise\ period\ in\ case\ of\ DEF\_ADV\_WITH\_TIMEOUT.}}
+\DoxyCodeLine{00317\ \ \ \ \ \textcolor{comment}{//\ It\ is\ measured\ in\ timer\ units\ (3\ min).\ Use\ MS\_TO\_TIMERUNITS\ macro\ to\ convert}}
+\DoxyCodeLine{00318\ \ \ \ \ \textcolor{comment}{//\ from\ milliseconds\ (ms)\ to\ timer\ units.}}
+\DoxyCodeLine{00319\ \ \ \ \ .advertise\_period\ =\ MS\_TO\_TIMERUNITS(180000),}
+\DoxyCodeLine{00320\ }
+\DoxyCodeLine{00321\ \ \ \ \ \textcolor{comment}{//\ Configure\ the\ security\ start\ operation\ of\ the\ default\ handlers}}
+\DoxyCodeLine{00322\ \ \ \ \ \textcolor{comment}{//\ if\ the\ security\ is\ enabled\ (CFG\_APP\_SECURITY)}}
+\DoxyCodeLine{00323\ \ \ \ \ \textcolor{comment}{//\ Possible\ values:}}
+\DoxyCodeLine{00324\ \ \ \ \ \textcolor{comment}{//\ \ -\/\ DEF\_SEC\_REQ\_NEVER}}
+\DoxyCodeLine{00325\ \ \ \ \ \textcolor{comment}{//\ \ -\/\ DEF\_SEC\_REQ\_ON\_CONNECT}}
+\DoxyCodeLine{00326\ \ \ \ \ .security\_request\_scenario\ =\ DEF\_SEC\_REQ\_NEVER}
+\DoxyCodeLine{00327\ \};}
+\DoxyCodeLine{00328\ }
+\DoxyCodeLine{00329\ \textcolor{comment}{/*}}
+\DoxyCodeLine{00330\ \textcolor{comment}{\ ****************************************************************************************}}
+\DoxyCodeLine{00331\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00332\ \textcolor{comment}{\ *\ Central\ configuration\ (not\ used\ by\ current\ example)}}
+\DoxyCodeLine{00333\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00334\ \textcolor{comment}{\ ****************************************************************************************}}
+\DoxyCodeLine{00335\ \textcolor{comment}{\ */}}
+\DoxyCodeLine{00336\ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ \textcolor{keyword}{struct\ }central\_configuration\ user\_central\_conf\ =\ \{}
+\DoxyCodeLine{00343\ \ \ \ \ .code\ =\ GAPM\_CONNECTION\_DIRECT,}
+\DoxyCodeLine{00344\ }
+\DoxyCodeLine{00346\ \ \ \ \ .addr\_src\ =\ APP\_CFG\_ADDR\_SRC(USER\_CFG\_ADDRESS\_MODE),}
+\DoxyCodeLine{00347\ }
+\DoxyCodeLine{00349\ \ \ \ \ .scan\_interval\ =\ 0x180,}
+\DoxyCodeLine{00350\ }
+\DoxyCodeLine{00352\ \ \ \ \ .scan\_window\ =\ 0x160,}
+\DoxyCodeLine{00353\ }
+\DoxyCodeLine{00355\ \ \ \ \ .con\_intv\_min\ =\ 100,}
+\DoxyCodeLine{00356\ }
+\DoxyCodeLine{00358\ \ \ \ \ .con\_intv\_max\ =\ 100,}
+\DoxyCodeLine{00359\ }
+\DoxyCodeLine{00361\ \ \ \ \ .con\_latency\ =\ 0,}
+\DoxyCodeLine{00362\ }
+\DoxyCodeLine{00364\ \ \ \ \ .superv\_to\ =\ 0x1F4,}
+\DoxyCodeLine{00365\ }
+\DoxyCodeLine{00367\ \ \ \ \ .ce\_len\_min\ =\ 0,}
+\DoxyCodeLine{00368\ }
+\DoxyCodeLine{00370\ \ \ \ \ .ce\_len\_max\ =\ 0x5,}
+\DoxyCodeLine{00371\ }
+\DoxyCodeLine{00372\ \textcolor{comment}{\ \ \ \ /**************************************************************************************}}
+\DoxyCodeLine{00373\ \textcolor{comment}{\ \ \ \ \ *\ Peer\ device\ information\ (maximum\ number\ of\ peers\ =\ 8)}}
+\DoxyCodeLine{00374\ \textcolor{comment}{\ \ \ \ \ **************************************************************************************}}
+\DoxyCodeLine{00375\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00376\ }
+\DoxyCodeLine{00378\ \ \ \ \ .peer\_addr\_0\ =\ \{0x0,\ 0x0,\ 0x0,\ 0x0,\ 0x0,\ 0x0\},}
+\DoxyCodeLine{00379\ }
+\DoxyCodeLine{00381\ \ \ \ \ .peer\_addr\_0\_type\ =\ 0,}
+\DoxyCodeLine{00382\ }
+\DoxyCodeLine{00384\ \ \ \ \ .peer\_addr\_1\ =\ \{0x0,\ 0x0,\ 0x0,\ 0x0,\ 0x0,\ 0x0\},}
+\DoxyCodeLine{00385\ }
+\DoxyCodeLine{00387\ \ \ \ \ .peer\_addr\_1\_type\ =\ 0,}
+\DoxyCodeLine{00388\ }
+\DoxyCodeLine{00390\ \ \ \ \ .peer\_addr\_2\ =\ \{0x0,\ 0x0,\ 0x0,\ 0x0,\ 0x0,\ 0x0\},}
+\DoxyCodeLine{00391\ }
+\DoxyCodeLine{00393\ \ \ \ \ .peer\_addr\_2\_type\ =\ 0,}
+\DoxyCodeLine{00394\ }
+\DoxyCodeLine{00396\ \ \ \ \ .peer\_addr\_3\ =\ \{0x0,\ 0x0,\ 0x0,\ 0x0,\ 0x0,\ 0x0\},}
+\DoxyCodeLine{00397\ }
+\DoxyCodeLine{00399\ \ \ \ \ .peer\_addr\_3\_type\ =\ 0,}
+\DoxyCodeLine{00400\ }
+\DoxyCodeLine{00402\ \ \ \ \ .peer\_addr\_4\ =\ \{0x0,\ 0x0,\ 0x0,\ 0x0,\ 0x0,\ 0x0\},}
+\DoxyCodeLine{00403\ }
+\DoxyCodeLine{00405\ \ \ \ \ .peer\_addr\_4\_type\ =\ 0,}
+\DoxyCodeLine{00406\ }
+\DoxyCodeLine{00408\ \ \ \ \ .peer\_addr\_5\ =\ \{0x0,\ 0x0,\ 0x0,\ 0x0,\ 0x0,\ 0x0\},}
+\DoxyCodeLine{00409\ }
+\DoxyCodeLine{00411\ \ \ \ \ .peer\_addr\_5\_type\ =\ 0,}
+\DoxyCodeLine{00412\ }
+\DoxyCodeLine{00414\ \ \ \ \ .peer\_addr\_6\ =\ \{0x0,\ 0x0,\ 0x0,\ 0x0,\ 0x0,\ 0x0\},}
+\DoxyCodeLine{00415\ }
+\DoxyCodeLine{00417\ \ \ \ \ .peer\_addr\_6\_type\ =\ 0,}
+\DoxyCodeLine{00418\ }
+\DoxyCodeLine{00420\ \ \ \ \ .peer\_addr\_7\ =\ \{0x0,\ 0x0,\ 0x0,\ 0x0,\ 0x0,\ 0x0\},}
+\DoxyCodeLine{00421\ }
+\DoxyCodeLine{00423\ \ \ \ \ .peer\_addr\_7\_type\ =\ 0,}
+\DoxyCodeLine{00424\ \};}
+\DoxyCodeLine{00425\ }
+\DoxyCodeLine{00426\ \textcolor{comment}{/*}}
+\DoxyCodeLine{00427\ \textcolor{comment}{\ ****************************************************************************************}}
+\DoxyCodeLine{00428\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00429\ \textcolor{comment}{\ *\ Security\ related\ configuration}}
+\DoxyCodeLine{00430\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00431\ \textcolor{comment}{\ ****************************************************************************************}}
+\DoxyCodeLine{00432\ \textcolor{comment}{\ */}}
+\DoxyCodeLine{00433\ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ \textcolor{keyword}{struct\ }security\_configuration\ user\_security\_conf\ =\ \{}
+\DoxyCodeLine{00434\ \ \ \ \ \textcolor{comment}{//\ IO\ Capabilities}}
+\DoxyCodeLine{00435\ \textcolor{preprocessor}{\ \ \ \ \#if\ defined\ (USER\_CFG\_FEAT\_IO\_CAP)}}
+\DoxyCodeLine{00436\ \ \ \ \ .iocap\ \ \ \ \ \ \ \ \ \ =\ USER\_CFG\_FEAT\_IO\_CAP,}
+\DoxyCodeLine{00437\ \textcolor{preprocessor}{\ \ \ \ \#else}}
+\DoxyCodeLine{00438\ \ \ \ \ .iocap\ \ \ \ \ \ \ \ \ \ =\ GAP\_IO\_CAP\_NO\_INPUT\_NO\_OUTPUT,}
+\DoxyCodeLine{00439\ \textcolor{preprocessor}{\ \ \ \ \#endif}}
+\DoxyCodeLine{00440\ }
+\DoxyCodeLine{00441\ \ \ \ \ \textcolor{comment}{//\ OOB\ Capabilities}}
+\DoxyCodeLine{00442\ \textcolor{preprocessor}{\ \ \ \ \#if\ defined\ (USER\_CFG\_FEAT\_OOB)}}
+\DoxyCodeLine{00443\ \ \ \ \ .oob\ \ \ \ \ \ \ \ \ \ \ \ =\ USER\_CFG\_FEAT\_OOB,}
+\DoxyCodeLine{00444\ \textcolor{preprocessor}{\ \ \ \ \#else}}
+\DoxyCodeLine{00445\ \ \ \ \ .oob\ \ \ \ \ \ \ \ \ \ \ \ =\ GAP\_OOB\_AUTH\_DATA\_NOT\_PRESENT,}
+\DoxyCodeLine{00446\ \textcolor{preprocessor}{\ \ \ \ \#endif}}
+\DoxyCodeLine{00447\ }
+\DoxyCodeLine{00448\ \ \ \ \ \textcolor{comment}{//\ Authentication\ Requirements}}
+\DoxyCodeLine{00449\ \textcolor{preprocessor}{\ \ \ \ \#if\ defined\ (USER\_CFG\_FEAT\_AUTH\_REQ)}}
+\DoxyCodeLine{00450\ \ \ \ \ .auth\ \ \ \ \ \ \ \ \ \ \ =\ USER\_CFG\_FEAT\_AUTH\_REQ,}
+\DoxyCodeLine{00451\ \textcolor{preprocessor}{\ \ \ \ \#else}}
+\DoxyCodeLine{00452\ \ \ \ \ .auth\ \ \ \ \ \ \ \ \ \ \ =\ GAP\_AUTH\_NONE,}
+\DoxyCodeLine{00453\ \textcolor{preprocessor}{\ \ \ \ \#endif}}
+\DoxyCodeLine{00454\ }
+\DoxyCodeLine{00455\ \ \ \ \ \textcolor{comment}{//\ LTK\ size}}
+\DoxyCodeLine{00456\ \textcolor{preprocessor}{\ \ \ \ \#if\ defined\ (USER\_CFG\_FEAT\_KEY\_SIZE)}}
+\DoxyCodeLine{00457\ \ \ \ \ .key\_size\ \ \ \ \ \ \ =\ USER\_CFG\_FEAT\_KEY\_SIZE,}
+\DoxyCodeLine{00458\ \textcolor{preprocessor}{\ \ \ \ \#else}}
+\DoxyCodeLine{00459\ \ \ \ \ .key\_size\ \ \ \ \ \ \ =\ KEY\_LEN,}
+\DoxyCodeLine{00460\ \textcolor{preprocessor}{\ \ \ \ \#endif}}
+\DoxyCodeLine{00461\ }
+\DoxyCodeLine{00462\ \ \ \ \ \textcolor{comment}{//\ Initiator\ key\ distribution}}
+\DoxyCodeLine{00463\ \textcolor{preprocessor}{\ \ \ \ \#if\ defined\ (USER\_CFG\_FEAT\_INIT\_KDIST)}}
+\DoxyCodeLine{00464\ \ \ \ \ .ikey\_dist\ \ \ \ \ \ =\ USER\_CFG\_FEAT\_INIT\_KDIST,}
+\DoxyCodeLine{00465\ \textcolor{preprocessor}{\ \ \ \ \#else}}
+\DoxyCodeLine{00466\ \ \ \ \ .ikey\_dist\ \ \ \ \ \ =\ GAP\_KDIST\_NONE,}
+\DoxyCodeLine{00467\ \textcolor{preprocessor}{\ \ \ \ \#endif}}
+\DoxyCodeLine{00468\ }
+\DoxyCodeLine{00469\ \ \ \ \ \textcolor{comment}{//\ Responder\ key\ distribution}}
+\DoxyCodeLine{00470\ \textcolor{preprocessor}{\ \ \ \ \#if\ defined\ (USER\_CFG\_FEAT\_RESP\_KDIST)}}
+\DoxyCodeLine{00471\ \ \ \ \ .rkey\_dist\ \ \ \ \ \ =\ USER\_CFG\_FEAT\_RESP\_KDIST,}
+\DoxyCodeLine{00472\ \textcolor{preprocessor}{\ \ \ \ \#else}}
+\DoxyCodeLine{00473\ \ \ \ \ .rkey\_dist\ \ \ \ \ \ =\ GAP\_KDIST\_ENCKEY,}
+\DoxyCodeLine{00474\ \textcolor{preprocessor}{\ \ \ \ \#endif}}
+\DoxyCodeLine{00475\ }
+\DoxyCodeLine{00476\ \ \ \ \ \textcolor{comment}{//\ Security\ requirements\ (minimum\ security\ level)}}
+\DoxyCodeLine{00477\ \textcolor{preprocessor}{\ \ \ \ \#if\ defined\ (USER\_CFG\_FEAT\_SEC\_REQ)}}
+\DoxyCodeLine{00478\ \ \ \ \ .sec\_req\ \ \ \ \ \ \ \ =\ USER\_CFG\_FEAT\_SEC\_REQ,}
+\DoxyCodeLine{00479\ \textcolor{preprocessor}{\ \ \ \ \#else}}
+\DoxyCodeLine{00480\ \ \ \ \ .sec\_req\ \ \ \ \ \ \ \ =\ GAP\_NO\_SEC,}
+\DoxyCodeLine{00481\ \textcolor{preprocessor}{\ \ \ \ \#endif}}
+\DoxyCodeLine{00482\ \};}
+\DoxyCodeLine{00483\ }
+\DoxyCodeLine{00484\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{//\ \_USER\_CONFIG\_H\_}}
+
+\end{DoxyCode}

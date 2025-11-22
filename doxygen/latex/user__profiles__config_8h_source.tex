@@ -1,0 +1,101 @@
+\doxysection{user\+\_\+profiles\+\_\+config.\+h}
+\hypertarget{user__profiles__config_8h_source}{}\label{user__profiles__config_8h_source}\index{C:/Users/alber/Documents/DA145xx\_SDK/6.0.24.1464/projects/target\_apps/template/fukuoka\_uric\_acid\_sensor/src/config/user\_profiles\_config.h@{C:/Users/alber/Documents/DA145xx\_SDK/6.0.24.1464/projects/target\_apps/template/fukuoka\_uric\_acid\_sensor/src/config/user\_profiles\_config.h}}
+\mbox{\hyperlink{user__profiles__config_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ }
+\DoxyCodeLine{00033\ }
+\DoxyCodeLine{00034\ \textcolor{preprocessor}{\#ifndef\ \_USER\_PROFILES\_CONFIG\_H\_}}
+\DoxyCodeLine{00035\ \textcolor{preprocessor}{\#define\ \_USER\_PROFILES\_CONFIG\_H\_}}
+\DoxyCodeLine{00036\ }
+\DoxyCodeLine{00048\ }
+\DoxyCodeLine{00049\ \textcolor{comment}{/*}}
+\DoxyCodeLine{00050\ \textcolor{comment}{\ *\ DEFINITIONS}}
+\DoxyCodeLine{00051\ \textcolor{comment}{\ ****************************************************************************************}}
+\DoxyCodeLine{00052\ \textcolor{comment}{\ */}}
+\DoxyCodeLine{00053\ }
+\DoxyCodeLine{00054\ \textcolor{comment}{/***************************************************************************************/}}
+\DoxyCodeLine{00055\ \textcolor{comment}{/*\ Used\ BLE\ profiles\ (used\ by\ "{}rwprf\_config.h"{}).\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ */}}
+\DoxyCodeLine{00056\ \textcolor{comment}{/***************************************************************************************/}}
+\DoxyCodeLine{00057\ }
+\DoxyCodeLine{00058\ \textcolor{preprocessor}{\#define\ CFG\_PRF\_DISS}}
+\DoxyCodeLine{00059\ \textcolor{preprocessor}{\#define\ CFG\_PRF\_CUST1}}
+\DoxyCodeLine{00060\ }
+\DoxyCodeLine{00061\ \textcolor{comment}{/***************************************************************************************/}}
+\DoxyCodeLine{00062\ \textcolor{comment}{/*\ Profile\ application\ configuration\ section\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ */}}
+\DoxyCodeLine{00063\ \textcolor{comment}{/***************************************************************************************/}}
+\DoxyCodeLine{00064\ }
+\DoxyCodeLine{00065\ \textcolor{comment}{/*}}
+\DoxyCodeLine{00066\ \textcolor{comment}{\ ****************************************************************************************}}
+\DoxyCodeLine{00067\ \textcolor{comment}{\ *\ DISS\ application\ profile\ configuration}}
+\DoxyCodeLine{00068\ \textcolor{comment}{\ ****************************************************************************************}}
+\DoxyCodeLine{00069\ \textcolor{comment}{\ */}}
+\DoxyCodeLine{00070\ }
+\DoxyCodeLine{00071\ \textcolor{preprocessor}{\#define\ APP\_DIS\_FEATURES\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ (DIS\_MANUFACTURER\_NAME\_CHAR\_SUP\ |\ \(\backslash\)}}
+\DoxyCodeLine{00072\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ DIS\_MODEL\_NB\_STR\_CHAR\_SUP\ |\ \(\backslash\)}}
+\DoxyCodeLine{00073\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ DIS\_SYSTEM\_ID\_CHAR\_SUP\ |\ \(\backslash\)}}
+\DoxyCodeLine{00074\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ DIS\_SW\_REV\_STR\_CHAR\_SUP\ |\ \(\backslash\)}}
+\DoxyCodeLine{00075\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ DIS\_FIRM\_REV\_STR\_CHAR\_SUP\ |\ \(\backslash\)}}
+\DoxyCodeLine{00076\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ DIS\_PNP\_ID\_CHAR\_SUP)}}
+\DoxyCodeLine{00077\ }
+\DoxyCodeLine{00079\ \textcolor{preprocessor}{\#define\ APP\_DIS\_MANUFACTURER\_NAME\ \ \ \ \ \ \ ("{}Renesas"{})}}
+\DoxyCodeLine{00080\ \textcolor{preprocessor}{\#define\ APP\_DIS\_MANUFACTURER\_NAME\_LEN\ \ \ (sizeof(APP\_DIS\_MANUFACTURER\_NAME)\ -\/\ 1)}}
+\DoxyCodeLine{00081\ }
+\DoxyCodeLine{00083\ \textcolor{preprocessor}{\#if\ defined\ (\_\_DA14586\_\_)}}
+\DoxyCodeLine{00084\ \textcolor{preprocessor}{\ \ \ \ \#define\ APP\_DIS\_MODEL\_NB\_STR\ \ \ \ \ \ \ \ \ \ \ \ ("{}DA14586"{})}}
+\DoxyCodeLine{00085\ \textcolor{preprocessor}{\#elif\ defined\ (\_\_DA14535\_\_)}}
+\DoxyCodeLine{00086\ \textcolor{preprocessor}{\ \ \ \ \#define\ APP\_DIS\_MODEL\_NB\_STR\ \ \ \ \ \ \ \ \ \ \ \ ("{}DA14535"{})}}
+\DoxyCodeLine{00087\ \textcolor{preprocessor}{\#elif\ defined\ (\_\_DA14531\_01\_\_)}}
+\DoxyCodeLine{00088\ \textcolor{preprocessor}{\ \ \ \ \#define\ APP\_DIS\_MODEL\_NB\_STR\ \ \ \ \ \ \ \ \ \ \ \ ("{}DA14531-\/01"{})}}
+\DoxyCodeLine{00089\ \textcolor{preprocessor}{\#elif\ defined\ (\_\_DA14531\_\_)}}
+\DoxyCodeLine{00090\ \textcolor{preprocessor}{\ \ \ \ \#define\ APP\_DIS\_MODEL\_NB\_STR\ \ \ \ \ \ \ \ \ \ \ \ ("{}DA14531"{})}}
+\DoxyCodeLine{00091\ \textcolor{preprocessor}{\#else}}
+\DoxyCodeLine{00092\ \textcolor{preprocessor}{\ \ \ \ \#define\ APP\_DIS\_MODEL\_NB\_STR\ \ \ \ \ \ \ \ \ \ \ \ ("{}DA14585"{})}}
+\DoxyCodeLine{00093\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{00094\ \textcolor{preprocessor}{\#ifdef\ \_\_DA14531\_01\_\_}}
+\DoxyCodeLine{00095\ \textcolor{preprocessor}{\#define\ APP\_DIS\_MODEL\_NB\_STR\_LEN\ \ \ \ \ \ \ \ (10)}}
+\DoxyCodeLine{00096\ \textcolor{preprocessor}{\#else}}
+\DoxyCodeLine{00097\ \textcolor{preprocessor}{\#define\ APP\_DIS\_MODEL\_NB\_STR\_LEN\ \ \ \ \ \ \ \ (7)}}
+\DoxyCodeLine{00098\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{00099\ }
+\DoxyCodeLine{00101\ \textcolor{preprocessor}{\#define\ APP\_DIS\_SYSTEM\_ID\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ ("{}\(\backslash\)x12\(\backslash\)x34\(\backslash\)x56\(\backslash\)xFF\(\backslash\)xFE\(\backslash\)x9A\(\backslash\)xBC\(\backslash\)xDE"{})}}
+\DoxyCodeLine{00102\ \textcolor{preprocessor}{\#define\ APP\_DIS\_SYSTEM\_ID\_LEN\ \ \ \ \ \ \ \ \ \ \ (8)}}
+\DoxyCodeLine{00103\ }
+\DoxyCodeLine{00104\ \textcolor{preprocessor}{\#define\ APP\_DIS\_SW\_REV\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ SDK\_VERSION}}
+\DoxyCodeLine{00105\ \textcolor{preprocessor}{\#define\ APP\_DIS\_FIRM\_REV\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ SDK\_VERSION}}
+\DoxyCodeLine{00106\ }
+\DoxyCodeLine{00108\ \textcolor{preprocessor}{\#define\ APP\_DIS\_SERIAL\_NB\_STR\ \ \ \ \ \ \ \ \ \ \ ("{}1.0.0.0-\/LE"{})}}
+\DoxyCodeLine{00109\ \textcolor{preprocessor}{\#define\ APP\_DIS\_SERIAL\_NB\_STR\_LEN\ \ \ \ \ \ \ (10)}}
+\DoxyCodeLine{00110\ }
+\DoxyCodeLine{00112\ \textcolor{preprocessor}{\#if\ defined\ (\_\_DA14586\_\_)}}
+\DoxyCodeLine{00113\ \textcolor{preprocessor}{\ \ \ \ \#define\ APP\_DIS\_HARD\_REV\_STR\ \ \ \ \ \ \ \ \ \ \ \ ("{}DA14586"{})}}
+\DoxyCodeLine{00114\ \textcolor{preprocessor}{\#elif\ defined\ (\_\_DA14535\_\_)}}
+\DoxyCodeLine{00115\ \textcolor{preprocessor}{\ \ \ \ \#define\ APP\_DIS\_HARD\_REV\_STR\ \ \ \ \ \ \ \ \ \ \ \ ("{}DA14535"{})}}
+\DoxyCodeLine{00116\ \textcolor{preprocessor}{\#elif\ defined\ (\_\_DA14531\_01\_\_)}}
+\DoxyCodeLine{00117\ \textcolor{preprocessor}{\ \ \ \ \#define\ APP\_DIS\_HARD\_REV\_STR\ \ \ \ \ \ \ \ \ \ \ \ ("{}DA14531-\/01"{})}}
+\DoxyCodeLine{00118\ \textcolor{preprocessor}{\#elif\ defined\ (\_\_DA14531\_\_)}}
+\DoxyCodeLine{00119\ \textcolor{preprocessor}{\ \ \ \ \#define\ APP\_DIS\_HARD\_REV\_STR\ \ \ \ \ \ \ \ \ \ \ \ ("{}DA14531"{})}}
+\DoxyCodeLine{00120\ \textcolor{preprocessor}{\#else}}
+\DoxyCodeLine{00121\ \textcolor{preprocessor}{\ \ \ \ \#define\ APP\_DIS\_HARD\_REV\_STR\ \ \ \ \ \ \ \ \ \ \ \ ("{}DA14585"{})}}
+\DoxyCodeLine{00122\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{00123\ \textcolor{preprocessor}{\#ifdef\ \_\_DA14531\_01\_\_}}
+\DoxyCodeLine{00124\ \textcolor{preprocessor}{\#define\ APP\_DIS\_HARD\_REV\_STR\_LEN\ \ \ \ \ \ \ \ (10)}}
+\DoxyCodeLine{00125\ \textcolor{preprocessor}{\#else}}
+\DoxyCodeLine{00126\ \textcolor{preprocessor}{\#define\ APP\_DIS\_HARD\_REV\_STR\_LEN\ \ \ \ \ \ \ \ (7)}}
+\DoxyCodeLine{00127\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{00128\ }
+\DoxyCodeLine{00130\ \textcolor{preprocessor}{\#define\ APP\_DIS\_FIRM\_REV\_STR\ \ \ \ \ \ \ \ \ \ \ \ SDK\_VERSION}}
+\DoxyCodeLine{00131\ \textcolor{preprocessor}{\#define\ APP\_DIS\_FIRM\_REV\_STR\_LEN\ \ \ \ \ \ \ \ (sizeof(APP\_DIS\_FIRM\_REV\_STR)\ -\/\ 1)}}
+\DoxyCodeLine{00132\ }
+\DoxyCodeLine{00134\ \textcolor{preprocessor}{\#define\ APP\_DIS\_SW\_REV\_STR\ \ \ \ \ \ \ \ \ \ \ \ \ \ SDK\_VERSION}}
+\DoxyCodeLine{00135\ \textcolor{preprocessor}{\#define\ APP\_DIS\_SW\_REV\_STR\_LEN\ \ \ \ \ \ \ \ \ \ (sizeof(APP\_DIS\_SW\_REV\_STR)\ -\/\ 1)}}
+\DoxyCodeLine{00136\ }
+\DoxyCodeLine{00138\ \textcolor{preprocessor}{\#define\ APP\_DIS\_IEEE\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ ("{}\(\backslash\)xFF\(\backslash\)xEE\(\backslash\)xDD\(\backslash\)xCC\(\backslash\)xBB\(\backslash\)xAA"{})}}
+\DoxyCodeLine{00139\ \textcolor{preprocessor}{\#define\ APP\_DIS\_IEEE\_LEN\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ (6)}}
+\DoxyCodeLine{00140\ }
+\DoxyCodeLine{00149\ \textcolor{preprocessor}{\#define\ APP\_DIS\_PNP\_ID\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ ("{}\(\backslash\)x01\(\backslash\)xD2\(\backslash\)x00\(\backslash\)x80\(\backslash\)x05\(\backslash\)x00\(\backslash\)x01"{})}}
+\DoxyCodeLine{00150\ \textcolor{preprocessor}{\#define\ APP\_DIS\_PNP\_ID\_LEN\ \ \ \ \ \ \ \ \ \ \ \ \ \ (7)}}
+\DoxyCodeLine{00151\ }
+\DoxyCodeLine{00153\ }
+\DoxyCodeLine{00154\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{//\ \_USER\_PROFILES\_CONFIG\_H\_}}
+
+\end{DoxyCode}

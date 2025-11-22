@@ -21,8 +21,8 @@
 #include "uart.h"
 #include "syscntl.h"
 
-// set flag for UVP GPIO with initial value of true
-bool flag_gpio_uvp = true;
+// Needed for flag_gpio_uvp
+#include "user_empty_peripheral_template.h"
 
 /*
  ****************************************************************************************
@@ -84,10 +84,16 @@ void set_pad_functions(void)
 			GPIO_ConfigurePin(UART2_TX_PORT, UART2_TX_PIN, OUTPUT, PID_UART2_TX, false);
 	#endif
 	
-	// FIXME: set pin 9 (UVP_MAX_SHDN) as digital output high, needs bench testing
-	if(flag_gpio_uvp){
+	// set pin 9 (UVP_MAX_SHDN) as digital output high or low based on flag in user_empty_peripheral_template.c
+	if(flag_gpio_uvp)
+	{
+		// GPIO_SetInactive(UVP_MAX_SHDN_PORT, UVP_MAX_SHDN_PIN); // shutdown amplifiers
+		GPIO_ConfigurePin(UVP_MAX_SHDN_PORT, UVP_MAX_SHDN_PIN, OUTPUT, PID_GPIO, false);
+	}
+	else
+	{
+		// GPIO_SetActive(UVP_MAX_SHDN_PORT, UVP_MAX_SHDN_PIN); // enable amplifiers
 		GPIO_ConfigurePin(UVP_MAX_SHDN_PORT, UVP_MAX_SHDN_PIN, OUTPUT, PID_GPIO, true);
-		flag_gpio_uvp = false; 	// flag is so that it only runs once at startup
 	}
 	
 	// set ADC pin as input
@@ -113,17 +119,17 @@ static const uart_cfg_t uart_cfg = {
 };
 #endif
 
-// template code
 void periph_init(void)
 {
 	#if defined (__DA14531__)
 	// In Boost mode enable the DCDC converter to supply VBAT_HIGH for the used GPIOs
 	// Assumption: The connected external peripheral is powered by 3V
 	
-	// TODO need to check this function and use it to set the DCDC converter
-	// USB devkit supplies 3.3 V to DA14531 chip in buck mode via an LDO
-			
-	syscntl_dcdc_turn_on_in_boost(SYSCNTL_DCDC_LEVEL_3V0);
+	// template code (old)
+	// syscntl_dcdc_turn_on_in_boost(SYSCNTL_DCDC_LEVEL_3V0);
+	
+	// Set converter to buck mode and generate VBAT_LOW = 1.1V typical value
+	syscntl_dcdc_turn_on_in_buck(SYSCNTL_DCDC_LEVEL_1V1);
 	
 	#else
 			// Power up peripherals' power domain

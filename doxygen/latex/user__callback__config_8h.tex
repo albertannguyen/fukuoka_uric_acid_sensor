@@ -1,0 +1,69 @@
+\doxysection{C\+:/\+Users/alber/\+Documents/\+DA145xx\+\_\+\+SDK/6.0.24.1464/projects/target\+\_\+apps/template/fukuoka\+\_\+uric\+\_\+acid\+\_\+sensor/src/config/user\+\_\+callback\+\_\+config.h File Reference}
+\hypertarget{user__callback__config_8h}{}\label{user__callback__config_8h}\index{C:/Users/alber/Documents/DA145xx\_SDK/6.0.24.1464/projects/target\_apps/template/fukuoka\_uric\_acid\_sensor/src/config/user\_callback\_config.h@{C:/Users/alber/Documents/DA145xx\_SDK/6.0.24.1464/projects/target\_apps/template/fukuoka\_uric\_acid\_sensor/src/config/user\_callback\_config.h}}
+
+
+Callback functions configuration file.  
+
+
+{\ttfamily \#include "{}app\+\_\+api.\+h"{}}\newline
+{\ttfamily \#include "{}app\+\_\+bass.\+h"{}}\newline
+{\ttfamily \#include "{}app\+\_\+findme.\+h"{}}\newline
+{\ttfamily \#include "{}app\+\_\+proxr.\+h"{}}\newline
+{\ttfamily \#include "{}app\+\_\+suotar.\+h"{}}\newline
+{\ttfamily \#include "{}app\+\_\+callback.\+h"{}}\newline
+{\ttfamily \#include "{}app\+\_\+prf\+\_\+types.\+h"{}}\newline
+{\ttfamily \#include "{}user\+\_\+empty\+\_\+peripheral\+\_\+template.\+h"{}}\newline
+\doxysubsubsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{user__callback__config_8h_a436aef52f3b068a4303379631daded81}\label{user__callback__config_8h_a436aef52f3b068a4303379631daded81} 
+\#define {\bfseries app\+\_\+process\+\_\+catch\+\_\+rest\+\_\+cb}~\mbox{\hyperlink{group___a_p_p_ga0b3422baf14d93c4ca220ed9999e5a3c}{user\+\_\+catch\+\_\+rest\+\_\+hndl}}
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{user__callback__config_8h_a333ba051b56b2538535a1e1b1e1c0640}{app\+\_\+advertise\+\_\+complete}} (const uint8\+\_\+t)
+\begin{DoxyCompactList}\small\item\em Function to be called on the advertising completion event. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{user__callback__config_8h_ab75fd65a1d33c7ed4755c49678a1cadb}{on\+\_\+suotar\+\_\+status\+\_\+change}} (const uint8\+\_\+t suotar\+\_\+event)
+\begin{DoxyCompactList}\small\item\em SUOTAR session start or stop event handler. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Callback functions configuration file. 
+
+\begin{DoxyNote}{Note}
+Albert Nguyen\+: Rerouted app\+\_\+on\+\_\+init and app\+\_\+on\+\_\+system\+\_\+powered to user space 
+\end{DoxyNote}
+
+
+\doxysubsection{Function Documentation}
+\Hypertarget{user__callback__config_8h_a333ba051b56b2538535a1e1b1e1c0640}\index{user\_callback\_config.h@{user\_callback\_config.h}!app\_advertise\_complete@{app\_advertise\_complete}}
+\index{app\_advertise\_complete@{app\_advertise\_complete}!user\_callback\_config.h@{user\_callback\_config.h}}
+\doxysubsubsection{\texorpdfstring{app\_advertise\_complete()}{app\_advertise\_complete()}}
+{\footnotesize\ttfamily \label{user__callback__config_8h_a333ba051b56b2538535a1e1b1e1c0640} 
+void app\+\_\+advertise\+\_\+complete (\begin{DoxyParamCaption}\item[{const uint8\+\_\+t}]{}{}\end{DoxyParamCaption})}
+
+
+
+Function to be called on the advertising completion event. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\texttt{ in}}  & {\em uint8\+\_\+t} & GAP Error code \\
+\hline
+\end{DoxyParams}
+\Hypertarget{user__callback__config_8h_ab75fd65a1d33c7ed4755c49678a1cadb}\index{user\_callback\_config.h@{user\_callback\_config.h}!on\_suotar\_status\_change@{on\_suotar\_status\_change}}
+\index{on\_suotar\_status\_change@{on\_suotar\_status\_change}!user\_callback\_config.h@{user\_callback\_config.h}}
+\doxysubsubsection{\texorpdfstring{on\_suotar\_status\_change()}{on\_suotar\_status\_change()}}
+{\footnotesize\ttfamily \label{user__callback__config_8h_ab75fd65a1d33c7ed4755c49678a1cadb} 
+void on\+\_\+suotar\+\_\+status\+\_\+change (\begin{DoxyParamCaption}\item[{const uint8\+\_\+t}]{suotar\+\_\+event}{}\end{DoxyParamCaption})}
+
+
+
+SUOTAR session start or stop event handler. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\texttt{ in}}  & {\em suotar\+\_\+event} & SUOTAR\+\_\+\+START/\+SUOTAR\+\_\+\+STOP \\
+\hline
+\end{DoxyParams}

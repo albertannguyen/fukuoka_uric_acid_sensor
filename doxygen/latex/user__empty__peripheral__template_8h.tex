@@ -1,0 +1,71 @@
+\doxysection{C\+:/\+Users/alber/\+Documents/\+DA145xx\+\_\+\+SDK/6.0.24.1464/projects/target\+\_\+apps/template/fukuoka\+\_\+uric\+\_\+acid\+\_\+sensor/src/user\+\_\+empty\+\_\+peripheral\+\_\+template.h File Reference}
+\hypertarget{user__empty__peripheral__template_8h}{}\label{user__empty__peripheral__template_8h}\index{C:/Users/alber/Documents/DA145xx\_SDK/6.0.24.1464/projects/target\_apps/template/fukuoka\_uric\_acid\_sensor/src/user\_empty\_peripheral\_template.h@{C:/Users/alber/Documents/DA145xx\_SDK/6.0.24.1464/projects/target\_apps/template/fukuoka\_uric\_acid\_sensor/src/user\_empty\_peripheral\_template.h}}
+
+
+Empty peripheral template project header file.  
+
+
+{\ttfamily \#include "{}rwble\+\_\+config.\+h"{}}\newline
+{\ttfamily \#include "{}app\+\_\+task.\+h"{}}\newline
+{\ttfamily \#include "{}gapc\+\_\+task.\+h"{}}\newline
+{\ttfamily \#include "{}gapm\+\_\+task.\+h"{}}\newline
+{\ttfamily \#include "{}app.\+h"{}}\newline
+{\ttfamily \#include "{}co\+\_\+error.\+h"{}}\newline
+{\ttfamily \#include "{}arch\+\_\+api.\+h"{}}\newline
+{\ttfamily \#include "{}adc\+\_\+531.\+h"{}}\newline
+{\ttfamily \#include "{}timer0\+\_\+2.\+h"{}}\newline
+{\ttfamily \#include "{}timer2.\+h"{}}\newline
+{\ttfamily \#include "{}custs1\+\_\+task.\+h"{}}\newline
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{group___a_p_p_ga0ba40d136da1f704417eac6f4b68c874}{uvp\+\_\+wireless\+\_\+timer\+\_\+cb}} (void)
+\begin{DoxyCompactList}\small\item\em UVP (for battery voltage) periodic timer callback. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{group___a_p_p_gae9df79242cefcda723510a89b90e0354}{gpadc\+\_\+wireless\+\_\+timer\+\_\+cb}} (void)
+\begin{DoxyCompactList}\small\item\em Sensor Voltage periodic timer callback. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{group___a_p_p_ga22bca6eda8d03d627c4d2287445a36a6}{gpadc\+\_\+init\+\_\+se}} (adc\+\_\+input\+\_\+se\+\_\+t input, uint8\+\_\+t smpl\+\_\+time\+\_\+mult, bool continuous, uint8\+\_\+t interval\+\_\+mult, adc\+\_\+input\+\_\+attn\+\_\+t input\+\_\+attenuator, bool chopping, uint8\+\_\+t oversampling)
+\begin{DoxyCompactList}\small\item\em Initialize the ADC in single-\/ended mode with given parameters. \end{DoxyCompactList}\item 
+uint16\+\_\+t \mbox{\hyperlink{group___a_p_p_gaa4fb3777459834fb4d0720eaf119d94f}{gpadc\+\_\+collect\+\_\+sample}} (void)
+\begin{DoxyCompactList}\small\item\em Collect a corrected raw ADC sample. \end{DoxyCompactList}\item 
+uint16\+\_\+t \mbox{\hyperlink{group___a_p_p_ga8258035a26667ea0be70867e5e483c3f}{gpadc\+\_\+sample\+\_\+to\+\_\+mv}} (uint16\+\_\+t sample)
+\begin{DoxyCompactList}\small\item\em Convert a corrected ADC sample to a millivolt value. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{group___a_p_p_ga12f39c2c81587d0e9a93610ca12310c0}{timer2\+\_\+pwm\+\_\+set\+\_\+frequency}} (tim0\+\_\+2\+\_\+clk\+\_\+div\+\_\+t clk\+\_\+div, tim2\+\_\+clk\+\_\+src\+\_\+t clk\+\_\+src, uint16\+\_\+t pwm\+\_\+div)
+\begin{DoxyCompactList}\small\item\em Configure Timer2 PWM frequency. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{group___a_p_p_ga91c119ea3d451fe1c908ff14ecb24312}{timer2\+\_\+pwm\+\_\+set\+\_\+dc\+\_\+and\+\_\+offset}} (uint8\+\_\+t dc\+\_\+pwm2, uint8\+\_\+t offset\+\_\+pwm2, uint8\+\_\+t dc\+\_\+pwm3, uint8\+\_\+t offset\+\_\+pwm3)
+\begin{DoxyCompactList}\small\item\em Set PWM duty cycle and offset for TIM2 channels 2 and 3. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{group___a_p_p_ga6f6b699b50011cb75aae07787816e2d7}{timer2\+\_\+pwm\+\_\+enable}} (void)
+\begin{DoxyCompactList}\small\item\em Enable Timer2 PWM outputs. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{group___a_p_p_ga8c8e71698fc4044fef4e7990642f44e1}{timer2\+\_\+pwm\+\_\+disable}} (void)
+\begin{DoxyCompactList}\small\item\em Disable Timer2 PWM outputs. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{group___a_p_p_ga097fccef82db4a9dfdc1cb542a9e9e20}{user\+\_\+on\+\_\+connection}} (const uint8\+\_\+t conidx, struct gapc\+\_\+connection\+\_\+req\+\_\+ind const \texorpdfstring{$\ast$}{*}param)
+\begin{DoxyCompactList}\small\item\em Called when a BLE central connects to the device. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{group___a_p_p_ga2b05ace9fab6a68b42379e8a17d91d43}{user\+\_\+on\+\_\+disconnect}} (struct gapc\+\_\+disconnect\+\_\+ind const \texorpdfstring{$\ast$}{*}param)
+\begin{DoxyCompactList}\small\item\em Called when a BLE central disconnects. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{group___a_p_p_ga0b3422baf14d93c4ca220ed9999e5a3c}{user\+\_\+catch\+\_\+rest\+\_\+hndl}} (ke\+\_\+msg\+\_\+id\+\_\+t const msgid, void const \texorpdfstring{$\ast$}{*}param, ke\+\_\+task\+\_\+id\+\_\+t const dest\+\_\+id, ke\+\_\+task\+\_\+id\+\_\+t const src\+\_\+id)
+\begin{DoxyCompactList}\small\item\em Handles unprocessed messages (not handled by the SDK) and dispatches custom handlers. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{group___a_p_p_ga9558355a6c2e75d01e5f38a64460f292}{user\+\_\+svc1\+\_\+sensor\+\_\+voltage\+\_\+cfg\+\_\+ind\+\_\+handler}} (ke\+\_\+msg\+\_\+id\+\_\+t const msgid, struct custs1\+\_\+val\+\_\+write\+\_\+ind const \texorpdfstring{$\ast$}{*}param, ke\+\_\+task\+\_\+id\+\_\+t const dest\+\_\+id, ke\+\_\+task\+\_\+id\+\_\+t const src\+\_\+id)
+\begin{DoxyCompactList}\small\item\em Handle CCCD writes to the Sensor Voltage characteristic. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{group___a_p_p_ga14840a8f42cc0574c8b39bd1f3046791}{user\+\_\+svc1\+\_\+pwm\+\_\+freq\+\_\+wr\+\_\+ind\+\_\+handler}} (ke\+\_\+msg\+\_\+id\+\_\+t const msgid, struct custs1\+\_\+val\+\_\+write\+\_\+ind const \texorpdfstring{$\ast$}{*}param, ke\+\_\+task\+\_\+id\+\_\+t const dest\+\_\+id, ke\+\_\+task\+\_\+id\+\_\+t const src\+\_\+id)
+\begin{DoxyCompactList}\small\item\em Handle client writes to PWM Frequency characteristic. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{group___a_p_p_gac5ce80be01027f38df019ba10e89451c}{user\+\_\+svc1\+\_\+pwm\+\_\+dc\+\_\+and\+\_\+offset\+\_\+wr\+\_\+ind\+\_\+handler}} (ke\+\_\+msg\+\_\+id\+\_\+t const msgid, struct custs1\+\_\+val\+\_\+write\+\_\+ind const \texorpdfstring{$\ast$}{*}param, ke\+\_\+task\+\_\+id\+\_\+t const dest\+\_\+id, ke\+\_\+task\+\_\+id\+\_\+t const src\+\_\+id)
+\begin{DoxyCompactList}\small\item\em Handle client writes to PWM duty cycle and offset characteristic. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{group___a_p_p_ga49d7c347aaec71e4d30678215f0c111b}{user\+\_\+svc1\+\_\+pwm\+\_\+state\+\_\+wr\+\_\+ind\+\_\+handler}} (ke\+\_\+msg\+\_\+id\+\_\+t const msgid, struct custs1\+\_\+val\+\_\+write\+\_\+ind const \texorpdfstring{$\ast$}{*}param, ke\+\_\+task\+\_\+id\+\_\+t const dest\+\_\+id, ke\+\_\+task\+\_\+id\+\_\+t const src\+\_\+id)
+\begin{DoxyCompactList}\small\item\em Handle client write to PWM State characteristic (single-\/byte ON/\+OFF). \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{group___a_p_p_ga07fe0a9cd441f968b0d9cd7c12c94d84}{user\+\_\+svc1\+\_\+battery\+\_\+voltage\+\_\+cfg\+\_\+ind\+\_\+handler}} (ke\+\_\+msg\+\_\+id\+\_\+t const msgid, struct custs1\+\_\+val\+\_\+write\+\_\+ind const \texorpdfstring{$\ast$}{*}param, ke\+\_\+task\+\_\+id\+\_\+t const dest\+\_\+id, ke\+\_\+task\+\_\+id\+\_\+t const src\+\_\+id)
+\begin{DoxyCompactList}\small\item\em Handle CCCD writes for Battery Voltage characteristic. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{group___a_p_p_ga1687342eb7a2e461d5daf779ec921c37}{user\+\_\+svc1\+\_\+read\+\_\+sensor\+\_\+voltage\+\_\+handler}} (ke\+\_\+msg\+\_\+id\+\_\+t const msgid, struct custs1\+\_\+value\+\_\+req\+\_\+ind const \texorpdfstring{$\ast$}{*}param, ke\+\_\+task\+\_\+id\+\_\+t const dest\+\_\+id, ke\+\_\+task\+\_\+id\+\_\+t const src\+\_\+id)
+\begin{DoxyCompactList}\small\item\em Handle read request for Sensor Voltage characteristic and respond with last-\/known value. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{group___a_p_p_gaea308371eb2904fe575d098aa9d717c4}{user\+\_\+svc1\+\_\+read\+\_\+battery\+\_\+voltage\+\_\+handler}} (ke\+\_\+msg\+\_\+id\+\_\+t const msgid, struct custs1\+\_\+value\+\_\+req\+\_\+ind const \texorpdfstring{$\ast$}{*}param, ke\+\_\+task\+\_\+id\+\_\+t const dest\+\_\+id, ke\+\_\+task\+\_\+id\+\_\+t const src\+\_\+id)
+\begin{DoxyCompactList}\small\item\em Handle read request for Battery Voltage characteristic and respond with last-\/known value. \end{DoxyCompactList}\item 
+arch\+\_\+main\+\_\+loop\+\_\+callback\+\_\+ret\+\_\+t \mbox{\hyperlink{group___a_p_p_ga868f1e60544dc2092df4c6a7110f461b}{user\+\_\+app\+\_\+on\+\_\+system\+\_\+powered}} (void)
+\begin{DoxyCompactList}\small\item\em User callback when the system is powered on. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{group___a_p_p_ga8d69ab99f9504092fa8ae723a6ab4cfa}{user\+\_\+app\+\_\+on\+\_\+init}} (void)
+\begin{DoxyCompactList}\small\item\em User initialization callback executed at boot. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Empty peripheral template project header file. 
+
+\begin{DoxyAuthor}{Author}
+Albert Nguyen 
+\end{DoxyAuthor}

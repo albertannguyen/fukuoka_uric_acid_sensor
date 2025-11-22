@@ -1,0 +1,66 @@
+\doxysection{C\+:/\+Users/alber/\+Documents/\+DA145xx\+\_\+\+SDK/6.0.24.1464/projects/target\+\_\+apps/template/fukuoka\+\_\+uric\+\_\+acid\+\_\+sensor/src/config/user\+\_\+profiles\+\_\+config.h File Reference}
+\hypertarget{user__profiles__config_8h}{}\label{user__profiles__config_8h}\index{C:/Users/alber/Documents/DA145xx\_SDK/6.0.24.1464/projects/target\_apps/template/fukuoka\_uric\_acid\_sensor/src/config/user\_profiles\_config.h@{C:/Users/alber/Documents/DA145xx\_SDK/6.0.24.1464/projects/target\_apps/template/fukuoka\_uric\_acid\_sensor/src/config/user\_profiles\_config.h}}
+
+
+Configuration file for the profiles used in the application.  
+
+
+\doxysubsubsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define {\bfseries CFG\+\_\+\+PRF\+\_\+\+DISS}
+\item 
+\#define {\bfseries CFG\+\_\+\+PRF\+\_\+\+CUST1}
+\item 
+\#define \mbox{\hyperlink{group___a_p_p___c_o_n_f_i_g_ga7d16a25e48dd9bda6d7a49356c6d2fba}{APP\+\_\+\+DIS\+\_\+\+FEATURES}}
+\item 
+\#define {\bfseries APP\+\_\+\+DIS\+\_\+\+MANUFACTURER\+\_\+\+NAME}~("{}Renesas"{})
+\begin{DoxyCompactList}\small\item\em Manufacturer Name (up to 18 chars) \end{DoxyCompactList}\item 
+\#define {\bfseries APP\+\_\+\+DIS\+\_\+\+MANUFACTURER\+\_\+\+NAME\+\_\+\+LEN}~(sizeof(\mbox{\hyperlink{group___a_p_p___c_o_n_f_i_g_gaade914448047682d4dcf0c090346800e}{APP\+\_\+\+DIS\+\_\+\+MANUFACTURER\+\_\+\+NAME}}) -\/ 1)
+\item 
+\#define {\bfseries APP\+\_\+\+DIS\+\_\+\+MODEL\+\_\+\+NB\+\_\+\+STR}~("{}DA14585"{})
+\begin{DoxyCompactList}\small\item\em Model Number String. \end{DoxyCompactList}\item 
+\#define {\bfseries APP\+\_\+\+DIS\+\_\+\+MODEL\+\_\+\+NB\+\_\+\+STR\+\_\+\+LEN}~(7)
+\item 
+\#define {\bfseries APP\+\_\+\+DIS\+\_\+\+SYSTEM\+\_\+\+ID}~("{}\textbackslash{}x12\textbackslash{}x34\textbackslash{}x56\textbackslash{}x\+FF\textbackslash{}x\+FE\textbackslash{}x9\+A\textbackslash{}x\+BC\textbackslash{}x\+DE"{})
+\begin{DoxyCompactList}\small\item\em System ID -\/ LSB -\/\texorpdfstring{$>$}{>} MSB. \end{DoxyCompactList}\item 
+\#define {\bfseries APP\+\_\+\+DIS\+\_\+\+SYSTEM\+\_\+\+ID\+\_\+\+LEN}~(8)
+\item 
+\#define {\bfseries APP\+\_\+\+DIS\+\_\+\+SW\+\_\+\+REV}~SDK\+\_\+\+VERSION
+\item 
+\#define {\bfseries APP\+\_\+\+DIS\+\_\+\+FIRM\+\_\+\+REV}~SDK\+\_\+\+VERSION
+\item 
+\#define {\bfseries APP\+\_\+\+DIS\+\_\+\+SERIAL\+\_\+\+NB\+\_\+\+STR}~("{}1.\+0.\+0.\+0-\/LE"{})
+\begin{DoxyCompactList}\small\item\em Serial Number. \end{DoxyCompactList}\item 
+\#define {\bfseries APP\+\_\+\+DIS\+\_\+\+SERIAL\+\_\+\+NB\+\_\+\+STR\+\_\+\+LEN}~(10)
+\item 
+\#define {\bfseries APP\+\_\+\+DIS\+\_\+\+HARD\+\_\+\+REV\+\_\+\+STR}~("{}DA14585"{})
+\begin{DoxyCompactList}\small\item\em Hardware Revision String. \end{DoxyCompactList}\item 
+\#define {\bfseries APP\+\_\+\+DIS\+\_\+\+HARD\+\_\+\+REV\+\_\+\+STR\+\_\+\+LEN}~(7)
+\item 
+\#define {\bfseries APP\+\_\+\+DIS\+\_\+\+FIRM\+\_\+\+REV\+\_\+\+STR}~SDK\+\_\+\+VERSION
+\begin{DoxyCompactList}\small\item\em Firmware Revision. \end{DoxyCompactList}\item 
+\#define {\bfseries APP\+\_\+\+DIS\+\_\+\+FIRM\+\_\+\+REV\+\_\+\+STR\+\_\+\+LEN}~(sizeof(\mbox{\hyperlink{group___a_p_p___c_o_n_f_i_g_ga01c86db2727d77d69abe372800fa3f57}{APP\+\_\+\+DIS\+\_\+\+FIRM\+\_\+\+REV\+\_\+\+STR}}) -\/ 1)
+\item 
+\#define {\bfseries APP\+\_\+\+DIS\+\_\+\+SW\+\_\+\+REV\+\_\+\+STR}~SDK\+\_\+\+VERSION
+\begin{DoxyCompactList}\small\item\em Software Revision String. \end{DoxyCompactList}\item 
+\#define {\bfseries APP\+\_\+\+DIS\+\_\+\+SW\+\_\+\+REV\+\_\+\+STR\+\_\+\+LEN}~(sizeof(\mbox{\hyperlink{group___a_p_p___c_o_n_f_i_g_gaef55cb1a18cb4a0475e48950c4d0450f}{APP\+\_\+\+DIS\+\_\+\+SW\+\_\+\+REV\+\_\+\+STR}}) -\/ 1)
+\item 
+\#define {\bfseries APP\+\_\+\+DIS\+\_\+\+IEEE}~("{}\textbackslash{}x\+FF\textbackslash{}x\+EE\textbackslash{}x\+DD\textbackslash{}x\+CC\textbackslash{}x\+BB\textbackslash{}x\+AA"{})
+\begin{DoxyCompactList}\small\item\em IEEE. \end{DoxyCompactList}\item 
+\#define {\bfseries APP\+\_\+\+DIS\+\_\+\+IEEE\+\_\+\+LEN}~(6)
+\item 
+\#define \mbox{\hyperlink{group___a_p_p___c_o_n_f_i_g_ga731e6f36e65f420bddf87e1ca94c4a87}{APP\+\_\+\+DIS\+\_\+\+PNP\+\_\+\+ID}}~("{}\textbackslash{}x01\textbackslash{}x\+D2\textbackslash{}x00\textbackslash{}x80\textbackslash{}x05\textbackslash{}x00\textbackslash{}x01"{})
+\item 
+\#define {\bfseries APP\+\_\+\+DIS\+\_\+\+PNP\+\_\+\+ID\+\_\+\+LEN}~(7)
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Configuration file for the profiles used in the application. 
+
+Copyright (C) 2015-\/2023 Renesas Electronics Corporation and/or its affiliates. All rights reserved. Confidential Information.
+
+This software ("{}\+Software"{}) is supplied by Renesas Electronics Corporation and/or its affiliates ("{}\+Renesas"{}). Renesas grants you a personal, non-\/exclusive, non-\/transferable, revocable, non-\/sub-\/licensable right and license to use the Software, solely if used in or together with Renesas products. You may make copies of this Software, provided this copyright notice and disclaimer ("{}\+Notice"{}) is included in all such copies. Renesas reserves the right to change or discontinue the Software at any time without notice.
+
+THE SOFTWARE IS PROVIDED "{}\+AS IS"{}. RENESAS DISCLAIMS ALL WARRANTIES OF ANY KIND, WHETHER EXPRESS, IMPLIED, OR STATUTORY, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NON-\/\+INFRINGEMENT. TO THE MAXIMUM EXTENT PERMITTED UNDER LAW, IN NO EVENT SHALL RENESAS BE LIABLE FOR ANY DIRECT, INDIRECT, SPECIAL, INCIDENTAL OR CONSEQUENTIAL DAMAGES ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE, EVEN IF RENESAS HAS BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGES. USE OF THIS SOFTWARE MAY BE SUBJECT TO TERMS AND CONDITIONS CONTAINED IN AN ADDITIONAL AGREEMENT BETWEEN YOU AND RENESAS. IN CASE OF CONFLICT BETWEEN THE TERMS OF THIS NOTICE AND ANY SUCH ADDITIONAL LICENSE AGREEMENT, THE TERMS OF THE AGREEMENT SHALL TAKE PRECEDENCE. BY CONTINUING TO USE THIS SOFTWARE, YOU AGREE TO THE TERMS OF THIS NOTICE.\+IF YOU DO NOT AGREE TO THESE TERMS, YOU ARE NOT PERMITTED TO USE THIS SOFTWARE. 

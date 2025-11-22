@@ -1,0 +1,31 @@
+\doxysection{C\+:/\+Users/alber/\+Documents/\+DA145xx\+\_\+\+SDK/6.0.24.1464/projects/target\+\_\+apps/template/fukuoka\+\_\+uric\+\_\+acid\+\_\+sensor/src/custom\+\_\+profile/user\+\_\+custs1\+\_\+def.c File Reference}
+\hypertarget{user__custs1__def_8c}{}\label{user__custs1__def_8c}\index{C:/Users/alber/Documents/DA145xx\_SDK/6.0.24.1464/projects/target\_apps/template/fukuoka\_uric\_acid\_sensor/src/custom\_profile/user\_custs1\_def.c@{C:/Users/alber/Documents/DA145xx\_SDK/6.0.24.1464/projects/target\_apps/template/fukuoka\_uric\_acid\_sensor/src/custom\_profile/user\_custs1\_def.c}}
+
+
+Custom Server 1 (CUSTS1) profile database definitions.  
+
+
+{\ttfamily \#include $<$stdint.\+h$>$}\newline
+{\ttfamily \#include "{}co\+\_\+utils.\+h"{}}\newline
+{\ttfamily \#include "{}prf\+\_\+types.\+h"{}}\newline
+{\ttfamily \#include "{}attm\+\_\+db\+\_\+128.\+h"{}}\newline
+{\ttfamily \#include "{}user\+\_\+custs1\+\_\+def.\+h"{}}\newline
+\doxysubsubsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+const uint8\+\_\+t {\bfseries custs1\+\_\+services} \mbox{[}$\,$\mbox{]} = \{SVC1\+\_\+\+IDX\+\_\+\+SVC, CUSTS1\+\_\+\+IDX\+\_\+\+NB\}
+\item 
+const uint8\+\_\+t {\bfseries custs1\+\_\+services\+\_\+size} = ARRAY\+\_\+\+LEN(custs1\+\_\+services) -\/ 1
+\item 
+const uint16\+\_\+t {\bfseries custs1\+\_\+att\+\_\+max\+\_\+nb} = CUSTS1\+\_\+\+IDX\+\_\+\+NB
+\item 
+const struct attm\+\_\+desc\+\_\+128 {\bfseries custs1\+\_\+att\+\_\+db} \mbox{[}CUSTS1\+\_\+\+IDX\+\_\+\+NB\mbox{]}
+\begin{DoxyCompactList}\small\item\em Full CUSTS1 Database Description -\/ Used to add attributes into the database (SDK line) \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Custom Server 1 (CUSTS1) profile database definitions. 
+
+\begin{DoxyAuthor}{Author}
+Albert Nguyen 
+\end{DoxyAuthor}

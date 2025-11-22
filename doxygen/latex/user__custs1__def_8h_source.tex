@@ -1,0 +1,97 @@
+\doxysection{user\+\_\+custs1\+\_\+def.\+h}
+\hypertarget{user__custs1__def_8h_source}{}\label{user__custs1__def_8h_source}\index{C:/Users/alber/Documents/DA145xx\_SDK/6.0.24.1464/projects/target\_apps/template/fukuoka\_uric\_acid\_sensor/src/custom\_profile/user\_custs1\_def.h@{C:/Users/alber/Documents/DA145xx\_SDK/6.0.24.1464/projects/target\_apps/template/fukuoka\_uric\_acid\_sensor/src/custom\_profile/user\_custs1\_def.h}}
+\mbox{\hyperlink{user__custs1__def_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ }
+\DoxyCodeLine{00008\ }
+\DoxyCodeLine{00009\ \textcolor{preprocessor}{\#ifndef\ \_USER\_CUSTS1\_DEF\_H\_}}
+\DoxyCodeLine{00010\ \textcolor{preprocessor}{\#define\ \_USER\_CUSTS1\_DEF\_H\_}}
+\DoxyCodeLine{00011\ }
+\DoxyCodeLine{00021\ }
+\DoxyCodeLine{00022\ \textcolor{comment}{/*}}
+\DoxyCodeLine{00023\ \textcolor{comment}{\ ****************************************************************************************}}
+\DoxyCodeLine{00024\ \textcolor{comment}{\ *\ INCLUDE\ FILES}}
+\DoxyCodeLine{00025\ \textcolor{comment}{\ ****************************************************************************************}}
+\DoxyCodeLine{00026\ \textcolor{comment}{\ */}}
+\DoxyCodeLine{00027\ }
+\DoxyCodeLine{00028\ \textcolor{preprocessor}{\#include\ "{}attm\_db\_128.h"{}}}
+\DoxyCodeLine{00029\ }
+\DoxyCodeLine{00030\ \textcolor{comment}{/*}}
+\DoxyCodeLine{00031\ \textcolor{comment}{\ ****************************************************************************************}}
+\DoxyCodeLine{00032\ \textcolor{comment}{\ *\ DEFINES}}
+\DoxyCodeLine{00033\ \textcolor{comment}{\ ****************************************************************************************}}
+\DoxyCodeLine{00034\ \textcolor{comment}{\ */}}
+\DoxyCodeLine{00035\ }
+\DoxyCodeLine{00036\ \textcolor{comment}{//\ Define\ service\ 1\ UUID\ (custom\ service\ for\ ADC\ data)}}
+\DoxyCodeLine{00037\ \textcolor{preprocessor}{\#define\ DEF\_SVC1\_UUID\_128\ \{0xee,0x8f,0x7a,0x37,0xcc,0x56,0x5d,0xaa,0xed,0x40,0xa0,0xf0,0xc2,0x94,0xe0,0xd6\}}}
+\DoxyCodeLine{00038\ }
+\DoxyCodeLine{00039\ \textcolor{comment}{/*}}
+\DoxyCodeLine{00040\ \textcolor{comment}{-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}}
+\DoxyCodeLine{00041\ \textcolor{comment}{-\/\ Characteristics}}
+\DoxyCodeLine{00042\ \textcolor{comment}{-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}}
+\DoxyCodeLine{00043\ \textcolor{comment}{*/}}
+\DoxyCodeLine{00044\ }
+\DoxyCodeLine{00045\ \textcolor{comment}{//\ Each\ one\ needs\ UUID,\ byte\ length,\ and\ user\ description}}
+\DoxyCodeLine{00046\ }
+\DoxyCodeLine{00047\ \textcolor{comment}{//\ Define\ sensor\ voltage}}
+\DoxyCodeLine{00048\ \textcolor{preprocessor}{\#define\ DEF\_SVC1\_SENSOR\_VOLTAGE\_UUID\_128\ \{0x35,0x8c,0x68,0x30,0xbb,0x00,0xec,0x89,0x46,0x4b,0x67,0xf2,0xc4,0xa7,0xf4,0xfe\}}}
+\DoxyCodeLine{00049\ \textcolor{preprocessor}{\#define\ DEF\_SVC1\_SENSOR\_VOLTAGE\_CHAR\_LEN\ 2\ }\textcolor{comment}{//\ 2\ bytes\ for\ 10-\/bit\ ADC}}
+\DoxyCodeLine{00050\ \textcolor{preprocessor}{\#define\ DEF\_SVC1\_SENSOR\_VOLTAGE\_USER\_DESC\ "{}Sensor\ Voltage\ (little-\/endian\ bytes\ to\ mV)"{}}}
+\DoxyCodeLine{00051\ }
+\DoxyCodeLine{00052\ \textcolor{comment}{//\ Define\ PWM\ freq}}
+\DoxyCodeLine{00053\ \textcolor{preprocessor}{\#define\ DEF\_SVC1\_PWM\_FREQ\_UUID\_128\ \{0xf0,0x5d,0x4d,0x6f,0xb6,0x6a,0x9b,0x98,0x33,0x42,0xb3,0xf2,0xf6,0x0f,0x2f,0xc8\}}}
+\DoxyCodeLine{00054\ \textcolor{preprocessor}{\#define\ DEF\_SVC1\_PWM\_FREQ\_CHAR\_LEN\ 4}}
+\DoxyCodeLine{00055\ \textcolor{preprocessor}{\#define\ DEF\_SVC1\_PWM\_FREQ\_USER\_DESC\ "{}Timer2\ PWM\ Frequency\ Config"{}}}
+\DoxyCodeLine{00056\ }
+\DoxyCodeLine{00057\ \textcolor{comment}{//\ Define\ PWM\ dc\ and\ offset}}
+\DoxyCodeLine{00058\ \textcolor{preprocessor}{\#define\ DEF\_SVC1\_PWM\_DC\_AND\_OFFSET\_UUID\_128\ \{0x72,0x50,0x8a,0x2d,0xca,0xcf,0x9c,0xb6,0x51,0x4f,0x07,0xbc,0xf6,0x0d,0xff,0x3a\}}}
+\DoxyCodeLine{00059\ \textcolor{preprocessor}{\#define\ DEF\_SVC1\_PWM\_DC\_AND\_OFFSET\_CHAR\_LEN\ 4}}
+\DoxyCodeLine{00060\ \textcolor{preprocessor}{\#define\ DEF\_SVC1\_PWM\_DC\_AND\_OFFSET\_USER\_DESC\ "{}Timer2\ PWM2\ and\ PWM3\ Duty\ Cycles\ and\ Offsets"{}}}
+\DoxyCodeLine{00061\ }
+\DoxyCodeLine{00062\ \textcolor{comment}{//\ Define\ PWM\ state}}
+\DoxyCodeLine{00063\ \textcolor{preprocessor}{\#define\ DEF\_SVC1\_PWM\_STATE\_UUID\_128\ \{0x42,0x2d,0x1b,0x1c,0x46,0x02,0x26,0xb4,0xd0,0x4a,0x1e,0xd5,0x25,0xf9,0xc3,0x2d\}}}
+\DoxyCodeLine{00064\ \textcolor{preprocessor}{\#define\ DEF\_SVC1\_PWM\_STATE\_CHAR\_LEN\ 1}}
+\DoxyCodeLine{00065\ \textcolor{preprocessor}{\#define\ DEF\_SVC1\_PWM\_STATE\_USER\_DESC\ "{}Timer2\ PWM\ State\ On/Off"{}}}
+\DoxyCodeLine{00066\ }
+\DoxyCodeLine{00067\ \textcolor{comment}{//\ Define\ battery\ voltage}}
+\DoxyCodeLine{00068\ \textcolor{preprocessor}{\#define\ DEF\_SVC1\_BATTERY\_VOLTAGE\_UUID\_128\ \{0xb8,0x6d,0x36,0xff,0xea,0x30,0xb9,0xa7,0xbe,0x41,0x48,0xee,0x96,0x44,0xff,0xfe\}}}
+\DoxyCodeLine{00069\ \textcolor{preprocessor}{\#define\ DEF\_SVC1\_BATTERY\_VOLTAGE\_CHAR\_LEN\ 2}}
+\DoxyCodeLine{00070\ \textcolor{preprocessor}{\#define\ DEF\_SVC1\_BATTERY\_VOLTAGE\_USER\_DESC\ "{}Battery\ Voltage\ (little-\/endian\ bytes\ to\ mV)"{}}}
+\DoxyCodeLine{00071\ }
+\DoxyCodeLine{00073\ \textcolor{keyword}{enum}}
+\DoxyCodeLine{00074\ \{}
+\DoxyCodeLine{00075\ \ \ \ \ \textcolor{comment}{//\ Service\ 1}}
+\DoxyCodeLine{00076\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Adds\ service\ 1\ index\ as\ starting\ point\ (SDK\ line)}}
+\DoxyCodeLine{00077\ \ \ \ \ SVC1\_IDX\_SVC\ =\ 0,}
+\DoxyCodeLine{00078\ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00079\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Adds\ service\ 1\ attributes}}
+\DoxyCodeLine{00080\ \ \ \ \ \ \ \ \ SVC1\_IDX\_SENSOR\_VOLTAGE\_CHAR,}
+\DoxyCodeLine{00081\ \ \ \ \ \ \ \ \ SVC1\_IDX\_SENSOR\_VOLTAGE\_VAL,}
+\DoxyCodeLine{00082\ \ \ \ \ \ \ \ \ SVC1\_IDX\_SENSOR\_VOLTAGE\_NTF\_CFG,}
+\DoxyCodeLine{00083\ \ \ \ \ \ \ \ \ SVC1\_IDX\_SENSOR\_VOLTAGE\_USER\_DESC,}
+\DoxyCodeLine{00084\ \ \ \ \ }
+\DoxyCodeLine{00085\ \ \ \ \ \ \ \ \ SVC1\_IDX\_PWM\_FREQ\_CHAR,}
+\DoxyCodeLine{00086\ \ \ \ \ \ \ \ \ SVC1\_IDX\_PWM\_FREQ\_VAL,}
+\DoxyCodeLine{00087\ \ \ \ \ \ \ \ \ SVC1\_IDX\_PWM\_FREQ\_USER\_DESC,}
+\DoxyCodeLine{00088\ \ \ \ \ }
+\DoxyCodeLine{00089\ \ \ \ \ \ \ \ \ SVC1\_IDX\_PWM\_DC\_AND\_OFFSET\_CHAR,}
+\DoxyCodeLine{00090\ \ \ \ \ \ \ \ \ SVC1\_IDX\_PWM\_DC\_AND\_OFFSET\_VAL,}
+\DoxyCodeLine{00091\ \ \ \ \ \ \ \ \ SVC1\_IDX\_PWM\_DC\_AND\_OFFSET\_USER\_DESC,}
+\DoxyCodeLine{00092\ \ \ \ \ }
+\DoxyCodeLine{00093\ \ \ \ \ \ \ \ \ SVC1\_IDX\_PWM\_STATE\_CHAR,}
+\DoxyCodeLine{00094\ \ \ \ \ \ \ \ \ SVC1\_IDX\_PWM\_STATE\_VAL,}
+\DoxyCodeLine{00095\ \ \ \ \ \ \ \ \ SVC1\_IDX\_PWM\_STATE\_USER\_DESC,}
+\DoxyCodeLine{00096\ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00097\ \ \ \ \ \ \ \ \ SVC1\_IDX\_BATTERY\_VOLTAGE\_CHAR,}
+\DoxyCodeLine{00098\ \ \ \ \ \ \ \ \ SVC1\_IDX\_BATTERY\_VOLTAGE\_VAL,}
+\DoxyCodeLine{00099\ \ \ \ \ \ \ \ \ SVC1\_IDX\_BATTERY\_VOLTAGE\_NTF\_CFG,}
+\DoxyCodeLine{00100\ \ \ \ \ \ \ \ \ SVC1\_IDX\_BATTERY\_VOLTAGE\_USER\_DESC,}
+\DoxyCodeLine{00101\ \ \ \ \ }
+\DoxyCodeLine{00102\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Saves\ total\ number\ of\ enumeration\ (SDK\ line)}}
+\DoxyCodeLine{00103\ \ \ \ \ CUSTS1\_IDX\_NB}
+\DoxyCodeLine{00104\ \};}
+\DoxyCodeLine{00105\ }
+\DoxyCodeLine{00107\ }
+\DoxyCodeLine{00108\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{//\ \_USER\_CUSTS1\_DEF\_H\_}}
+
+\end{DoxyCode}
