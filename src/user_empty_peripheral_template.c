@@ -52,7 +52,7 @@
 // Macro that clamps value to the range [min, max]
 #define CLAMP(value, min, max) ((value) < (min) ? (min) : ((value) > (max) ? (max) : (value)))
 
-// Define ADC pin based on preprocessor toggle for gpadc_init_se()
+// Define ADC pin based on preprocessor toggle in user_periph_setup.h for gpadc_init_se()
 #if defined(BOARD_CUSTOM_PCB)
     #define ADC_ENUM_INPUT ADC_INPUT_SE_P0_6   // custom PCB ADC pin
 #else
@@ -248,7 +248,6 @@ void uvp_wireless_timer_cb(void)
 void gpadc_wireless_timer_cb(void)
 {
 	// Initialize and enable ADC for a single conversion of sensor voltage
-	// FIXME: change ADC PIN once implementing on custom PCB
 	gpadc_init_se(ADC_ENUM_INPUT, 2, false, 0, ADC_INPUT_ATTN_4X, false, 0);
 	adc_enable();
 	
