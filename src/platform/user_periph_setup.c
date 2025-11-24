@@ -21,7 +21,7 @@
 #include "uart.h"
 #include "syscntl.h"
 
-// Needed for flag_gpio_uvp
+// Needed for uvp_shutdown
 #include "user_empty_peripheral_template.h"
 
 /*
@@ -45,14 +45,14 @@ void GPIO_reservations(void)
 	#endif
 
 	// reserve UVP pins as GPIO
-	RESERVE_GPIO(UVP_MAX_SHDN, UVP_MAX_SHDN_PORT, UVP_MAX_SHDN_PIN, PID_GPIO);
+	RESERVE_GPIO(UVP_MAX_SHDN, UVP_EN_OUTPUT_PORT, UVP_EN_OUTPUT_PIN, PID_GPIO);
 	
 	// reserve ADC pins
 	RESERVE_GPIO(ADC_INPUT, ADC_INPUT_PORT, ADC_INPUT_PIN, PID_ADC);
 	
 	// reserve PWM pins
-	RESERVE_GPIO(PWM2_OUTPUT, PWM2_PORT, PWM2_PIN, PID_PWM2);
-	RESERVE_GPIO(PWM3_OUTPUT, PWM3_PORT, PWM3_PIN, PID_PWM3);
+	RESERVE_GPIO(PWM2_OUTPUT, PWM2_OUTPUT_PORT, PWM2_OUTPUT_PIN, PID_PWM2);
+	RESERVE_GPIO(PWM3_OUTPUT, PWM3_OUTPUT_PORT, PWM3_OUTPUT_PIN, PID_PWM3);
 }
 
 #endif
@@ -85,23 +85,21 @@ void set_pad_functions(void)
 	#endif
 	
 	// set pin 9 (UVP_MAX_SHDN) as digital output high or low based on flag in user_empty_peripheral_template.c
-	if(flag_gpio_uvp)
+	if(uvp_shutdown)
 	{
-		// GPIO_SetInactive(UVP_MAX_SHDN_PORT, UVP_MAX_SHDN_PIN); // shutdown amplifiers
-		GPIO_ConfigurePin(UVP_MAX_SHDN_PORT, UVP_MAX_SHDN_PIN, OUTPUT, PID_GPIO, false);
+		GPIO_ConfigurePin(UVP_EN_OUTPUT_PORT, UVP_EN_OUTPUT_PIN, OUTPUT, PID_GPIO, false); // enable output low
 	}
 	else
 	{
-		// GPIO_SetActive(UVP_MAX_SHDN_PORT, UVP_MAX_SHDN_PIN); // enable amplifiers
-		GPIO_ConfigurePin(UVP_MAX_SHDN_PORT, UVP_MAX_SHDN_PIN, OUTPUT, PID_GPIO, true);
+		GPIO_ConfigurePin(UVP_EN_OUTPUT_PORT, UVP_EN_OUTPUT_PIN, OUTPUT, PID_GPIO, true); // enable output high
 	}
 	
 	// set ADC pin as input
 	GPIO_ConfigurePin(ADC_INPUT_PORT, ADC_INPUT_PIN, INPUT, PID_ADC, false);
 	
 	// set PWM pins
-	GPIO_ConfigurePin(PWM2_PORT, PWM2_PIN, OUTPUT, PID_PWM2, false);
-	GPIO_ConfigurePin(PWM3_PORT, PWM3_PIN, OUTPUT, PID_PWM3, false);
+	GPIO_ConfigurePin(PWM2_OUTPUT_PORT, PWM2_OUTPUT_PIN, OUTPUT, PID_PWM2, false);
+	GPIO_ConfigurePin(PWM3_OUTPUT_PORT, PWM3_OUTPUT_PIN, OUTPUT, PID_PWM3, false);
 }
 
 #if defined (CFG_PRINTF_UART2)

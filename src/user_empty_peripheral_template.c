@@ -79,7 +79,7 @@ bool uvp_timer_initialized __SECTION_ZERO("retention_mem_area0");
 uint16_t uvp_cccd_value __SECTION_ZERO("retention_mem_area0");
 uint16_t uvp_adc_sample_raw __SECTION_ZERO("retention_mem_area0");
 uint16_t uvp_adc_sample_mv __SECTION_ZERO("retention_mem_area0");
-bool flag_gpio_uvp __SECTION_ZERO("retention_mem_area0");
+bool uvp_shutdown __SECTION_ZERO("retention_mem_area0");
 
 // Sensor voltage variables
 timer_hnd sensor_timer __SECTION_ZERO("retention_mem_area0");
@@ -94,9 +94,6 @@ uint16_t sensor_adc_sample_mv __SECTION_ZERO("retention_mem_area0");
 
 void uvp_wireless_timer_cb(void)
 {
-	// Declared for UART printout
-	bool uvp_result;
-	
 	// Initialize and enable ADC for a single conversion of VBAT HIGH rail
 	gpadc_init_se(ADC_INPUT_SE_VBAT_HIGH, 2, false, 0, ADC_INPUT_ATTN_4X, false, 0);
 	adc_enable();
@@ -108,20 +105,22 @@ void uvp_wireless_timer_cb(void)
 	// Compare ADC value to see if it is less than chosen UVP threshold (1900 mV)
 	if(uvp_adc_sample_mv < (uint16_t)1900)
 	{
-		flag_gpio_uvp = true;
-		uvp_result = true;
+		// GPIO enable signal is controlled by this flag in user_periph_setup.c
+		uvp_shutdown = true;
+		
+		// FIXME: check if this redundant call breaks FW
+		adc_disable();
+		timer2_pwm_disable();
 	}
 	else
 	{
-		flag_gpio_uvp = false;
-		uvp_result = false;
+		uvp_shutdown = false;
 	}
 	
 	#ifdef CFG_PRINTF
 	arch_printf("---------------------------------------------------------------------\n\r");
 	arch_printf("[UVP] Register Value: %u | Battery Voltage: %u mV \n\r", uvp_adc_sample_raw, uvp_adc_sample_mv);
-	arch_printf("[UVP] System undervoltage status: %s \n\r", uvp_result ? "YES" : "NO");
-	arch_printf("[UVP] flag_gpio_uvp = %s \n\r", flag_gpio_uvp ? "true" : "false");
+	arch_printf("[UVP] System undervoltage shutdown status: %s \n\r", uvp_shutdown ? "true" : "false");
 	#endif
 	
 	if (uvp_cccd_value == 0x0001 && (ke_state_get(TASK_APP) == APP_CONNECTED)) // notifications enabled and phone connected
@@ -149,9 +148,8 @@ void uvp_wireless_timer_cb(void)
 		KE_MSG_SEND(req);
 	}
 	
-	#ifdef CFG_PRINTF
-	arch_printf("---------------------------------------------------------------------\n\r");
-	#endif
+	// Disable ADC to conserve power
+	adc_disable();
 	
 	/*
    ****************************************************************************************
@@ -232,8 +230,9 @@ void uvp_wireless_timer_cb(void)
 	arch_printf("[SLEEP] Current Mode: %s (Value: %u) \n\r", mode_str, (uint8_t)current_mode);
 	#endif
 	
-	// Disable ADC to conserve power
-	adc_disable();
+	#ifdef CFG_PRINTF
+	arch_printf("---------------------------------------------------------------------\n\r");
+	#endif
 	
 	// Restart this function every 0.5 second
 	uvp_timer = app_easy_timer(50, uvp_wireless_timer_cb);
@@ -272,8 +271,8 @@ void gpadc_wireless_timer_cb(void)
 	
 	#ifdef CFG_PRINTF
 	arch_printf("---------------------------------------------------------------------\n\r");
-	arch_printf("[GPADC] Register Value: %u | Sensor Voltage: %u mV \n\r", sensor_adc_sample_raw, sensor_adc_sample_mv);
-	arch_printf("[GPADC] LSB: 0x%02X, MSB: 0x%02X\n\r", sensor_adc_sample_mv & 0xFF, (sensor_adc_sample_mv >> 8) & 0xFF);
+	arch_printf("[ADC] Register Value: %u | Sensor Voltage: %u mV \n\r", sensor_adc_sample_raw, sensor_adc_sample_mv);
+	arch_printf("[ADC] LSB: 0x%02X, MSB: 0x%02X\n\r", sensor_adc_sample_mv & 0xFF, (sensor_adc_sample_mv >> 8) & 0xFF);
 	arch_printf("---------------------------------------------------------------------\n\r");
 	#endif
 	
@@ -357,13 +356,6 @@ uint16_t gpadc_sample_to_mv(uint16_t sample)
 
 void timer2_pwm_set_frequency(tim0_2_clk_div_t clk_div, tim2_clk_src_t clk_src, uint16_t pwm_div)
 {
-	#ifdef CFG_PRINTF
-	arch_printf("[PWM FREQ] Function called.\n\r");
-	arch_printf("[PWM FREQ] clk_div (enum)   = %u (0x%02X)\n\r", clk_div, clk_div);
-	arch_printf("[PWM FREQ] clk_src (enum)   = %u (0x%02X)\n\r", clk_src, clk_src);
-	arch_printf("[PWM FREQ] pwm_div (value) = %u (0x%04X)\n\r", pwm_div, pwm_div);
-	#endif
-	
 	// Create config structures for clock division and timer2 config
 	tim0_2_clk_div_config_t clk_cfg = {
 		.clk_div = clk_div
@@ -567,6 +559,16 @@ void user_svc1_sensor_voltage_cfg_ind_handler(ke_msg_id_t const msgid,
                                          ke_task_id_t const dest_id,
                                          ke_task_id_t const src_id)
 {
+	// Check UVP status
+	if(uvp_shutdown)
+	{
+		#ifdef CFG_PRINTF
+		arch_printf("[WARNING] Prevented characteristic change and forced exit of handler function \n\r");
+		#endif
+		
+		return;
+	}
+	
 	// Copy CCCD value written by the phone into a local variable
 	uint16_t cccd_value = 0; // set to zero for safe memcpy
 	memcpy(&cccd_value, param->value, param->length);
@@ -605,6 +607,16 @@ void user_svc1_pwm_freq_wr_ind_handler(ke_msg_id_t const msgid,
                                ke_task_id_t const dest_id,
                                ke_task_id_t const src_id)
 {
+	// Check UVP status
+	if(uvp_shutdown)
+	{
+		#ifdef CFG_PRINTF
+		arch_printf("[WARNING] Prevented characteristic change and forced exit of handler function \n\r");
+		#endif
+		
+		return;
+	}
+	
 	// Validate length of characteristic value written by the phone
 	if (param->length != DEF_SVC1_PWM_FREQ_CHAR_LEN)
 	{
@@ -651,6 +663,16 @@ void user_svc1_pwm_dc_and_offset_wr_ind_handler(ke_msg_id_t const msgid,
                                ke_task_id_t const dest_id,
                                ke_task_id_t const src_id)
 {
+	// Check UVP status
+	if(uvp_shutdown)
+	{
+		#ifdef CFG_PRINTF
+		arch_printf("[WARNING] Prevented characteristic change and forced exit of handler function \n\r");
+		#endif
+		
+		return;
+	}
+	
 	// Validate length of characteristic value written by the phone
 	if (param->length != DEF_SVC1_PWM_DC_AND_OFFSET_CHAR_LEN)
 	{
@@ -689,6 +711,16 @@ void user_svc1_pwm_state_wr_ind_handler(ke_msg_id_t const msgid,
                                ke_task_id_t const dest_id,
                                ke_task_id_t const src_id)
 {	
+	// Check UVP status
+	if(uvp_shutdown)
+	{
+		#ifdef CFG_PRINTF
+		arch_printf("[WARNING] Prevented characteristic change and forced exit of handler function \n\r");
+		#endif
+		
+		return;
+	}
+	
 	// Copy single byte value to variable
 	uint8_t state = 0;
 	memcpy(&state, param->value, param->length);
@@ -730,6 +762,16 @@ void user_svc1_battery_voltage_cfg_ind_handler(ke_msg_id_t const msgid,
                                ke_task_id_t const dest_id,
                                ke_task_id_t const src_id)
 {
+	// Check UVP status
+	if(uvp_shutdown)
+	{
+		#ifdef CFG_PRINTF
+		arch_printf("[WARNING] Prevented characteristic change and forced exit of handler function \n\r");
+		#endif
+		
+		return;
+	}
+	
 	// Copy CCCD value written by the phone into a local variable
 	uint16_t cccd_value = 0;
 	memcpy(&cccd_value, param->value, param->length);
@@ -760,6 +802,16 @@ void user_svc1_read_sensor_voltage_handler(ke_msg_id_t const msgid,
                                            ke_task_id_t const dest_id,
                                            ke_task_id_t const src_id)
 {
+	// Check UVP status
+	if(uvp_shutdown)
+	{
+		#ifdef CFG_PRINTF
+		arch_printf("[WARNING] Prevented characteristic change and forced exit of handler function \n\r");
+		#endif
+		
+		return;
+	}
+	
 	#ifdef CFG_PRINTF
 	arch_printf("[READ SENSOR VOLTAGE] READING last saved value of sensor voltage. \n\r");
 	arch_printf("[READ SENSOR VOLTAGE] Register Value: %u | Sensor Voltage: %u mV \n\r", sensor_adc_sample_raw, sensor_adc_sample_mv);
@@ -791,6 +843,16 @@ void user_svc1_read_battery_voltage_handler(ke_msg_id_t const msgid,
                                            ke_task_id_t const dest_id,
                                            ke_task_id_t const src_id)
 {
+	// Check UVP status
+	if(uvp_shutdown)
+	{
+		#ifdef CFG_PRINTF
+		arch_printf("[WARNING] Prevented characteristic change and forced exit of handler function \n\r");
+		#endif
+		
+		return;
+	}
+	
 	#ifdef CFG_PRINTF
 	arch_printf("[READ BATTERY VOLTAGE] READING last saved value of battery. \n\r");
 	arch_printf("[READ BATTERY VOLTAGE] Register Value: %u | Battery Voltage: %u mV \n\r", uvp_adc_sample_raw, uvp_adc_sample_mv);
@@ -835,7 +897,7 @@ arch_main_loop_callback_ret_t user_app_on_system_powered(void)
 void user_app_on_init(void)
 {
 	// Initialize user retained variables to safe defaults
-	flag_gpio_uvp = false;
+	uvp_shutdown = false;
 	uvp_timer_initialized = false;
 	uvp_cccd_value = 0;
 	uvp_adc_sample_raw = 0;

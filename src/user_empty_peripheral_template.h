@@ -57,7 +57,7 @@ i.e.
 
 // For user_periph_setup.c
 #include <stdbool.h>
-extern bool flag_gpio_uvp;
+extern bool uvp_shutdown;
 
 /*
  ****************************************************************************************
