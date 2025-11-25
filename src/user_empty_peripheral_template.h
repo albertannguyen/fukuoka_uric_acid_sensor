@@ -160,6 +160,11 @@ uint16_t gpadc_collect_sample(void);
  */
 uint16_t gpadc_sample_to_mv(uint16_t sample);
 
+// #FIXME: write doxygen comments
+void timer2_pwm_dc_control_timer_cb(void);
+void timer2_pwm_dc_control(int16_t target_vbias_mv, tim2_pwm_t channel);
+void timer2_pwm_set_offset(uint8_t offset_percentage, tim2_pwm_t channel);
+
 /**
  ****************************************************************************************
  * @brief Configure Timer2 PWM frequency.
@@ -320,6 +325,12 @@ void user_svc1_pwm_freq_wr_ind_handler(ke_msg_id_t const msgid,
  ****************************************************************************************
  */
 void user_svc1_pwm_dc_and_offset_wr_ind_handler(ke_msg_id_t const msgid,
+                               struct custs1_val_write_ind const *param,
+                               ke_task_id_t const dest_id,
+                               ke_task_id_t const src_id);
+
+// FIXME: write doxygen comment														 
+void user_svc1_pwm_vbias_and_offset_wr_ind_handler(ke_msg_id_t const msgid,
                                struct custs1_val_write_ind const *param,
                                ke_task_id_t const dest_id,
                                ke_task_id_t const src_id);

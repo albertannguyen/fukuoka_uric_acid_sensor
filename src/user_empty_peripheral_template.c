@@ -86,6 +86,10 @@ timer_hnd sensor_timer __SECTION_ZERO("retention_mem_area0");
 uint16_t sensor_adc_sample_raw __SECTION_ZERO("retention_mem_area0");
 uint16_t sensor_adc_sample_mv __SECTION_ZERO("retention_mem_area0");
 
+// PWM variables
+timer_hnd pwm_dc_control_timer __SECTION_ZERO("retention_mem_area0");
+int16_t target_vbias_1_mv __SECTION_ZERO("retention_mem_area0");
+int16_t target_vbias_2_mv __SECTION_ZERO("retention_mem_area0");
 /*
  ****************************************************************************************
  * UVP FUNCTIONS
@@ -108,8 +112,18 @@ void uvp_wireless_timer_cb(void)
 		// GPIO enable signal is controlled by this flag in user_periph_setup.c
 		uvp_shutdown = true;
 		
-		// FIXME: check if this redundant call breaks FW
-		adc_disable();
+		// FIXME: check if this UVP disabling section breaks the FW
+		
+		// Stop sensor voltage peripheral and timer
+		// FIXME: redundant call adc_disable();
+		if (sensor_timer != EASY_TIMER_INVALID_TIMER) // prevents cancel when timer does not exist
+		{
+			// Cancels existing timer
+			app_easy_timer_cancel(sensor_timer);
+			sensor_timer = EASY_TIMER_INVALID_TIMER;
+		}
+		
+		// Stop vbias peripheral and timer
 		timer2_pwm_disable();
 	}
 	else
@@ -354,6 +368,178 @@ uint16_t gpadc_sample_to_mv(uint16_t sample)
  ****************************************************************************************
 */
 
+void timer2_pwm_dc_control_timer_cb(void)
+{
+	// Update duty cycles based on VBAT ADC reading for a select channel
+	timer2_pwm_dc_control(target_vbias_1_mv, TIM2_PWM_2);
+	timer2_pwm_dc_control(target_vbias_2_mv, TIM2_PWM_3);
+	
+	// Restart this function every 0.5 second
+	pwm_dc_control_timer = app_easy_timer(50, timer2_pwm_dc_control_timer_cb);
+}
+
+void timer2_pwm_dc_control(int16_t target_vbias_mv, tim2_pwm_t channel)
+{
+	#ifdef CFG_PRINTF
+	arch_printf("[PWM DC CONTROL CH%u] Starting control cycle. \n\r", channel + 1);
+	#endif
+	
+	// Clamp target vbias voltage from -1V to 1V
+	target_vbias_mv = CLAMP(target_vbias_mv, -1000, 1000);
+	
+	#ifdef CFG_PRINTF
+	arch_printf("[PWM CONTROL CH%u] Input Vbias Clamped: %d mV \n\r", channel + 1, target_vbias_mv);
+	#endif
+	
+	// Read Timer 2 period counter register
+	uint32_t period_count = GetWord16(TRIPLE_PWM_FREQUENCY) + 1u;
+	
+	#ifdef CFG_PRINTF
+	arch_printf("[PWM CONTROL CH%u] Read Period Count: %lu \n\r", channel + 1, period_count);
+	#endif
+	
+	// Declare variables used to read existing offset
+	volatile uint16_t *start_reg;
+	volatile uint16_t *end_reg;
+	
+	// Select the correct START and END cycle registers based on the channel
+	switch (channel)
+	{
+		case TIM2_PWM_2:
+				start_reg = (volatile uint16_t *)PWM2_START_CYCLE;
+				end_reg = (volatile uint16_t *)PWM2_END_CYCLE;
+				break;
+		case TIM2_PWM_3:
+				start_reg = (volatile uint16_t *)PWM3_START_CYCLE;
+				end_reg = (volatile uint16_t *)PWM3_END_CYCLE;
+				break;
+		case TIM2_PWM_4:
+				start_reg = (volatile uint16_t *)PWM4_START_CYCLE;
+				end_reg = (volatile uint16_t *)PWM4_END_CYCLE;
+				break;
+		#if defined (__DA14531__)
+		case TIM2_PWM_5:
+				start_reg = (volatile uint16_t *)PWM5_START_CYCLE;
+				end_reg = (volatile uint16_t *)PWM5_END_CYCLE;
+				break;
+		case TIM2_PWM_6:
+				start_reg = (volatile uint16_t *)PWM6_START_CYCLE;
+				end_reg = (volatile uint16_t *)PWM6_END_CYCLE;
+				break;
+		case TIM2_PWM_7:
+				start_reg = (volatile uint16_t *)PWM7_START_CYCLE;
+				end_reg = (volatile uint16_t *)PWM7_END_CYCLE;
+				break;
+		#endif
+		default:
+				return;
+	}
+	
+	// Read existing offset from correct START_CYCLE register
+	uint32_t offset_count = GetWord16(start_reg);
+	
+	#ifdef CFG_PRINTF
+	arch_printf("[PWM CONTROL CH%u] Read Offset: %lu counts \n\r", channel + 1, offset_count);
+	#endif
+	
+	// Cast adc reading from uvp timer to float and convert to battery voltage
+	float vbat_v = (float)uvp_adc_sample_mv / 1000.0f;
+	
+	// Guard against division by zero
+	if(vbat_v < 0.5f)
+	{
+		#ifdef CFG_PRINTF
+		arch_printf("[ERROR] Division by zero \n\r");
+		#endif
+		
+		return;
+	}
+	
+	#ifdef CFG_PRINTF
+	arch_printf("[PWM CONTROL CH%u] Read Vbat: %.3f V \n\r", channel + 1, vbat_v);
+	#endif
+
+	// Cast target voltage to float
+	float vtarget_v = (float)target_vbias_mv / 1000.0f;
+
+	// Calculate duty cycle
+	float duty_cycle_correct = 0.5f - (vtarget_v / (1.4f * vbat_v));
+	
+	#ifdef CFG_PRINTF
+	arch_printf("[PWM CONTROL CH%u] Calculated Duty Cycle: %.4f (%.2f%%) \n\r", channel + 1, duty_cycle_correct, duty_cycle_correct * 100.0f);
+	#endif
+	
+	// Convert the corrected duty cycle to a pulse width in timer counts using period counter
+	uint32_t pulse_width = (uint32_t)(duty_cycle_correct * (float)period_count);
+	
+	// Clamp the pulse width
+	pulse_width = CLAMP(pulse_width, 0, period_count);
+	
+	#ifdef CFG_PRINTF
+	arch_printf("[PWM CONTROL CH%u] Calculated Pulse Width: %lu counts \n\r", channel + 1, pulse_width);
+	#endif
+	
+	// Calculate new END_CYCLE value
+	uint32_t end_cycle_value = (uint32_t)(pulse_width + offset_count);
+	
+	// Clamp end cycle value
+	end_cycle_value = CLAMP(end_cycle_value, 0, period_count);
+	
+	#ifdef CFG_PRINTF
+	arch_printf("[PWM CONTROL CH%u] Calculated END_CYCLE: %lu counts \n\r", channel + 1, end_cycle_value);
+	#endif
+	
+	// Write the new END_CYCLE value directly to the register
+	SetWord16(end_reg, end_cycle_value);
+}
+
+void timer2_pwm_set_offset(uint8_t offset_percentage, tim2_pwm_t channel)
+{
+	#ifdef CFG_PRINTF
+	arch_printf("[PWM OFFSET CH%u] Starting offset configuration. \n\r", channel + 1);
+	#endif
+	
+	// Clamp input percentage
+	uint8_t offset_clamped = CLAMP(offset_percentage, 0, 100);
+	
+	#ifdef CFG_PRINTF
+	arch_printf("[PWM OFFSET CH%u] Clamped Offset: %u%% \n\r", channel + 1, offset_clamped);
+	#endif
+	
+	// Read Timer 2 period counter register
+	uint32_t period_count = GetWord16(TRIPLE_PWM_FREQUENCY) + 1u;
+	
+	#ifdef CFG_PRINTF
+	arch_printf("[PWM OFFSET CH%u] Read Period Count: %lu \n\r", channel + 1, period_count);
+	#endif
+	
+	// Calculate the offset value in timer counts (32-bit)
+	uint32_t offset_count = (period_count * offset_clamped) / 100u;
+	
+	#ifdef CFG_PRINTF
+	arch_printf("[PWM CONTROL CH%u] Calculated Offset Counts: %lu counts \n\r", channel + 1, offset_count);
+	#endif
+	
+	// Determine the correct register address based on the channel
+	volatile uint16_t *start_reg;
+	
+	switch (channel)
+	{
+			case TIM2_PWM_2: start_reg = (volatile uint16_t *)PWM2_START_CYCLE; break;
+			case TIM2_PWM_3: start_reg = (volatile uint16_t *)PWM3_START_CYCLE; break;
+			case TIM2_PWM_4: start_reg = (volatile uint16_t *)PWM4_START_CYCLE; break;
+			#if defined (__DA14531__)
+			case TIM2_PWM_5: start_reg = (volatile uint16_t *)PWM5_START_CYCLE; break;
+			case TIM2_PWM_6: start_reg = (volatile uint16_t *)PWM6_START_CYCLE; break;
+			case TIM2_PWM_7: start_reg = (volatile uint16_t *)PWM7_START_CYCLE; break;
+			#endif
+			default: return;
+	}
+	
+	// Write the offset to the register
+	SetWord16(start_reg, offset_count);
+}
+
 void timer2_pwm_set_frequency(tim0_2_clk_div_t clk_div, tim2_clk_src_t clk_src, uint16_t pwm_div)
 {
 	// Create config structures for clock division and timer2 config
@@ -418,6 +604,9 @@ void timer2_pwm_enable(void)
 	// Enable timer input clock
 	timer0_2_clk_enable();
 	
+	// FIXME: start dc updates
+	pwm_dc_control_timer = app_easy_timer(50, timer2_pwm_dc_control_timer_cb);
+	
 	// Enable PWM outputs
 	timer2_start();
 	
@@ -427,6 +616,14 @@ void timer2_pwm_enable(void)
 
 void timer2_pwm_disable(void)
 {
+	// FIXME: stop dc updates
+	if (pwm_dc_control_timer != EASY_TIMER_INVALID_TIMER) // prevents cancel when timer does not exist
+	{
+		// Cancels existing timer
+		app_easy_timer_cancel(pwm_dc_control_timer);
+		pwm_dc_control_timer = EASY_TIMER_INVALID_TIMER;
+	}
+	
 	// Disable PWM outputs
 	timer2_stop();
 
@@ -487,6 +684,10 @@ void user_catch_rest_hndl(ke_msg_id_t const msgid,
 				
 				case SVC1_IDX_PWM_DC_AND_OFFSET_VAL:
 					user_svc1_pwm_dc_and_offset_wr_ind_handler(msgid, msg_param, dest_id, src_id);
+					break;
+				
+				case SVC1_IDX_PWM_VBIAS_AND_OFFSET_VAL:
+					user_svc1_pwm_vbias_and_offset_wr_ind_handler(msgid, msg_param, dest_id, src_id);
 					break;
 				
 				case SVC1_IDX_PWM_STATE_VAL:
@@ -704,6 +905,60 @@ void user_svc1_pwm_dc_and_offset_wr_ind_handler(ke_msg_id_t const msgid,
 	#ifdef CFG_PRINTF
 	arch_printf("[PWM DC AND OFFSET] SUCCESS on setting config. \n\r");
 	#endif
+}
+
+void user_svc1_pwm_vbias_and_offset_wr_ind_handler(ke_msg_id_t const msgid,
+                               struct custs1_val_write_ind const *param,
+                               ke_task_id_t const dest_id,
+                               ke_task_id_t const src_id)
+{
+	// Check UVP status
+	if(uvp_shutdown)
+	{
+		#ifdef CFG_PRINTF
+		arch_printf("[WARNING] Prevented characteristic change and forced exit of handler function \n\r");
+		#endif
+		
+		return;
+	}
+	
+	// Validate length of characteristic value written by the phone
+	if (param->length != DEF_SVC1_PWM_VBIAS_AND_OFFSET_CHAR_LEN)
+	{
+		#ifdef CFG_PRINTF
+		arch_printf("[PWM VBIAS AND OFFSET] Invalid packet byte length: %u (expected %u) \n\r", param->length, DEF_SVC1_PWM_VBIAS_AND_OFFSET_CHAR_LEN);
+		#endif
+		
+    return; // ignore incomplete write
+	}
+	
+	// Parse byte array into expected values
+	// Byte order is [vbias_1, offset_1, vbias_2, offset_2]
+	uint16_t vbias_1 = ((param->value[0] << 8)| param->value[1]);
+	uint8_t offset_1 = param->value[2];
+	uint16_t vbias_2 = ((param->value[3] << 8) | param->value[4]);
+	uint8_t offset_2 = param->value[5];
+	
+	#ifdef CFG_PRINTF
+	arch_printf("[PWM VBIAS AND OFFSET Bytes received. \n\r");
+	arch_printf("[PWM VBIAS AND OFFSET] vbias_1 = %u (0x%04X) \n\r", vbias_1, vbias_1);
+	arch_printf("[PWM VBIAS AND OFFSET] offset_1 = %u (0x%02X) \n\r", offset_1, offset_1);
+	arch_printf("[PWM VBIAS AND OFFSET] vbias_2 = %u (0x%04X) \n\r", vbias_2, vbias_2);
+	arch_printf("[PWM VBIAS AND OFFSET] offset_2 = %u (0x%02X) \n\r", offset_2, offset_2);
+	#endif
+	
+	// Set offsets for PWM2 and PWM3
+	timer2_pwm_set_offset(offset_1, TIM2_PWM_2);
+	timer2_pwm_set_offset(offset_2, TIM2_PWM_3);
+	
+	// Set initial duty cycle for PWM2 and PWM3
+	timer2_pwm_dc_control(vbias_1, TIM2_PWM_2);
+	timer2_pwm_dc_control(vbias_2, TIM2_PWM_3);
+	
+	// FIXME: Update retained value in memory for timer function
+	target_vbias_1_mv = vbias_1;
+	target_vbias_2_mv = vbias_2;
+	// duty cycle updates will only start in pwm enable function and turn off in disable function
 }
 
 void user_svc1_pwm_state_wr_ind_handler(ke_msg_id_t const msgid,
