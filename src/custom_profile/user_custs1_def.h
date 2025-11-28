@@ -61,7 +61,7 @@
 
 // Define PWM vbias and offset
 #define DEF_SVC1_PWM_VBIAS_AND_OFFSET_UUID_128 {0xfb,0xbe,0x45,0xc7,0x2f,0xef,0x80,0xae,0xa5,0x4a,0x0c,0x5e,0xc0,0x5f,0xb1,0xcc}
-#define DEF_SVC1_PWM_VBIAS_AND_OFFSET_CHAR_LEN 6
+#define DEF_SVC1_PWM_VBIAS_AND_OFFSET_CHAR_LEN 10
 #define DEF_SVC1_PWM_VBIAS_AND_OFFSET_USER_DESC "Timer2 PWM2 and PWM3 Vbias and Offsets"
 
 // Define PWM state

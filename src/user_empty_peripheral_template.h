@@ -107,8 +107,6 @@ void gpadc_wireless_timer_cb(void);
  *
  * @param[in] input            		ADC input channel (e.g., P0_6, VBAT_HIGH).
  * @param[in] smpl_time_mult   		Sample time multiplier (1–15).
- * @param[in] continuous       		Enable or disable continuous sampling mode.
- * @param[in] interval_mult    		Interval multiplier for continuous mode (0–255).
  * @param[in] input_attenuator 		Attenuation factor for the ADC input.
  *														 		Must be one of the values from adc_input_attn_t enum.
  * @param[in] chopping         		Enable or disable chopping.
@@ -127,7 +125,7 @@ void gpadc_wireless_timer_cb(void);
  * @sa adc_init, adc_input_shift_disable, adc_temp_sensor_disable, adc_delay_set, adc_offset_calibrate
  ****************************************************************************************
  */
-void gpadc_init_se(adc_input_se_t input, uint8_t smpl_time_mult, bool continuous, uint8_t interval_mult, adc_input_attn_t input_attenuator, bool chopping, uint8_t oversampling);
+void gpadc_init_se(adc_input_se_t input, uint8_t smpl_time_mult, adc_input_attn_t input_attenuator, bool chopping, uint8_t oversampling);
 
 /**
  ****************************************************************************************

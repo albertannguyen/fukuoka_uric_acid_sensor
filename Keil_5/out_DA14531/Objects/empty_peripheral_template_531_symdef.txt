@@ -1,4 +1,4 @@
-#<SYMDEFS># ARM Linker, 6230001: Last Updated: Tue Nov 25 04:17:27 2025
+#<SYMDEFS># ARM Linker, 6230001: Last Updated: Thu Nov 27 20:39:27 2025
 0x07f02001 T uECC_vli_add
 0x07f02019 T uECC_vli_sub
 0x07f02035 T uECC_vli_mult
@@ -915,17 +915,17 @@
 0x07fc0f79 T arch_asm_delay_us
 0x07fc0f99 T __scatterload
 0x07fc0f99 T __scatterload_rt2
-0x07fc1451 T HardFault_HandlerC
-0x07fc14e9 T NMI_HandlerC
-0x07fc2b71 T main
-0x07fc3e4d T rf_calibration
-0x07fc5211 T __scatterload_copy
-0x07fc521f T __scatterload_null
-0x07fc5221 T __scatterload_zeroinit
-0x07fc6da0 D stack_var
+0x07fc1199 T HardFault_HandlerC
+0x07fc1231 T NMI_HandlerC
+0x07fc2891 T main
+0x07fc3b45 T rf_calibration
+0x07fc4ee5 T __scatterload_copy
+0x07fc4ef3 T __scatterload_null
+0x07fc4ef5 T __scatterload_zeroinit
+0x07fc66f8 D stack_var
 0x07fc8bc9 D lld_force_timeout_refresh
-0x07fc8d59 D rf_ldo_calibrated_value
-0x07fc8d5b D rf_ldo_calibration_pending
+0x07fc8d29 D rf_ldo_calibrated_value
+0x07fc8d2b D rf_ldo_calibration_pending
 0x07fc9c00 D dummy
 0x07fcb900 D ble_wakeup_executed
 0x07fcb901 D rf_in_sleep

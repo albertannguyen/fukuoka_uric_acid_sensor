@@ -511,6 +511,11 @@
           <WinNumber>1</WinNumber>
           <ItemText>toggle</ItemText>
         </Ww>
+        <Ww>
+          <count>5</count>
+          <WinNumber>1</WinNumber>
+          <ItemText>period_count</ItemText>
+        </Ww>
       </WatchWindow1>
       <Tracepoint>
         <THDelay>0</THDelay>
