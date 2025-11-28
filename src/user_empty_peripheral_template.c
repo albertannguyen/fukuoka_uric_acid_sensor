@@ -66,6 +66,7 @@ static const uint32_t SYS_CLK_FREQ_HZ = 16000000U;
 static const uint32_t LP_CLK_FREQ_HZ  = 32000U;
 
 // Constant ADC offset from GND measurement
+// FIXME: do some more testing here with bench power supply
 static const uint16_t adc_software_offset_mv = 34U;
 
 /*
@@ -174,7 +175,6 @@ void uvp_wireless_timer_cb(void)
 	 */
 
 	#ifdef CFG_PRINTF
-	/*
 	// Prints VBAT_LOW voltage
 	syscntl_dcdc_level_t vbat_low = syscntl_dcdc_get_level();
 	
@@ -242,8 +242,8 @@ void uvp_wireless_timer_cb(void)
 	}
 
 	arch_printf("[SLEEP] Current Mode: %s (Value: %u) \n\r", mode_str, (uint8_t)current_mode);
-	*/
 	
+	// Print PWM parameters
 	arch_printf("[PWM DUTY] Pulse Width 1: %lu \n\r", pulse_width_1);
 	arch_printf("[PWM DUTY] Pulse Width 2: %lu \n\r", pulse_width_2);
 	arch_printf("[PWM DUTY] Period Width: %lu \n\r", period_width);
@@ -365,6 +365,8 @@ uint16_t gpadc_sample_to_mv(uint16_t sample)
  ****************************************************************************************
 */
 
+// BUG: PWM registers do not retain value or can be wrote too when sleep mode is on
+
 void timer2_pwm_dc_control_timer_cb(void)
 {
 	// Update duty cycles based on VBAT ADC reading for a select channel
@@ -377,6 +379,9 @@ void timer2_pwm_dc_control_timer_cb(void)
 
 void timer2_pwm_dc_control(int16_t target_vbias_mv, tim2_pwm_t channel)
 {
+	// Prevent SoC from sleeping
+	arch_set_sleep_mode(ARCH_SLEEP_OFF);
+	
 	// Read Timer 2 period counter register
 	uint32_t period_count = GetWord16(TRIPLE_PWM_FREQUENCY) + 1u;
 	
@@ -512,6 +517,9 @@ void timer2_pwm_dc_control(int16_t target_vbias_mv, tim2_pwm_t channel)
 
 void timer2_pwm_set_offset(uint8_t offset_percentage, tim2_pwm_t channel)
 {
+	// Prevent SoC from sleeping
+	arch_set_sleep_mode(ARCH_SLEEP_OFF);
+	
 	// Clamp input percentage
 	uint8_t offset_clamped = CLAMP(offset_percentage, 0, 100);
 	
@@ -551,6 +559,9 @@ void timer2_pwm_set_offset(uint8_t offset_percentage, tim2_pwm_t channel)
 
 void timer2_pwm_set_frequency(tim0_2_clk_div_t clk_div, tim2_clk_src_t clk_src, uint16_t pwm_div)
 {
+	// Prevent SoC from sleeping
+	arch_set_sleep_mode(ARCH_SLEEP_OFF);
+	
 	// Create config structures for clock division and timer2 config
 	tim0_2_clk_div_config_t clk_cfg = {
 		.clk_div = clk_div
@@ -619,6 +630,9 @@ void timer2_pwm_set_dc_and_offset(uint8_t dc_pwm2, uint8_t offset_pwm2, uint8_t 
 
 void timer2_pwm_enable(void)
 {
+	// Prevent SoC from sleeping
+	arch_set_sleep_mode(ARCH_SLEEP_OFF);
+	
 	// Enable timer input clock
 	timer0_2_clk_enable();
 	
@@ -627,9 +641,6 @@ void timer2_pwm_enable(void)
 	
 	// Enable PWM outputs
 	timer2_start();
-	
-	// Prevent SoC from sleeping
-	arch_set_sleep_mode(ARCH_SLEEP_OFF);
 	
 	#ifdef CFG_PRINTF
 	arch_printf("---------------------------------------------------------------------------------------- \n\r");
