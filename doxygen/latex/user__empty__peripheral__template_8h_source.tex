@@ -30,92 +30,99 @@
 \DoxyCodeLine{00040\ \textcolor{comment}{\#endif}}
 \DoxyCodeLine{00041\ \textcolor{comment}{*****************************************************************************/}}
 \DoxyCodeLine{00042\ }
-\DoxyCodeLine{00043\ \textcolor{comment}{//\ for\ user\ callback\ functions}}
+\DoxyCodeLine{00043\ \textcolor{comment}{//\ For\ user\ callback\ functions}}
 \DoxyCodeLine{00044\ \textcolor{preprocessor}{\#include\ "{}arch\_api.h"{}}}
 \DoxyCodeLine{00045\ }
-\DoxyCodeLine{00046\ \textcolor{comment}{//\ for\ ADC\ functions}}
+\DoxyCodeLine{00046\ \textcolor{comment}{//\ For\ ADC\ functions}}
 \DoxyCodeLine{00047\ \textcolor{preprocessor}{\#include\ "{}adc\_531.h"{}}}
 \DoxyCodeLine{00048\ }
-\DoxyCodeLine{00049\ \textcolor{comment}{//\ for\ PWM\ functions}}
+\DoxyCodeLine{00049\ \textcolor{comment}{//\ For\ PWM\ functions}}
 \DoxyCodeLine{00050\ \textcolor{preprocessor}{\#include\ "{}timer0\_2.h"{}}}
 \DoxyCodeLine{00051\ \textcolor{preprocessor}{\#include\ "{}timer2.h"{}}}
 \DoxyCodeLine{00052\ }
-\DoxyCodeLine{00053\ \textcolor{comment}{//\ for\ BLE\ handler\ functions}}
+\DoxyCodeLine{00053\ \textcolor{comment}{//\ For\ BLE\ handler\ functions}}
 \DoxyCodeLine{00054\ \textcolor{preprocessor}{\#include\ "{}gapc\_task.h"{}}\ \textcolor{comment}{//\ gap\ functions\ and\ messages}}
 \DoxyCodeLine{00055\ \textcolor{preprocessor}{\#include\ "{}gapm\_task.h"{}}\ \textcolor{comment}{//\ gap\ functions\ and\ messages}}
 \DoxyCodeLine{00056\ \textcolor{preprocessor}{\#include\ "{}custs1\_task.h"{}}}
 \DoxyCodeLine{00057\ }
-\DoxyCodeLine{00058\ \textcolor{comment}{/*}}
-\DoxyCodeLine{00059\ \textcolor{comment}{\ ****************************************************************************************}}
-\DoxyCodeLine{00060\ \textcolor{comment}{\ *\ FUNCTION\ DECLARATIONS}}
-\DoxyCodeLine{00061\ \textcolor{comment}{\ ****************************************************************************************}}
-\DoxyCodeLine{00062\ \textcolor{comment}{\ */}}
-\DoxyCodeLine{00063\ \ }
-\DoxyCodeLine{00081\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{group___a_p_p_ga0ba40d136da1f704417eac6f4b68c874}{uvp\_wireless\_timer\_cb}}(\textcolor{keywordtype}{void});}
-\DoxyCodeLine{00082\ \ }
-\DoxyCodeLine{00098\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{group___a_p_p_gae9df79242cefcda723510a89b90e0354}{gpadc\_wireless\_timer\_cb}}(\textcolor{keywordtype}{void});}
-\DoxyCodeLine{00099\ \ }
-\DoxyCodeLine{00126\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{group___a_p_p_ga22bca6eda8d03d627c4d2287445a36a6}{gpadc\_init\_se}}(adc\_input\_se\_t\ input,\ uint8\_t\ smpl\_time\_mult,\ \textcolor{keywordtype}{bool}\ continuous,\ uint8\_t\ interval\_mult,\ adc\_input\_attn\_t\ input\_attenuator,\ \textcolor{keywordtype}{bool}\ chopping,\ uint8\_t\ oversampling);}
-\DoxyCodeLine{00127\ }
-\DoxyCodeLine{00139\ uint16\_t\ \mbox{\hyperlink{group___a_p_p_gaa4fb3777459834fb4d0720eaf119d94f}{gpadc\_collect\_sample}}(\textcolor{keywordtype}{void});}
-\DoxyCodeLine{00140\ }
-\DoxyCodeLine{00157\ uint16\_t\ \mbox{\hyperlink{group___a_p_p_ga8258035a26667ea0be70867e5e483c3f}{gpadc\_sample\_to\_mv}}(uint16\_t\ sample);}
-\DoxyCodeLine{00158\ }
-\DoxyCodeLine{00177\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{group___a_p_p_ga12f39c2c81587d0e9a93610ca12310c0}{timer2\_pwm\_set\_frequency}}(tim0\_2\_clk\_div\_t\ clk\_div,\ tim2\_clk\_src\_t\ clk\_src,\ uint16\_t\ pwm\_div);}
-\DoxyCodeLine{00178\ }
-\DoxyCodeLine{00193\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{group___a_p_p_ga91c119ea3d451fe1c908ff14ecb24312}{timer2\_pwm\_set\_dc\_and\_offset}}(uint8\_t\ dc\_pwm2,\ uint8\_t\ offset\_pwm2,\ uint8\_t\ dc\_pwm3,\ uint8\_t\ offset\_pwm3);}
-\DoxyCodeLine{00194\ \ }
-\DoxyCodeLine{00204\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{group___a_p_p_ga6f6b699b50011cb75aae07787816e2d7}{timer2\_pwm\_enable}}(\textcolor{keywordtype}{void});}
-\DoxyCodeLine{00205\ }
-\DoxyCodeLine{00215\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{group___a_p_p_ga8c8e71698fc4044fef4e7990642f44e1}{timer2\_pwm\_disable}}(\textcolor{keywordtype}{void});}
-\DoxyCodeLine{00216\ }
-\DoxyCodeLine{00217\ \textcolor{comment}{//\ TODO:\ see\ if\ connection\ or\ disconnection\ function\ need\ to\ be\ used\ for\ device\ operation}}
-\DoxyCodeLine{00228\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{group___a_p_p_ga097fccef82db4a9dfdc1cb542a9e9e20}{user\_on\_connection}}(\textcolor{keyword}{const}\ uint8\_t\ conidx,\ \textcolor{keyword}{struct}\ gapc\_connection\_req\_ind\ \textcolor{keyword}{const}\ *param);}
-\DoxyCodeLine{00229\ }
-\DoxyCodeLine{00239\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{group___a_p_p_ga2b05ace9fab6a68b42379e8a17d91d43}{user\_on\_disconnect}}(\textcolor{keyword}{struct}\ gapc\_disconnect\_ind\ \textcolor{keyword}{const}\ *param);}
-\DoxyCodeLine{00240\ }
-\DoxyCodeLine{00258\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{group___a_p_p_ga0b3422baf14d93c4ca220ed9999e5a3c}{user\_catch\_rest\_hndl}}(ke\_msg\_id\_t\ \textcolor{keyword}{const}\ msgid,\ \textcolor{keywordtype}{void}\ \textcolor{keyword}{const}\ *param,\ ke\_task\_id\_t\ \textcolor{keyword}{const}\ dest\_id,\ ke\_task\_id\_t\ \textcolor{keyword}{const}\ src\_id);}
-\DoxyCodeLine{00259\ }
-\DoxyCodeLine{00275\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{group___a_p_p_ga9558355a6c2e75d01e5f38a64460f292}{user\_svc1\_sensor\_voltage\_cfg\_ind\_handler}}(ke\_msg\_id\_t\ \textcolor{keyword}{const}\ msgid,}
-\DoxyCodeLine{00276\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{struct}\ custs1\_val\_write\_ind\ \textcolor{keyword}{const}\ *param,}
-\DoxyCodeLine{00277\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ ke\_task\_id\_t\ \textcolor{keyword}{const}\ dest\_id,}
-\DoxyCodeLine{00278\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ ke\_task\_id\_t\ \textcolor{keyword}{const}\ src\_id);}
-\DoxyCodeLine{00279\ }
-\DoxyCodeLine{00297\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{group___a_p_p_ga14840a8f42cc0574c8b39bd1f3046791}{user\_svc1\_pwm\_freq\_wr\_ind\_handler}}(ke\_msg\_id\_t\ \textcolor{keyword}{const}\ msgid,}
-\DoxyCodeLine{00298\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{struct}\ custs1\_val\_write\_ind\ \textcolor{keyword}{const}\ *param,}
-\DoxyCodeLine{00299\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ ke\_task\_id\_t\ \textcolor{keyword}{const}\ dest\_id,}
-\DoxyCodeLine{00300\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ ke\_task\_id\_t\ \textcolor{keyword}{const}\ src\_id);}
-\DoxyCodeLine{00301\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
-\DoxyCodeLine{00318\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{group___a_p_p_gac5ce80be01027f38df019ba10e89451c}{user\_svc1\_pwm\_dc\_and\_offset\_wr\_ind\_handler}}(ke\_msg\_id\_t\ \textcolor{keyword}{const}\ msgid,}
-\DoxyCodeLine{00319\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{struct}\ custs1\_val\_write\_ind\ \textcolor{keyword}{const}\ *param,}
-\DoxyCodeLine{00320\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ ke\_task\_id\_t\ \textcolor{keyword}{const}\ dest\_id,}
-\DoxyCodeLine{00321\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ ke\_task\_id\_t\ \textcolor{keyword}{const}\ src\_id);}
-\DoxyCodeLine{00322\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
-\DoxyCodeLine{00344\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{group___a_p_p_ga49d7c347aaec71e4d30678215f0c111b}{user\_svc1\_pwm\_state\_wr\_ind\_handler}}(ke\_msg\_id\_t\ \textcolor{keyword}{const}\ msgid,}
-\DoxyCodeLine{00345\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{struct}\ custs1\_val\_write\_ind\ \textcolor{keyword}{const}\ *param,}
-\DoxyCodeLine{00346\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ ke\_task\_id\_t\ \textcolor{keyword}{const}\ dest\_id,}
-\DoxyCodeLine{00347\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ ke\_task\_id\_t\ \textcolor{keyword}{const}\ src\_id);}
-\DoxyCodeLine{00348\ }
-\DoxyCodeLine{00368\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{group___a_p_p_ga07fe0a9cd441f968b0d9cd7c12c94d84}{user\_svc1\_battery\_voltage\_cfg\_ind\_handler}}(ke\_msg\_id\_t\ \textcolor{keyword}{const}\ msgid,}
+\DoxyCodeLine{00058\ \textcolor{comment}{//\ For\ user\_periph\_setup.c}}
+\DoxyCodeLine{00059\ \textcolor{preprocessor}{\#include\ <stdbool.h>}}
+\DoxyCodeLine{00060\ \textcolor{keyword}{extern}\ \textcolor{keywordtype}{bool}\ uvp\_shutdown;}
+\DoxyCodeLine{00061\ }
+\DoxyCodeLine{00062\ \textcolor{comment}{/*}}
+\DoxyCodeLine{00063\ \textcolor{comment}{\ ****************************************************************************************}}
+\DoxyCodeLine{00064\ \textcolor{comment}{\ *\ FUNCTION\ DECLARATIONS}}
+\DoxyCodeLine{00065\ \textcolor{comment}{\ ****************************************************************************************}}
+\DoxyCodeLine{00066\ \textcolor{comment}{\ */}}
+\DoxyCodeLine{00067\ \ }
+\DoxyCodeLine{00085\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{group___a_p_p_ga0ba40d136da1f704417eac6f4b68c874}{uvp\_wireless\_timer\_cb}}(\textcolor{keywordtype}{void});}
+\DoxyCodeLine{00086\ \ }
+\DoxyCodeLine{00102\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{group___a_p_p_gae9df79242cefcda723510a89b90e0354}{gpadc\_wireless\_timer\_cb}}(\textcolor{keywordtype}{void});}
+\DoxyCodeLine{00103\ \ }
+\DoxyCodeLine{00128\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{group___a_p_p_ga7c97072d522e510a46ce656a19030f8e}{gpadc\_init\_se}}(adc\_input\_se\_t\ input,\ uint8\_t\ smpl\_time\_mult,\ adc\_input\_attn\_t\ input\_attenuator,\ \textcolor{keywordtype}{bool}\ chopping,\ uint8\_t\ oversampling);}
+\DoxyCodeLine{00129\ }
+\DoxyCodeLine{00141\ uint16\_t\ \mbox{\hyperlink{group___a_p_p_gaa4fb3777459834fb4d0720eaf119d94f}{gpadc\_collect\_sample}}(\textcolor{keywordtype}{void});}
+\DoxyCodeLine{00142\ }
+\DoxyCodeLine{00159\ uint16\_t\ \mbox{\hyperlink{group___a_p_p_ga8258035a26667ea0be70867e5e483c3f}{gpadc\_sample\_to\_mv}}(uint16\_t\ sample);}
+\DoxyCodeLine{00160\ \ }
+\DoxyCodeLine{00177\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{group___a_p_p_ga396eebd5d11d6cc9f0c664317368462a}{timer2\_pwm\_dc\_control\_timer\_cb}}(\textcolor{keywordtype}{void});}
+\DoxyCodeLine{00178\ \ }
+\DoxyCodeLine{00196\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{group___a_p_p_gae5ad8d119c31a70aba28c8f68dffeb64}{timer2\_pwm\_dc\_control}}(int16\_t\ target\_vbias\_mv,\ tim2\_pwm\_t\ channel);}
+\DoxyCodeLine{00197\ \ }
+\DoxyCodeLine{00214\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{group___a_p_p_ga761e682d9f65842703360c0c35d85024}{timer2\_pwm\_set\_offset}}(uint8\_t\ offset\_percentage,\ tim2\_pwm\_t\ channel);}
+\DoxyCodeLine{00215\ }
+\DoxyCodeLine{00234\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{group___a_p_p_ga12f39c2c81587d0e9a93610ca12310c0}{timer2\_pwm\_set\_frequency}}(tim0\_2\_clk\_div\_t\ clk\_div,\ tim2\_clk\_src\_t\ clk\_src,\ uint16\_t\ pwm\_div);}
+\DoxyCodeLine{00235\ }
+\DoxyCodeLine{00245\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{group___a_p_p_ga6f6b699b50011cb75aae07787816e2d7}{timer2\_pwm\_enable}}(\textcolor{keywordtype}{void});}
+\DoxyCodeLine{00246\ }
+\DoxyCodeLine{00256\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{group___a_p_p_ga8c8e71698fc4044fef4e7990642f44e1}{timer2\_pwm\_disable}}(\textcolor{keywordtype}{void});}
+\DoxyCodeLine{00257\ }
+\DoxyCodeLine{00268\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{group___a_p_p_ga097fccef82db4a9dfdc1cb542a9e9e20}{user\_on\_connection}}(\textcolor{keyword}{const}\ uint8\_t\ conidx,\ \textcolor{keyword}{struct}\ gapc\_connection\_req\_ind\ \textcolor{keyword}{const}\ *param);}
+\DoxyCodeLine{00269\ }
+\DoxyCodeLine{00279\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{group___a_p_p_ga2b05ace9fab6a68b42379e8a17d91d43}{user\_on\_disconnect}}(\textcolor{keyword}{struct}\ gapc\_disconnect\_ind\ \textcolor{keyword}{const}\ *param);}
+\DoxyCodeLine{00280\ }
+\DoxyCodeLine{00298\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{group___a_p_p_ga0b3422baf14d93c4ca220ed9999e5a3c}{user\_catch\_rest\_hndl}}(ke\_msg\_id\_t\ \textcolor{keyword}{const}\ msgid,\ \textcolor{keywordtype}{void}\ \textcolor{keyword}{const}\ *param,\ ke\_task\_id\_t\ \textcolor{keyword}{const}\ dest\_id,\ ke\_task\_id\_t\ \textcolor{keyword}{const}\ src\_id);}
+\DoxyCodeLine{00299\ }
+\DoxyCodeLine{00315\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{group___a_p_p_ga9558355a6c2e75d01e5f38a64460f292}{user\_svc1\_sensor\_voltage\_cfg\_ind\_handler}}(ke\_msg\_id\_t\ \textcolor{keyword}{const}\ msgid,}
+\DoxyCodeLine{00316\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{struct}\ custs1\_val\_write\_ind\ \textcolor{keyword}{const}\ *param,}
+\DoxyCodeLine{00317\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ ke\_task\_id\_t\ \textcolor{keyword}{const}\ dest\_id,}
+\DoxyCodeLine{00318\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ ke\_task\_id\_t\ \textcolor{keyword}{const}\ src\_id);}
+\DoxyCodeLine{00319\ }
+\DoxyCodeLine{00337\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{group___a_p_p_ga14840a8f42cc0574c8b39bd1f3046791}{user\_svc1\_pwm\_freq\_wr\_ind\_handler}}(ke\_msg\_id\_t\ \textcolor{keyword}{const}\ msgid,}
+\DoxyCodeLine{00338\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{struct}\ custs1\_val\_write\_ind\ \textcolor{keyword}{const}\ *param,}
+\DoxyCodeLine{00339\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ ke\_task\_id\_t\ \textcolor{keyword}{const}\ dest\_id,}
+\DoxyCodeLine{00340\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ ke\_task\_id\_t\ \textcolor{keyword}{const}\ src\_id);}
+\DoxyCodeLine{00341\ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00368\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{group___a_p_p_ga7c1a0c412a4500a4e12f0f2ca742624d}{user\_svc1\_pwm\_vbias\_and\_offset\_wr\_ind\_handler}}(ke\_msg\_id\_t\ \textcolor{keyword}{const}\ msgid,}
 \DoxyCodeLine{00369\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{struct}\ custs1\_val\_write\_ind\ \textcolor{keyword}{const}\ *param,}
 \DoxyCodeLine{00370\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ ke\_task\_id\_t\ \textcolor{keyword}{const}\ dest\_id,}
 \DoxyCodeLine{00371\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ ke\_task\_id\_t\ \textcolor{keyword}{const}\ src\_id);}
-\DoxyCodeLine{00372\ }
-\DoxyCodeLine{00390\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{group___a_p_p_ga1687342eb7a2e461d5daf779ec921c37}{user\_svc1\_read\_sensor\_voltage\_handler}}(ke\_msg\_id\_t\ \textcolor{keyword}{const}\ msgid,}
-\DoxyCodeLine{00391\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{struct}\ custs1\_value\_req\_ind\ \textcolor{keyword}{const}\ *param,}
-\DoxyCodeLine{00392\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ ke\_task\_id\_t\ \textcolor{keyword}{const}\ dest\_id,}
-\DoxyCodeLine{00393\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ ke\_task\_id\_t\ \textcolor{keyword}{const}\ src\_id);}
-\DoxyCodeLine{00394\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
-\DoxyCodeLine{00411\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{group___a_p_p_gaea308371eb2904fe575d098aa9d717c4}{user\_svc1\_read\_battery\_voltage\_handler}}(ke\_msg\_id\_t\ \textcolor{keyword}{const}\ msgid,}
-\DoxyCodeLine{00412\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{struct}\ custs1\_value\_req\_ind\ \textcolor{keyword}{const}\ *param,}
-\DoxyCodeLine{00413\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ ke\_task\_id\_t\ \textcolor{keyword}{const}\ dest\_id,}
-\DoxyCodeLine{00414\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ ke\_task\_id\_t\ \textcolor{keyword}{const}\ src\_id);}
-\DoxyCodeLine{00415\ }
-\DoxyCodeLine{00428\ arch\_main\_loop\_callback\_ret\_t\ \mbox{\hyperlink{group___a_p_p_ga868f1e60544dc2092df4c6a7110f461b}{user\_app\_on\_system\_powered}}(\textcolor{keywordtype}{void});}
-\DoxyCodeLine{00429\ }
-\DoxyCodeLine{00439\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{group___a_p_p_ga8d69ab99f9504092fa8ae723a6ab4cfa}{user\_app\_on\_init}}(\textcolor{keywordtype}{void});}
-\DoxyCodeLine{00440\ }
-\DoxyCodeLine{00442\ }
-\DoxyCodeLine{00443\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{00372\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00394\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{group___a_p_p_ga49d7c347aaec71e4d30678215f0c111b}{user\_svc1\_pwm\_state\_wr\_ind\_handler}}(ke\_msg\_id\_t\ \textcolor{keyword}{const}\ msgid,}
+\DoxyCodeLine{00395\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{struct}\ custs1\_val\_write\_ind\ \textcolor{keyword}{const}\ *param,}
+\DoxyCodeLine{00396\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ ke\_task\_id\_t\ \textcolor{keyword}{const}\ dest\_id,}
+\DoxyCodeLine{00397\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ ke\_task\_id\_t\ \textcolor{keyword}{const}\ src\_id);}
+\DoxyCodeLine{00398\ }
+\DoxyCodeLine{00418\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{group___a_p_p_ga07fe0a9cd441f968b0d9cd7c12c94d84}{user\_svc1\_battery\_voltage\_cfg\_ind\_handler}}(ke\_msg\_id\_t\ \textcolor{keyword}{const}\ msgid,}
+\DoxyCodeLine{00419\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{struct}\ custs1\_val\_write\_ind\ \textcolor{keyword}{const}\ *param,}
+\DoxyCodeLine{00420\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ ke\_task\_id\_t\ \textcolor{keyword}{const}\ dest\_id,}
+\DoxyCodeLine{00421\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ ke\_task\_id\_t\ \textcolor{keyword}{const}\ src\_id);}
+\DoxyCodeLine{00422\ }
+\DoxyCodeLine{00440\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{group___a_p_p_ga1687342eb7a2e461d5daf779ec921c37}{user\_svc1\_read\_sensor\_voltage\_handler}}(ke\_msg\_id\_t\ \textcolor{keyword}{const}\ msgid,}
+\DoxyCodeLine{00441\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{struct}\ custs1\_value\_req\_ind\ \textcolor{keyword}{const}\ *param,}
+\DoxyCodeLine{00442\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ ke\_task\_id\_t\ \textcolor{keyword}{const}\ dest\_id,}
+\DoxyCodeLine{00443\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ ke\_task\_id\_t\ \textcolor{keyword}{const}\ src\_id);}
+\DoxyCodeLine{00444\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00461\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{group___a_p_p_gaea308371eb2904fe575d098aa9d717c4}{user\_svc1\_read\_battery\_voltage\_handler}}(ke\_msg\_id\_t\ \textcolor{keyword}{const}\ msgid,}
+\DoxyCodeLine{00462\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{struct}\ custs1\_value\_req\_ind\ \textcolor{keyword}{const}\ *param,}
+\DoxyCodeLine{00463\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ ke\_task\_id\_t\ \textcolor{keyword}{const}\ dest\_id,}
+\DoxyCodeLine{00464\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ ke\_task\_id\_t\ \textcolor{keyword}{const}\ src\_id);}
+\DoxyCodeLine{00465\ }
+\DoxyCodeLine{00478\ arch\_main\_loop\_callback\_ret\_t\ \mbox{\hyperlink{group___a_p_p_ga868f1e60544dc2092df4c6a7110f461b}{user\_app\_on\_system\_powered}}(\textcolor{keywordtype}{void});}
+\DoxyCodeLine{00479\ }
+\DoxyCodeLine{00489\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{group___a_p_p_ga8d69ab99f9504092fa8ae723a6ab4cfa}{user\_app\_on\_init}}(\textcolor{keywordtype}{void});}
+\DoxyCodeLine{00490\ }
+\DoxyCodeLine{00492\ }
+\DoxyCodeLine{00493\ \textcolor{preprocessor}{\#endif}}
 
 \end{DoxyCode}

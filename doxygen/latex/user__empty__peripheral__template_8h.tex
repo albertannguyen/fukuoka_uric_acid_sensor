@@ -16,23 +16,28 @@ Empty peripheral template project header file.
 {\ttfamily \#include "{}timer0\+\_\+2.\+h"{}}\newline
 {\ttfamily \#include "{}timer2.\+h"{}}\newline
 {\ttfamily \#include "{}custs1\+\_\+task.\+h"{}}\newline
+{\ttfamily \#include $<$stdbool.\+h$>$}\newline
 \doxysubsubsection*{Functions}
 \begin{DoxyCompactItemize}
 \item 
 void \mbox{\hyperlink{group___a_p_p_ga0ba40d136da1f704417eac6f4b68c874}{uvp\+\_\+wireless\+\_\+timer\+\_\+cb}} (void)
-\begin{DoxyCompactList}\small\item\em UVP (for battery voltage) periodic timer callback. \end{DoxyCompactList}\item 
+\begin{DoxyCompactList}\small\item\em UVP (for battery voltage) periodic timer callback.  \texorpdfstring{$\ast$}{*}. \end{DoxyCompactList}\item 
 void \mbox{\hyperlink{group___a_p_p_gae9df79242cefcda723510a89b90e0354}{gpadc\+\_\+wireless\+\_\+timer\+\_\+cb}} (void)
 \begin{DoxyCompactList}\small\item\em Sensor Voltage periodic timer callback. \end{DoxyCompactList}\item 
-void \mbox{\hyperlink{group___a_p_p_ga22bca6eda8d03d627c4d2287445a36a6}{gpadc\+\_\+init\+\_\+se}} (adc\+\_\+input\+\_\+se\+\_\+t input, uint8\+\_\+t smpl\+\_\+time\+\_\+mult, bool continuous, uint8\+\_\+t interval\+\_\+mult, adc\+\_\+input\+\_\+attn\+\_\+t input\+\_\+attenuator, bool chopping, uint8\+\_\+t oversampling)
+void \mbox{\hyperlink{group___a_p_p_ga7c97072d522e510a46ce656a19030f8e}{gpadc\+\_\+init\+\_\+se}} (adc\+\_\+input\+\_\+se\+\_\+t input, uint8\+\_\+t smpl\+\_\+time\+\_\+mult, adc\+\_\+input\+\_\+attn\+\_\+t input\+\_\+attenuator, bool chopping, uint8\+\_\+t oversampling)
 \begin{DoxyCompactList}\small\item\em Initialize the ADC in single-\/ended mode with given parameters. \end{DoxyCompactList}\item 
 uint16\+\_\+t \mbox{\hyperlink{group___a_p_p_gaa4fb3777459834fb4d0720eaf119d94f}{gpadc\+\_\+collect\+\_\+sample}} (void)
 \begin{DoxyCompactList}\small\item\em Collect a corrected raw ADC sample. \end{DoxyCompactList}\item 
 uint16\+\_\+t \mbox{\hyperlink{group___a_p_p_ga8258035a26667ea0be70867e5e483c3f}{gpadc\+\_\+sample\+\_\+to\+\_\+mv}} (uint16\+\_\+t sample)
 \begin{DoxyCompactList}\small\item\em Convert a corrected ADC sample to a millivolt value. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{group___a_p_p_ga396eebd5d11d6cc9f0c664317368462a}{timer2\+\_\+pwm\+\_\+dc\+\_\+control\+\_\+timer\+\_\+cb}} (void)
+\begin{DoxyCompactList}\small\item\em Periodic timer callback that runs the control loop to adjust the PWM Duty Cycle (DC) to compensate for battery voltage (VBAT) changes. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{group___a_p_p_gae5ad8d119c31a70aba28c8f68dffeb64}{timer2\+\_\+pwm\+\_\+dc\+\_\+control}} (int16\+\_\+t target\+\_\+vbias\+\_\+mv, tim2\+\_\+pwm\+\_\+t channel)
+\begin{DoxyCompactList}\small\item\em Calculates and updates the PWM Duty Cycle (DC) value based on a target output voltage and the current battery voltage (VBAT). \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{group___a_p_p_ga761e682d9f65842703360c0c35d85024}{timer2\+\_\+pwm\+\_\+set\+\_\+offset}} (uint8\+\_\+t offset\+\_\+percentage, tim2\+\_\+pwm\+\_\+t channel)
+\begin{DoxyCompactList}\small\item\em Directly sets the PWM offset ({\ttfamily START\+\_\+\+CYCLE}) as a fixed Duty Cycle (DC) percentage for a channel. \end{DoxyCompactList}\item 
 void \mbox{\hyperlink{group___a_p_p_ga12f39c2c81587d0e9a93610ca12310c0}{timer2\+\_\+pwm\+\_\+set\+\_\+frequency}} (tim0\+\_\+2\+\_\+clk\+\_\+div\+\_\+t clk\+\_\+div, tim2\+\_\+clk\+\_\+src\+\_\+t clk\+\_\+src, uint16\+\_\+t pwm\+\_\+div)
 \begin{DoxyCompactList}\small\item\em Configure Timer2 PWM frequency. \end{DoxyCompactList}\item 
-void \mbox{\hyperlink{group___a_p_p_ga91c119ea3d451fe1c908ff14ecb24312}{timer2\+\_\+pwm\+\_\+set\+\_\+dc\+\_\+and\+\_\+offset}} (uint8\+\_\+t dc\+\_\+pwm2, uint8\+\_\+t offset\+\_\+pwm2, uint8\+\_\+t dc\+\_\+pwm3, uint8\+\_\+t offset\+\_\+pwm3)
-\begin{DoxyCompactList}\small\item\em Set PWM duty cycle and offset for TIM2 channels 2 and 3. \end{DoxyCompactList}\item 
 void \mbox{\hyperlink{group___a_p_p_ga6f6b699b50011cb75aae07787816e2d7}{timer2\+\_\+pwm\+\_\+enable}} (void)
 \begin{DoxyCompactList}\small\item\em Enable Timer2 PWM outputs. \end{DoxyCompactList}\item 
 void \mbox{\hyperlink{group___a_p_p_ga8c8e71698fc4044fef4e7990642f44e1}{timer2\+\_\+pwm\+\_\+disable}} (void)
@@ -47,8 +52,8 @@ void \mbox{\hyperlink{group___a_p_p_ga9558355a6c2e75d01e5f38a64460f292}{user\+\_
 \begin{DoxyCompactList}\small\item\em Handle CCCD writes to the Sensor Voltage characteristic. \end{DoxyCompactList}\item 
 void \mbox{\hyperlink{group___a_p_p_ga14840a8f42cc0574c8b39bd1f3046791}{user\+\_\+svc1\+\_\+pwm\+\_\+freq\+\_\+wr\+\_\+ind\+\_\+handler}} (ke\+\_\+msg\+\_\+id\+\_\+t const msgid, struct custs1\+\_\+val\+\_\+write\+\_\+ind const \texorpdfstring{$\ast$}{*}param, ke\+\_\+task\+\_\+id\+\_\+t const dest\+\_\+id, ke\+\_\+task\+\_\+id\+\_\+t const src\+\_\+id)
 \begin{DoxyCompactList}\small\item\em Handle client writes to PWM Frequency characteristic. \end{DoxyCompactList}\item 
-void \mbox{\hyperlink{group___a_p_p_gac5ce80be01027f38df019ba10e89451c}{user\+\_\+svc1\+\_\+pwm\+\_\+dc\+\_\+and\+\_\+offset\+\_\+wr\+\_\+ind\+\_\+handler}} (ke\+\_\+msg\+\_\+id\+\_\+t const msgid, struct custs1\+\_\+val\+\_\+write\+\_\+ind const \texorpdfstring{$\ast$}{*}param, ke\+\_\+task\+\_\+id\+\_\+t const dest\+\_\+id, ke\+\_\+task\+\_\+id\+\_\+t const src\+\_\+id)
-\begin{DoxyCompactList}\small\item\em Handle client writes to PWM duty cycle and offset characteristic. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{group___a_p_p_ga7c1a0c412a4500a4e12f0f2ca742624d}{user\+\_\+svc1\+\_\+pwm\+\_\+vbias\+\_\+and\+\_\+offset\+\_\+wr\+\_\+ind\+\_\+handler}} (ke\+\_\+msg\+\_\+id\+\_\+t const msgid, struct custs1\+\_\+val\+\_\+write\+\_\+ind const \texorpdfstring{$\ast$}{*}param, ke\+\_\+task\+\_\+id\+\_\+t const dest\+\_\+id, ke\+\_\+task\+\_\+id\+\_\+t const src\+\_\+id)
+\begin{DoxyCompactList}\small\item\em BLE Write Indication Handler for the PWM VBIAS and Offset Characteristic. \end{DoxyCompactList}\item 
 void \mbox{\hyperlink{group___a_p_p_ga49d7c347aaec71e4d30678215f0c111b}{user\+\_\+svc1\+\_\+pwm\+\_\+state\+\_\+wr\+\_\+ind\+\_\+handler}} (ke\+\_\+msg\+\_\+id\+\_\+t const msgid, struct custs1\+\_\+val\+\_\+write\+\_\+ind const \texorpdfstring{$\ast$}{*}param, ke\+\_\+task\+\_\+id\+\_\+t const dest\+\_\+id, ke\+\_\+task\+\_\+id\+\_\+t const src\+\_\+id)
 \begin{DoxyCompactList}\small\item\em Handle client write to PWM State characteristic (single-\/byte ON/\+OFF). \end{DoxyCompactList}\item 
 void \mbox{\hyperlink{group___a_p_p_ga07fe0a9cd441f968b0d9cd7c12c94d84}{user\+\_\+svc1\+\_\+battery\+\_\+voltage\+\_\+cfg\+\_\+ind\+\_\+handler}} (ke\+\_\+msg\+\_\+id\+\_\+t const msgid, struct custs1\+\_\+val\+\_\+write\+\_\+ind const \texorpdfstring{$\ast$}{*}param, ke\+\_\+task\+\_\+id\+\_\+t const dest\+\_\+id, ke\+\_\+task\+\_\+id\+\_\+t const src\+\_\+id)
@@ -61,6 +66,11 @@ arch\+\_\+main\+\_\+loop\+\_\+callback\+\_\+ret\+\_\+t \mbox{\hyperlink{group___
 \begin{DoxyCompactList}\small\item\em User callback when the system is powered on. \end{DoxyCompactList}\item 
 void \mbox{\hyperlink{group___a_p_p_ga8d69ab99f9504092fa8ae723a6ab4cfa}{user\+\_\+app\+\_\+on\+\_\+init}} (void)
 \begin{DoxyCompactList}\small\item\em User initialization callback executed at boot. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+bool {\bfseries uvp\+\_\+shutdown}
+\end{DoxyCompactItemize}
 
 
 \doxysubsection{Detailed Description}

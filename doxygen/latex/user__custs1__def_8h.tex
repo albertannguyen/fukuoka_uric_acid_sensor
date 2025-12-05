@@ -23,11 +23,11 @@ Custom Server 1 (CUSTS1) profile database definitions.
 \item 
 \#define {\bfseries DEF\+\_\+\+SVC1\+\_\+\+PWM\+\_\+\+FREQ\+\_\+\+USER\+\_\+\+DESC}~"{}Timer2 PWM Frequency Config"{}
 \item 
-\#define {\bfseries DEF\+\_\+\+SVC1\+\_\+\+PWM\+\_\+\+DC\+\_\+\+AND\+\_\+\+OFFSET\+\_\+\+UUID\+\_\+128}~\{0x72,0x50,0x8a,0x2d,0xca,0xcf,0x9c,0xb6,0x51,0x4f,0x07,0xbc,0xf6,0x0d,0xff,0x3a\}
+\#define {\bfseries DEF\+\_\+\+SVC1\+\_\+\+PWM\+\_\+\+VBIAS\+\_\+\+AND\+\_\+\+OFFSET\+\_\+\+UUID\+\_\+128}~\{0xfb,0xbe,0x45,0xc7,0x2f,0xef,0x80,0xae,0xa5,0x4a,0x0c,0x5e,0xc0,0x5f,0xb1,0xcc\}
 \item 
-\#define {\bfseries DEF\+\_\+\+SVC1\+\_\+\+PWM\+\_\+\+DC\+\_\+\+AND\+\_\+\+OFFSET\+\_\+\+CHAR\+\_\+\+LEN}~4
+\#define {\bfseries DEF\+\_\+\+SVC1\+\_\+\+PWM\+\_\+\+VBIAS\+\_\+\+AND\+\_\+\+OFFSET\+\_\+\+CHAR\+\_\+\+LEN}~10
 \item 
-\#define {\bfseries DEF\+\_\+\+SVC1\+\_\+\+PWM\+\_\+\+DC\+\_\+\+AND\+\_\+\+OFFSET\+\_\+\+USER\+\_\+\+DESC}~"{}Timer2 PWM2 and PWM3 Duty Cycles and Offsets"{}
+\#define {\bfseries DEF\+\_\+\+SVC1\+\_\+\+PWM\+\_\+\+VBIAS\+\_\+\+AND\+\_\+\+OFFSET\+\_\+\+USER\+\_\+\+DESC}~"{}Timer2 PWM2 and PWM3 Vbias and Offsets"{}
 \item 
 \#define {\bfseries DEF\+\_\+\+SVC1\+\_\+\+PWM\+\_\+\+STATE\+\_\+\+UUID\+\_\+128}~\{0x42,0x2d,0x1b,0x1c,0x46,0x02,0x26,0xb4,0xd0,0x4a,0x1e,0xd5,0x25,0xf9,0xc3,0x2d\}
 \item 
@@ -56,9 +56,9 @@ enum \{ \newline
 , {\bfseries SVC1\+\_\+\+IDX\+\_\+\+PWM\+\_\+\+FREQ\+\_\+\+VAL}
 , {\bfseries SVC1\+\_\+\+IDX\+\_\+\+PWM\+\_\+\+FREQ\+\_\+\+USER\+\_\+\+DESC}
 , \newline
-{\bfseries SVC1\+\_\+\+IDX\+\_\+\+PWM\+\_\+\+DC\+\_\+\+AND\+\_\+\+OFFSET\+\_\+\+CHAR}
-, {\bfseries SVC1\+\_\+\+IDX\+\_\+\+PWM\+\_\+\+DC\+\_\+\+AND\+\_\+\+OFFSET\+\_\+\+VAL}
-, {\bfseries SVC1\+\_\+\+IDX\+\_\+\+PWM\+\_\+\+DC\+\_\+\+AND\+\_\+\+OFFSET\+\_\+\+USER\+\_\+\+DESC}
+{\bfseries SVC1\+\_\+\+IDX\+\_\+\+PWM\+\_\+\+VBIAS\+\_\+\+AND\+\_\+\+OFFSET\+\_\+\+CHAR}
+, {\bfseries SVC1\+\_\+\+IDX\+\_\+\+PWM\+\_\+\+VBIAS\+\_\+\+AND\+\_\+\+OFFSET\+\_\+\+VAL}
+, {\bfseries SVC1\+\_\+\+IDX\+\_\+\+PWM\+\_\+\+VBIAS\+\_\+\+AND\+\_\+\+OFFSET\+\_\+\+USER\+\_\+\+DESC}
 , {\bfseries SVC1\+\_\+\+IDX\+\_\+\+PWM\+\_\+\+STATE\+\_\+\+CHAR}
 , \newline
 {\bfseries SVC1\+\_\+\+IDX\+\_\+\+PWM\+\_\+\+STATE\+\_\+\+VAL}
