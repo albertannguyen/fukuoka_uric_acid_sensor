@@ -44,11 +44,11 @@
 
 // for UVP circuit
 #ifdef BOARD_CUSTOM_PCB
-    #define UVP_MAX_SHDN_PORT           GPIO_PORT_0
-    #define UVP_MAX_SHDN_PIN            GPIO_PIN_7
+    #define UVP_EN_OUTPUT_PORT          GPIO_PORT_0
+    #define UVP_EN_OUTPUT_PIN           GPIO_PIN_7
 #else
-    #define UVP_MAX_SHDN_PORT           GPIO_PORT_0
-    #define UVP_MAX_SHDN_PIN            GPIO_PIN_9  // PWM on MikroBus (also is the red LED pin)
+    #define UVP_EN_OUTPUT_PORT          GPIO_PORT_0
+    #define UVP_EN_OUTPUT_PIN           GPIO_PIN_9 // PWM on MikroBus (also is the red LED pin)
 #endif
 
 // for ADC
@@ -62,15 +62,15 @@
 
 // for PWM
 #ifdef BOARD_CUSTOM_PCB
-    #define PWM2_PORT                   GPIO_PORT_0
-    #define PWM2_PIN                    GPIO_PIN_8 // SDA on MikroBus
-    #define PWM3_PORT                   GPIO_PORT_0
-    #define PWM3_PIN                    GPIO_PIN_9 // PWM on MikroBus
+    #define PWM2_OUTPUT_PORT                   GPIO_PORT_0
+    #define PWM2_OUTPUT_PIN                    GPIO_PIN_8 // SDA on MikroBus
+    #define PWM3_OUTPUT_PORT                   GPIO_PORT_0
+    #define PWM3_OUTPUT_PIN                    GPIO_PIN_9 // PWM on MikroBus
 #else
-    #define PWM2_PORT                   GPIO_PORT_0
-    #define PWM2_PIN                    GPIO_PIN_7 // CS on MikroBus
-    #define PWM3_PORT                   GPIO_PORT_0
-    #define PWM3_PIN                    GPIO_PIN_11 // INT on MikroBus
+    #define PWM2_OUTPUT_PORT                   GPIO_PORT_0
+    #define PWM2_OUTPUT_PIN                    GPIO_PIN_7 // CS on MikroBus
+    #define PWM3_OUTPUT_PORT                   GPIO_PORT_0
+    #define PWM3_OUTPUT_PIN                    GPIO_PIN_11 // INT on MikroBus
 #endif
 
 /*

@@ -23,114 +23,144 @@
 \DoxyCodeLine{00025\ \textcolor{comment}{\ ****************************************************************************************}}
 \DoxyCodeLine{00026\ \textcolor{comment}{\ */}}
 \DoxyCodeLine{00027\ }
-\DoxyCodeLine{00028\ \textcolor{comment}{//\ pins\ are\ formatted\ as\ P0\_X\ in\ datasheet}}
-\DoxyCodeLine{00029\ }
-\DoxyCodeLine{00030\ \textcolor{comment}{//\ define\ UVP\ circuit\ pins}}
-\DoxyCodeLine{00031\ \textcolor{comment}{//\ note\ that\ P0\_9\ is\ the\ LED\ pin\ for\ USB\ devkit\ by\ default}}
-\DoxyCodeLine{00032\ \textcolor{preprocessor}{\#define\ UVP\_MAX\_SHDN\_PORT\ \ \ \ \ \ \ \ \ \ \ GPIO\_PORT\_0}}
-\DoxyCodeLine{00033\ \textcolor{preprocessor}{\#define\ UVP\_MAX\_SHDN\_PIN\ \ \ \ \ \ \ \ \ \ \ \ GPIO\_PIN\_9\ }\textcolor{comment}{//\ PWM\ on\ MikroBus}}
-\DoxyCodeLine{00034\ }
-\DoxyCodeLine{00035\ \textcolor{comment}{//\ define\ ADC\ pins}}
-\DoxyCodeLine{00036\ \textcolor{preprocessor}{\#define\ ADC\_INPUT\_PORT\ \ \ \ \ \ \ \ \ \ \ \ \ \ GPIO\_PORT\_0}}
-\DoxyCodeLine{00037\ \textcolor{preprocessor}{\#define\ ADC\_INPUT\_PIN\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ GPIO\_PIN\_6\ }\textcolor{comment}{//\ RX\ on\ MikroBus}}
-\DoxyCodeLine{00038\ }
-\DoxyCodeLine{00039\ \textcolor{comment}{//\ define\ PWM\ pins}}
-\DoxyCodeLine{00040\ \textcolor{preprocessor}{\#define\ PWM2\_PORT\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ GPIO\_PORT\_0}}
-\DoxyCodeLine{00041\ \textcolor{preprocessor}{\#define\ PWM2\_PIN\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ GPIO\_PIN\_7\ }\textcolor{comment}{//\ CS\ on\ MikroBus}}
-\DoxyCodeLine{00042\ \textcolor{preprocessor}{\#define\ PWM3\_PORT\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ GPIO\_PORT\_0}}
-\DoxyCodeLine{00043\ \textcolor{preprocessor}{\#define\ PWM3\_PIN\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ GPIO\_PIN\_11\ }\textcolor{comment}{//\ INT\ on\ MikroBus}}
+\DoxyCodeLine{00028\ \textcolor{comment}{/*}}
+\DoxyCodeLine{00029\ \textcolor{comment}{-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}}
+\DoxyCodeLine{00030\ \textcolor{comment}{-\/\ Board\ Selection}}
+\DoxyCodeLine{00031\ \textcolor{comment}{-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}}
+\DoxyCodeLine{00032\ \textcolor{comment}{*/}}
+\DoxyCodeLine{00033\ }
+\DoxyCodeLine{00034\ \textcolor{preprocessor}{\#define\ BOARD\_CUSTOM\_PCB\ }\textcolor{comment}{//\ define\ this\ line\ if\ running\ on\ custom\ PCB}}
+\DoxyCodeLine{00035\ }
+\DoxyCodeLine{00036\ \textcolor{comment}{/*}}
+\DoxyCodeLine{00037\ \textcolor{comment}{-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}}
+\DoxyCodeLine{00038\ \textcolor{comment}{-\/\ Pin\ Configuration}}
+\DoxyCodeLine{00039\ \textcolor{comment}{-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}}
+\DoxyCodeLine{00040\ \textcolor{comment}{*/}}
+\DoxyCodeLine{00041\ }
+\DoxyCodeLine{00042\ \textcolor{comment}{//\ pins\ are\ labeled\ as\ P0\_X\ in\ datasheet}}
+\DoxyCodeLine{00043\ \textcolor{comment}{//\ if-\/else\ preprocessor\ branch\ configs\ the\ pins\ for\ the\ DA14531\ USB\ Devkit}}
 \DoxyCodeLine{00044\ }
-\DoxyCodeLine{00045\ \textcolor{comment}{/*}}
-\DoxyCodeLine{00046\ \textcolor{comment}{\ ****************************************************************************************}}
-\DoxyCodeLine{00047\ \textcolor{comment}{\ *\ UART2\ configuration\ to\ use\ with\ arch\_console\ print\ messages}}
-\DoxyCodeLine{00048\ \textcolor{comment}{\ ****************************************************************************************}}
-\DoxyCodeLine{00049\ \textcolor{comment}{\ */}}
-\DoxyCodeLine{00050\ }
-\DoxyCodeLine{00051\ \textcolor{comment}{//\ Define\ UART2\ Tx\ Pad}}
-\DoxyCodeLine{00052\ \textcolor{preprocessor}{\#if\ defined\ (\_\_DA14531\_\_)}}
-\DoxyCodeLine{00053\ \textcolor{preprocessor}{\ \ \ \ \#define\ UART2\_TX\_PORT\ \ \ \ \ \ \ \ \ \ \ GPIO\_PORT\_0}}
-\DoxyCodeLine{00054\ \textcolor{preprocessor}{\ \ \ \ \#define\ UART2\_TX\_PIN\ \ \ \ \ \ \ \ \ \ \ \ GPIO\_PIN\_5}}
-\DoxyCodeLine{00055\ \textcolor{preprocessor}{\#else}}
-\DoxyCodeLine{00056\ \textcolor{preprocessor}{\ \ \ \ \#define\ UART2\_TX\_PORT\ \ \ \ \ \ \ \ \ \ \ GPIO\_PORT\_0}}
-\DoxyCodeLine{00057\ \textcolor{preprocessor}{\ \ \ \ \#define\ UART2\_TX\_PIN\ \ \ \ \ \ \ \ \ \ \ \ GPIO\_PIN\_4}}
-\DoxyCodeLine{00058\ \textcolor{preprocessor}{\#endif}}
-\DoxyCodeLine{00059\ }
-\DoxyCodeLine{00060\ \textcolor{comment}{//\ Define\ UART2\ Settings}}
-\DoxyCodeLine{00061\ \textcolor{preprocessor}{\#define\ UART2\_BAUDRATE\ \ \ \ \ \ \ \ \ \ \ \ \ \ UART\_BAUDRATE\_115200}}
-\DoxyCodeLine{00062\ \textcolor{preprocessor}{\#define\ UART2\_DATABITS\ \ \ \ \ \ \ \ \ \ \ \ \ \ UART\_DATABITS\_8}}
-\DoxyCodeLine{00063\ \textcolor{preprocessor}{\#define\ UART2\_PARITY\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ UART\_PARITY\_NONE}}
-\DoxyCodeLine{00064\ \textcolor{preprocessor}{\#define\ UART2\_STOPBITS\ \ \ \ \ \ \ \ \ \ \ \ \ \ UART\_STOPBITS\_1}}
-\DoxyCodeLine{00065\ \textcolor{preprocessor}{\#define\ UART2\_AFCE\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ UART\_AFCE\_DIS}}
-\DoxyCodeLine{00066\ \textcolor{preprocessor}{\#define\ UART2\_FIFO\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ UART\_FIFO\_EN}}
-\DoxyCodeLine{00067\ \textcolor{preprocessor}{\#define\ UART2\_TX\_FIFO\_LEVEL\ \ \ \ \ \ \ \ \ UART\_TX\_FIFO\_LEVEL\_0}}
-\DoxyCodeLine{00068\ \textcolor{preprocessor}{\#define\ UART2\_RX\_FIFO\_LEVEL\ \ \ \ \ \ \ \ \ UART\_RX\_FIFO\_LEVEL\_0}}
-\DoxyCodeLine{00069\ }
-\DoxyCodeLine{00070\ \textcolor{comment}{/*}}
-\DoxyCodeLine{00071\ \textcolor{comment}{\ ****************************************************************************************}}
-\DoxyCodeLine{00072\ \textcolor{comment}{\ *\ SPI\ configuration}}
-\DoxyCodeLine{00073\ \textcolor{comment}{\ ****************************************************************************************}}
-\DoxyCodeLine{00074\ \textcolor{comment}{\ */}}
+\DoxyCodeLine{00045\ \textcolor{comment}{//\ for\ UVP\ circuit}}
+\DoxyCodeLine{00046\ \textcolor{preprocessor}{\#ifdef\ BOARD\_CUSTOM\_PCB}}
+\DoxyCodeLine{00047\ \textcolor{preprocessor}{\ \ \ \ \#define\ UVP\_EN\_OUTPUT\_PORT\ \ \ \ \ \ \ \ \ \ GPIO\_PORT\_0}}
+\DoxyCodeLine{00048\ \textcolor{preprocessor}{\ \ \ \ \#define\ UVP\_EN\_OUTPUT\_PIN\ \ \ \ \ \ \ \ \ \ \ GPIO\_PIN\_7}}
+\DoxyCodeLine{00049\ \textcolor{preprocessor}{\#else}}
+\DoxyCodeLine{00050\ \textcolor{preprocessor}{\ \ \ \ \#define\ UVP\_EN\_OUTPUT\_PORT\ \ \ \ \ \ \ \ \ \ GPIO\_PORT\_0}}
+\DoxyCodeLine{00051\ \textcolor{preprocessor}{\ \ \ \ \#define\ UVP\_EN\_OUTPUT\_PIN\ \ \ \ \ \ \ \ \ \ \ GPIO\_PIN\_9\ }\textcolor{comment}{//\ PWM\ on\ MikroBus\ (also\ is\ the\ red\ LED\ pin)}}
+\DoxyCodeLine{00052\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{00053\ }
+\DoxyCodeLine{00054\ \textcolor{comment}{//\ for\ ADC}}
+\DoxyCodeLine{00055\ \textcolor{preprocessor}{\#ifdef\ BOARD\_CUSTOM\_PCB}}
+\DoxyCodeLine{00056\ \textcolor{preprocessor}{\ \ \ \ \#define\ ADC\_INPUT\_PORT\ \ \ \ \ \ \ \ \ \ \ \ \ \ GPIO\_PORT\_0}}
+\DoxyCodeLine{00057\ \textcolor{preprocessor}{\ \ \ \ \#define\ ADC\_INPUT\_PIN\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ GPIO\_PIN\_6}}
+\DoxyCodeLine{00058\ \textcolor{preprocessor}{\#else}}
+\DoxyCodeLine{00059\ \textcolor{preprocessor}{\ \ \ \ \#define\ ADC\_INPUT\_PORT\ \ \ \ \ \ \ \ \ \ \ \ \ \ GPIO\_PORT\_0}}
+\DoxyCodeLine{00060\ \textcolor{preprocessor}{\ \ \ \ \#define\ ADC\_INPUT\_PIN\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ GPIO\_PIN\_6\ }\textcolor{comment}{//\ RX\ on\ MikroBus}}
+\DoxyCodeLine{00061\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{00062\ }
+\DoxyCodeLine{00063\ \textcolor{comment}{//\ for\ PWM}}
+\DoxyCodeLine{00064\ \textcolor{preprocessor}{\#ifdef\ BOARD\_CUSTOM\_PCB}}
+\DoxyCodeLine{00065\ \textcolor{preprocessor}{\ \ \ \ \#define\ PWM2\_OUTPUT\_PORT\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ GPIO\_PORT\_0}}
+\DoxyCodeLine{00066\ \textcolor{preprocessor}{\ \ \ \ \#define\ PWM2\_OUTPUT\_PIN\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ GPIO\_PIN\_8\ }\textcolor{comment}{//\ SDA\ on\ MikroBus}}
+\DoxyCodeLine{00067\ \textcolor{preprocessor}{\ \ \ \ \#define\ PWM3\_OUTPUT\_PORT\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ GPIO\_PORT\_0}}
+\DoxyCodeLine{00068\ \textcolor{preprocessor}{\ \ \ \ \#define\ PWM3\_OUTPUT\_PIN\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ GPIO\_PIN\_9\ }\textcolor{comment}{//\ PWM\ on\ MikroBus}}
+\DoxyCodeLine{00069\ \textcolor{preprocessor}{\#else}}
+\DoxyCodeLine{00070\ \textcolor{preprocessor}{\ \ \ \ \#define\ PWM2\_OUTPUT\_PORT\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ GPIO\_PORT\_0}}
+\DoxyCodeLine{00071\ \textcolor{preprocessor}{\ \ \ \ \#define\ PWM2\_OUTPUT\_PIN\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ GPIO\_PIN\_7\ }\textcolor{comment}{//\ CS\ on\ MikroBus}}
+\DoxyCodeLine{00072\ \textcolor{preprocessor}{\ \ \ \ \#define\ PWM3\_OUTPUT\_PORT\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ GPIO\_PORT\_0}}
+\DoxyCodeLine{00073\ \textcolor{preprocessor}{\ \ \ \ \#define\ PWM3\_OUTPUT\_PIN\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ GPIO\_PIN\_11\ }\textcolor{comment}{//\ INT\ on\ MikroBus}}
+\DoxyCodeLine{00074\ \textcolor{preprocessor}{\#endif}}
 \DoxyCodeLine{00075\ }
-\DoxyCodeLine{00076\ \textcolor{comment}{//\ TODO:\ validate\ pins\ for\ custom\ PCB}}
-\DoxyCodeLine{00077\ \textcolor{comment}{//\ Define\ SPI\ Pads}}
-\DoxyCodeLine{00078\ \textcolor{preprocessor}{\#if\ defined\ (\_\_DA14531\_\_)}}
-\DoxyCodeLine{00079\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ \#define\ SPI\_EN\_PORT\ \ \ \ \ \ \ \ \ \ \ \ \ GPIO\_PORT\_0}}
-\DoxyCodeLine{00080\ \textcolor{preprocessor}{\ \ \ \ \#define\ SPI\_EN\_PIN\ \ \ \ \ \ \ \ \ \ \ \ \ \ GPIO\_PIN\_1}}
+\DoxyCodeLine{00076\ \textcolor{comment}{/*}}
+\DoxyCodeLine{00077\ \textcolor{comment}{\ ****************************************************************************************}}
+\DoxyCodeLine{00078\ \textcolor{comment}{\ *\ UART2\ configuration\ to\ use\ with\ arch\_console\ print\ messages}}
+\DoxyCodeLine{00079\ \textcolor{comment}{\ ****************************************************************************************}}
+\DoxyCodeLine{00080\ \textcolor{comment}{\ */}}
 \DoxyCodeLine{00081\ }
-\DoxyCodeLine{00082\ \textcolor{preprocessor}{\ \ \ \ \#define\ SPI\_CLK\_PORT\ \ \ \ \ \ \ \ \ \ \ \ GPIO\_PORT\_0}}
-\DoxyCodeLine{00083\ \textcolor{preprocessor}{\ \ \ \ \#define\ SPI\_CLK\_PIN\ \ \ \ \ \ \ \ \ \ \ \ \ GPIO\_PIN\_4}}
-\DoxyCodeLine{00084\ }
-\DoxyCodeLine{00085\ \textcolor{preprocessor}{\ \ \ \ \#define\ SPI\_DO\_PORT\ \ \ \ \ \ \ \ \ \ \ \ \ GPIO\_PORT\_0}}
-\DoxyCodeLine{00086\ \textcolor{preprocessor}{\ \ \ \ \#define\ SPI\_DO\_PIN\ \ \ \ \ \ \ \ \ \ \ \ \ \ GPIO\_PIN\_0}}
-\DoxyCodeLine{00087\ }
-\DoxyCodeLine{00088\ \textcolor{preprocessor}{\ \ \ \ \#define\ SPI\_DI\_PORT\ \ \ \ \ \ \ \ \ \ \ \ \ GPIO\_PORT\_0}}
-\DoxyCodeLine{00089\ \textcolor{preprocessor}{\ \ \ \ \#define\ SPI\_DI\_PIN\ \ \ \ \ \ \ \ \ \ \ \ \ \ GPIO\_PIN\_3}}
+\DoxyCodeLine{00082\ \textcolor{comment}{//\ Define\ UART2\ Tx\ Pad}}
+\DoxyCodeLine{00083\ \textcolor{preprocessor}{\#if\ defined\ (\_\_DA14531\_\_)}}
+\DoxyCodeLine{00084\ \textcolor{preprocessor}{\ \ \ \ \#define\ UART2\_TX\_PORT\ \ \ \ \ \ \ \ \ \ \ GPIO\_PORT\_0}}
+\DoxyCodeLine{00085\ \textcolor{preprocessor}{\ \ \ \ \#define\ UART2\_TX\_PIN\ \ \ \ \ \ \ \ \ \ \ \ GPIO\_PIN\_5}}
+\DoxyCodeLine{00086\ \textcolor{preprocessor}{\#else}}
+\DoxyCodeLine{00087\ \textcolor{preprocessor}{\ \ \ \ \#define\ UART2\_TX\_PORT\ \ \ \ \ \ \ \ \ \ \ GPIO\_PORT\_0}}
+\DoxyCodeLine{00088\ \textcolor{preprocessor}{\ \ \ \ \#define\ UART2\_TX\_PIN\ \ \ \ \ \ \ \ \ \ \ \ GPIO\_PIN\_4}}
+\DoxyCodeLine{00089\ \textcolor{preprocessor}{\#endif}}
 \DoxyCodeLine{00090\ }
-\DoxyCodeLine{00091\ \textcolor{preprocessor}{\#elif\ !defined\ (\_\_DA14586\_\_)}}
-\DoxyCodeLine{00092\ \textcolor{preprocessor}{\ \ \ \ \#define\ SPI\_EN\_PORT\ \ \ \ \ \ \ \ \ \ \ \ \ GPIO\_PORT\_0}}
-\DoxyCodeLine{00093\ \textcolor{preprocessor}{\ \ \ \ \#define\ SPI\_EN\_PIN\ \ \ \ \ \ \ \ \ \ \ \ \ \ GPIO\_PIN\_3}}
-\DoxyCodeLine{00094\ }
-\DoxyCodeLine{00095\ \textcolor{preprocessor}{\ \ \ \ \#define\ SPI\_CLK\_PORT\ \ \ \ \ \ \ \ \ \ \ \ GPIO\_PORT\_0}}
-\DoxyCodeLine{00096\ \textcolor{preprocessor}{\ \ \ \ \#define\ SPI\_CLK\_PIN\ \ \ \ \ \ \ \ \ \ \ \ \ GPIO\_PIN\_0}}
-\DoxyCodeLine{00097\ }
-\DoxyCodeLine{00098\ \textcolor{preprocessor}{\ \ \ \ \#define\ SPI\_DO\_PORT\ \ \ \ \ \ \ \ \ \ \ \ \ GPIO\_PORT\_0}}
-\DoxyCodeLine{00099\ \textcolor{preprocessor}{\ \ \ \ \#define\ SPI\_DO\_PIN\ \ \ \ \ \ \ \ \ \ \ \ \ \ GPIO\_PIN\_6}}
+\DoxyCodeLine{00091\ \textcolor{comment}{//\ Define\ UART2\ Settings}}
+\DoxyCodeLine{00092\ \textcolor{preprocessor}{\#define\ UART2\_BAUDRATE\ \ \ \ \ \ \ \ \ \ \ \ \ \ UART\_BAUDRATE\_115200}}
+\DoxyCodeLine{00093\ \textcolor{preprocessor}{\#define\ UART2\_DATABITS\ \ \ \ \ \ \ \ \ \ \ \ \ \ UART\_DATABITS\_8}}
+\DoxyCodeLine{00094\ \textcolor{preprocessor}{\#define\ UART2\_PARITY\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ UART\_PARITY\_NONE}}
+\DoxyCodeLine{00095\ \textcolor{preprocessor}{\#define\ UART2\_STOPBITS\ \ \ \ \ \ \ \ \ \ \ \ \ \ UART\_STOPBITS\_1}}
+\DoxyCodeLine{00096\ \textcolor{preprocessor}{\#define\ UART2\_AFCE\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ UART\_AFCE\_DIS}}
+\DoxyCodeLine{00097\ \textcolor{preprocessor}{\#define\ UART2\_FIFO\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ UART\_FIFO\_EN}}
+\DoxyCodeLine{00098\ \textcolor{preprocessor}{\#define\ UART2\_TX\_FIFO\_LEVEL\ \ \ \ \ \ \ \ \ UART\_TX\_FIFO\_LEVEL\_0}}
+\DoxyCodeLine{00099\ \textcolor{preprocessor}{\#define\ UART2\_RX\_FIFO\_LEVEL\ \ \ \ \ \ \ \ \ UART\_RX\_FIFO\_LEVEL\_0}}
 \DoxyCodeLine{00100\ }
-\DoxyCodeLine{00101\ \textcolor{preprocessor}{\ \ \ \ \#define\ SPI\_DI\_PORT\ \ \ \ \ \ \ \ \ \ \ \ \ GPIO\_PORT\_0}}
-\DoxyCodeLine{00102\ \textcolor{preprocessor}{\ \ \ \ \#define\ SPI\_DI\_PIN\ \ \ \ \ \ \ \ \ \ \ \ \ \ GPIO\_PIN\_5}}
-\DoxyCodeLine{00103\ \textcolor{preprocessor}{\#endif}}
-\DoxyCodeLine{00104\ }
-\DoxyCodeLine{00105\ \textcolor{comment}{/*}}
-\DoxyCodeLine{00106\ \textcolor{comment}{\ ****************************************************************************************}}
-\DoxyCodeLine{00107\ \textcolor{comment}{\ *\ Production\ debug\ output\ configuration}}
-\DoxyCodeLine{00108\ \textcolor{comment}{\ ****************************************************************************************}}
-\DoxyCodeLine{00109\ \textcolor{comment}{\ */}}
-\DoxyCodeLine{00110\ }
-\DoxyCodeLine{00111\ \textcolor{preprocessor}{\#if\ PRODUCTION\_DEBUG\_OUTPUT}}
-\DoxyCodeLine{00112\ \textcolor{preprocessor}{\#if\ defined\ (\_\_DA14531\_\_)}}
-\DoxyCodeLine{00113\ \textcolor{preprocessor}{\ \ \ \ \#define\ PRODUCTION\_DEBUG\_PORT\ \ \ GPIO\_PORT\_0}}
-\DoxyCodeLine{00114\ \textcolor{preprocessor}{\ \ \ \ \#define\ PRODUCTION\_DEBUG\_PIN\ \ \ \ GPIO\_PIN\_11}}
-\DoxyCodeLine{00115\ \textcolor{preprocessor}{\#else}}
-\DoxyCodeLine{00116\ \textcolor{preprocessor}{\ \ \ \ \#define\ PRODUCTION\_DEBUG\_PORT\ \ \ GPIO\_PORT\_2}}
-\DoxyCodeLine{00117\ \textcolor{preprocessor}{\ \ \ \ \#define\ PRODUCTION\_DEBUG\_PIN\ \ \ \ GPIO\_PIN\_5}}
-\DoxyCodeLine{00118\ \textcolor{preprocessor}{\#endif}}
-\DoxyCodeLine{00119\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{00101\ \textcolor{comment}{/*}}
+\DoxyCodeLine{00102\ \textcolor{comment}{\ ****************************************************************************************}}
+\DoxyCodeLine{00103\ \textcolor{comment}{\ *\ SPI\ configuration}}
+\DoxyCodeLine{00104\ \textcolor{comment}{\ ****************************************************************************************}}
+\DoxyCodeLine{00105\ \textcolor{comment}{\ */}}
+\DoxyCodeLine{00106\ }
+\DoxyCodeLine{00107\ \textcolor{comment}{//\ Define\ SPI\ Pads}}
+\DoxyCodeLine{00108\ \textcolor{preprocessor}{\#if\ defined\ (\_\_DA14531\_\_)}}
+\DoxyCodeLine{00109\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ \#define\ SPI\_EN\_PORT\ \ \ \ \ \ \ \ \ \ \ \ \ GPIO\_PORT\_0}}
+\DoxyCodeLine{00110\ \textcolor{preprocessor}{\ \ \ \ \#define\ SPI\_EN\_PIN\ \ \ \ \ \ \ \ \ \ \ \ \ \ GPIO\_PIN\_1}}
+\DoxyCodeLine{00111\ }
+\DoxyCodeLine{00112\ \textcolor{preprocessor}{\ \ \ \ \#define\ SPI\_CLK\_PORT\ \ \ \ \ \ \ \ \ \ \ \ GPIO\_PORT\_0}}
+\DoxyCodeLine{00113\ \textcolor{preprocessor}{\ \ \ \ \#define\ SPI\_CLK\_PIN\ \ \ \ \ \ \ \ \ \ \ \ \ GPIO\_PIN\_4}}
+\DoxyCodeLine{00114\ }
+\DoxyCodeLine{00115\ \textcolor{preprocessor}{\ \ \ \ \#define\ SPI\_DO\_PORT\ \ \ \ \ \ \ \ \ \ \ \ \ GPIO\_PORT\_0}}
+\DoxyCodeLine{00116\ \textcolor{preprocessor}{\ \ \ \ \#define\ SPI\_DO\_PIN\ \ \ \ \ \ \ \ \ \ \ \ \ \ GPIO\_PIN\_0}}
+\DoxyCodeLine{00117\ }
+\DoxyCodeLine{00118\ \textcolor{preprocessor}{\ \ \ \ \#define\ SPI\_DI\_PORT\ \ \ \ \ \ \ \ \ \ \ \ \ GPIO\_PORT\_0}}
+\DoxyCodeLine{00119\ \textcolor{preprocessor}{\ \ \ \ \#define\ SPI\_DI\_PIN\ \ \ \ \ \ \ \ \ \ \ \ \ \ GPIO\_PIN\_3}}
 \DoxyCodeLine{00120\ }
-\DoxyCodeLine{00121\ \textcolor{comment}{/*}}
-\DoxyCodeLine{00122\ \textcolor{comment}{\ ****************************************************************************************}}
-\DoxyCodeLine{00123\ \textcolor{comment}{\ *\ FUNCTION\ DECLARATIONS}}
-\DoxyCodeLine{00124\ \textcolor{comment}{\ ****************************************************************************************}}
-\DoxyCodeLine{00125\ \textcolor{comment}{\ */}}
-\DoxyCodeLine{00126\ }
-\DoxyCodeLine{00127\ \textcolor{preprocessor}{\#if\ DEVELOPMENT\_DEBUG}\textcolor{preprocessor}{}}
-\DoxyCodeLine{00136\ \textcolor{keywordtype}{void}\ GPIO\_reservations(\textcolor{keywordtype}{void});}
-\DoxyCodeLine{00137\ \textcolor{preprocessor}{\#endif}}
-\DoxyCodeLine{00138\ }
-\DoxyCodeLine{00146\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{user__periph__setup_8h_ac55a7e5121b9797ba36f63cb1f2f6d7f}{set\_pad\_functions}}(\textcolor{keywordtype}{void});}
-\DoxyCodeLine{00147\ }
-\DoxyCodeLine{00153\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{user__periph__setup_8h_a2cd4bdd061501508fe71aa672f690e81}{periph\_init}}(\textcolor{keywordtype}{void});}
-\DoxyCodeLine{00154\ }
-\DoxyCodeLine{00155\ }
-\DoxyCodeLine{00156\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{//\ \_USER\_PERIPH\_SETUP\_H\_}}
+\DoxyCodeLine{00121\ \textcolor{preprocessor}{\#elif\ !defined\ (\_\_DA14586\_\_)}}
+\DoxyCodeLine{00122\ \textcolor{preprocessor}{\ \ \ \ \#define\ SPI\_EN\_PORT\ \ \ \ \ \ \ \ \ \ \ \ \ GPIO\_PORT\_0}}
+\DoxyCodeLine{00123\ \textcolor{preprocessor}{\ \ \ \ \#define\ SPI\_EN\_PIN\ \ \ \ \ \ \ \ \ \ \ \ \ \ GPIO\_PIN\_3}}
+\DoxyCodeLine{00124\ }
+\DoxyCodeLine{00125\ \textcolor{preprocessor}{\ \ \ \ \#define\ SPI\_CLK\_PORT\ \ \ \ \ \ \ \ \ \ \ \ GPIO\_PORT\_0}}
+\DoxyCodeLine{00126\ \textcolor{preprocessor}{\ \ \ \ \#define\ SPI\_CLK\_PIN\ \ \ \ \ \ \ \ \ \ \ \ \ GPIO\_PIN\_0}}
+\DoxyCodeLine{00127\ }
+\DoxyCodeLine{00128\ \textcolor{preprocessor}{\ \ \ \ \#define\ SPI\_DO\_PORT\ \ \ \ \ \ \ \ \ \ \ \ \ GPIO\_PORT\_0}}
+\DoxyCodeLine{00129\ \textcolor{preprocessor}{\ \ \ \ \#define\ SPI\_DO\_PIN\ \ \ \ \ \ \ \ \ \ \ \ \ \ GPIO\_PIN\_6}}
+\DoxyCodeLine{00130\ }
+\DoxyCodeLine{00131\ \textcolor{preprocessor}{\ \ \ \ \#define\ SPI\_DI\_PORT\ \ \ \ \ \ \ \ \ \ \ \ \ GPIO\_PORT\_0}}
+\DoxyCodeLine{00132\ \textcolor{preprocessor}{\ \ \ \ \#define\ SPI\_DI\_PIN\ \ \ \ \ \ \ \ \ \ \ \ \ \ GPIO\_PIN\_5}}
+\DoxyCodeLine{00133\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{00134\ }
+\DoxyCodeLine{00135\ \textcolor{comment}{/*}}
+\DoxyCodeLine{00136\ \textcolor{comment}{\ ****************************************************************************************}}
+\DoxyCodeLine{00137\ \textcolor{comment}{\ *\ Production\ debug\ output\ configuration}}
+\DoxyCodeLine{00138\ \textcolor{comment}{\ ****************************************************************************************}}
+\DoxyCodeLine{00139\ \textcolor{comment}{\ */}}
+\DoxyCodeLine{00140\ }
+\DoxyCodeLine{00141\ \textcolor{preprocessor}{\#if\ PRODUCTION\_DEBUG\_OUTPUT}}
+\DoxyCodeLine{00142\ \textcolor{preprocessor}{\#if\ defined\ (\_\_DA14531\_\_)}}
+\DoxyCodeLine{00143\ \textcolor{preprocessor}{\ \ \ \ \#define\ PRODUCTION\_DEBUG\_PORT\ \ \ GPIO\_PORT\_0}}
+\DoxyCodeLine{00144\ \textcolor{preprocessor}{\ \ \ \ \#define\ PRODUCTION\_DEBUG\_PIN\ \ \ \ GPIO\_PIN\_11}}
+\DoxyCodeLine{00145\ \textcolor{preprocessor}{\#else}}
+\DoxyCodeLine{00146\ \textcolor{preprocessor}{\ \ \ \ \#define\ PRODUCTION\_DEBUG\_PORT\ \ \ GPIO\_PORT\_2}}
+\DoxyCodeLine{00147\ \textcolor{preprocessor}{\ \ \ \ \#define\ PRODUCTION\_DEBUG\_PIN\ \ \ \ GPIO\_PIN\_5}}
+\DoxyCodeLine{00148\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{00149\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{00150\ }
+\DoxyCodeLine{00151\ \textcolor{comment}{/*}}
+\DoxyCodeLine{00152\ \textcolor{comment}{\ ****************************************************************************************}}
+\DoxyCodeLine{00153\ \textcolor{comment}{\ *\ FUNCTION\ DECLARATIONS}}
+\DoxyCodeLine{00154\ \textcolor{comment}{\ ****************************************************************************************}}
+\DoxyCodeLine{00155\ \textcolor{comment}{\ */}}
+\DoxyCodeLine{00156\ }
+\DoxyCodeLine{00157\ \textcolor{preprocessor}{\#if\ DEVELOPMENT\_DEBUG}\textcolor{preprocessor}{}}
+\DoxyCodeLine{00166\ \textcolor{keywordtype}{void}\ GPIO\_reservations(\textcolor{keywordtype}{void});}
+\DoxyCodeLine{00167\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{00168\ }
+\DoxyCodeLine{00176\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{user__periph__setup_8h_ac55a7e5121b9797ba36f63cb1f2f6d7f}{set\_pad\_functions}}(\textcolor{keywordtype}{void});}
+\DoxyCodeLine{00177\ }
+\DoxyCodeLine{00183\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{user__periph__setup_8h_a2cd4bdd061501508fe71aa672f690e81}{periph\_init}}(\textcolor{keywordtype}{void});}
+\DoxyCodeLine{00184\ }
+\DoxyCodeLine{00185\ }
+\DoxyCodeLine{00186\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{//\ \_USER\_PERIPH\_SETUP\_H\_}}
 
 \end{DoxyCode}

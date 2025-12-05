@@ -124,38 +124,48 @@ $(function(){initNavTree('user__empty__peripheral__template_8c.html',''); initRe
 <code>#include &quot;timer2.h&quot;</code><br />
 <code>#include &quot;syscntl.h&quot;</code><br />
 <code>#include &quot;<a class="el" href="user__custs1__def_8h_source.html">user_custs1_def.h</a>&quot;</code><br />
+<code>#include &quot;arch_api.h&quot;</code><br />
 </div><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="define-members" name="define-members"></a>
 Macros</h2></td></tr>
 <tr class="memitem:gafb679b492d0ccf7e55b77e1126bb312e" id="r_gafb679b492d0ccf7e55b77e1126bb312e"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___a_p_p.html#gafb679b492d0ccf7e55b77e1126bb312e">CLAMP</a>(value,  min,  max)</td></tr>
 <tr class="separator:gafb679b492d0ccf7e55b77e1126bb312e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga9e728ac9a876d4bc80f78e2e55fd43d6" id="r_ga9e728ac9a876d4bc80f78e2e55fd43d6"><td class="memItemLeft" align="right" valign="top">
+#define&#160;</td><td class="memItemRight" valign="bottom"><b>ADC_ENUM_INPUT</b>&#160;&#160;&#160;ADC_INPUT_SE_P0_6</td></tr>
+<tr class="separator:ga9e728ac9a876d4bc80f78e2e55fd43d6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="func-members" name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:gab0cc4f20d86933707a3d861fca293617" id="r_gab0cc4f20d86933707a3d861fca293617"><td class="memItemLeft" align="right" valign="top">
+<tr class="memitem:gac0369c54710505ca740d8e3167b90485" id="r_gac0369c54710505ca740d8e3167b90485"><td class="memItemLeft" align="right" valign="top">
 timer_hnd uvp_timer&#160;</td><td class="memItemRight" valign="bottom"><b>__SECTION_ZERO</b> (&quot;retention_mem_area0&quot;)</td></tr>
-<tr class="separator:gab0cc4f20d86933707a3d861fca293617"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="separator:gac0369c54710505ca740d8e3167b90485"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga0ba40d136da1f704417eac6f4b68c874" id="r_ga0ba40d136da1f704417eac6f4b68c874"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___a_p_p.html#ga0ba40d136da1f704417eac6f4b68c874">uvp_wireless_timer_cb</a> (void)</td></tr>
-<tr class="memdesc:ga0ba40d136da1f704417eac6f4b68c874"><td class="mdescLeft">&#160;</td><td class="mdescRight">UVP (for battery voltage) periodic timer callback.  <br /></td></tr>
+<tr class="memdesc:ga0ba40d136da1f704417eac6f4b68c874"><td class="mdescLeft">&#160;</td><td class="mdescRight">UVP (for battery voltage) periodic timer callback.  *.  <br /></td></tr>
 <tr class="separator:ga0ba40d136da1f704417eac6f4b68c874"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:gae9df79242cefcda723510a89b90e0354" id="r_gae9df79242cefcda723510a89b90e0354"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___a_p_p.html#gae9df79242cefcda723510a89b90e0354">gpadc_wireless_timer_cb</a> (void)</td></tr>
 <tr class="memdesc:gae9df79242cefcda723510a89b90e0354"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sensor Voltage periodic timer callback.  <br /></td></tr>
 <tr class="separator:gae9df79242cefcda723510a89b90e0354"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga22bca6eda8d03d627c4d2287445a36a6" id="r_ga22bca6eda8d03d627c4d2287445a36a6"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___a_p_p.html#ga22bca6eda8d03d627c4d2287445a36a6">gpadc_init_se</a> (adc_input_se_t input, uint8_t smpl_time_mult, bool continuous, uint8_t interval_mult, adc_input_attn_t input_attenuator, bool chopping, uint8_t oversampling)</td></tr>
-<tr class="memdesc:ga22bca6eda8d03d627c4d2287445a36a6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initialize the ADC in single-ended mode with given parameters.  <br /></td></tr>
-<tr class="separator:ga22bca6eda8d03d627c4d2287445a36a6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga7c97072d522e510a46ce656a19030f8e" id="r_ga7c97072d522e510a46ce656a19030f8e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___a_p_p.html#ga7c97072d522e510a46ce656a19030f8e">gpadc_init_se</a> (adc_input_se_t input, uint8_t smpl_time_mult, adc_input_attn_t input_attenuator, bool chopping, uint8_t oversampling)</td></tr>
+<tr class="memdesc:ga7c97072d522e510a46ce656a19030f8e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initialize the ADC in single-ended mode with given parameters.  <br /></td></tr>
+<tr class="separator:ga7c97072d522e510a46ce656a19030f8e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:gaa4fb3777459834fb4d0720eaf119d94f" id="r_gaa4fb3777459834fb4d0720eaf119d94f"><td class="memItemLeft" align="right" valign="top">uint16_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___a_p_p.html#gaa4fb3777459834fb4d0720eaf119d94f">gpadc_collect_sample</a> (void)</td></tr>
 <tr class="memdesc:gaa4fb3777459834fb4d0720eaf119d94f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Collect a corrected raw ADC sample.  <br /></td></tr>
 <tr class="separator:gaa4fb3777459834fb4d0720eaf119d94f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga8258035a26667ea0be70867e5e483c3f" id="r_ga8258035a26667ea0be70867e5e483c3f"><td class="memItemLeft" align="right" valign="top">uint16_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___a_p_p.html#ga8258035a26667ea0be70867e5e483c3f">gpadc_sample_to_mv</a> (uint16_t sample)</td></tr>
 <tr class="memdesc:ga8258035a26667ea0be70867e5e483c3f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Convert a corrected ADC sample to a millivolt value.  <br /></td></tr>
 <tr class="separator:ga8258035a26667ea0be70867e5e483c3f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga396eebd5d11d6cc9f0c664317368462a" id="r_ga396eebd5d11d6cc9f0c664317368462a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___a_p_p.html#ga396eebd5d11d6cc9f0c664317368462a">timer2_pwm_dc_control_timer_cb</a> (void)</td></tr>
+<tr class="memdesc:ga396eebd5d11d6cc9f0c664317368462a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Periodic timer callback that runs the control loop to adjust the PWM Duty Cycle (DC) to compensate for battery voltage (VBAT) changes.  <br /></td></tr>
+<tr class="separator:ga396eebd5d11d6cc9f0c664317368462a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gae5ad8d119c31a70aba28c8f68dffeb64" id="r_gae5ad8d119c31a70aba28c8f68dffeb64"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___a_p_p.html#gae5ad8d119c31a70aba28c8f68dffeb64">timer2_pwm_dc_control</a> (int16_t target_vbias_mv, tim2_pwm_t channel)</td></tr>
+<tr class="memdesc:gae5ad8d119c31a70aba28c8f68dffeb64"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates and updates the PWM Duty Cycle (DC) value based on a target output voltage and the current battery voltage (VBAT).  <br /></td></tr>
+<tr class="separator:gae5ad8d119c31a70aba28c8f68dffeb64"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga761e682d9f65842703360c0c35d85024" id="r_ga761e682d9f65842703360c0c35d85024"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___a_p_p.html#ga761e682d9f65842703360c0c35d85024">timer2_pwm_set_offset</a> (uint8_t offset_percentage, tim2_pwm_t channel)</td></tr>
+<tr class="memdesc:ga761e682d9f65842703360c0c35d85024"><td class="mdescLeft">&#160;</td><td class="mdescRight">Directly sets the PWM offset (<code>START_CYCLE</code>) as a fixed Duty Cycle (DC) percentage for a channel.  <br /></td></tr>
+<tr class="separator:ga761e682d9f65842703360c0c35d85024"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga12f39c2c81587d0e9a93610ca12310c0" id="r_ga12f39c2c81587d0e9a93610ca12310c0"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___a_p_p.html#ga12f39c2c81587d0e9a93610ca12310c0">timer2_pwm_set_frequency</a> (tim0_2_clk_div_t clk_div, tim2_clk_src_t clk_src, uint16_t pwm_div)</td></tr>
 <tr class="memdesc:ga12f39c2c81587d0e9a93610ca12310c0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Configure Timer2 PWM frequency.  <br /></td></tr>
 <tr class="separator:ga12f39c2c81587d0e9a93610ca12310c0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga91c119ea3d451fe1c908ff14ecb24312" id="r_ga91c119ea3d451fe1c908ff14ecb24312"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___a_p_p.html#ga91c119ea3d451fe1c908ff14ecb24312">timer2_pwm_set_dc_and_offset</a> (uint8_t dc_pwm2, uint8_t offset_pwm2, uint8_t dc_pwm3, uint8_t offset_pwm3)</td></tr>
-<tr class="memdesc:ga91c119ea3d451fe1c908ff14ecb24312"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set PWM duty cycle and offset for TIM2 channels 2 and 3.  <br /></td></tr>
-<tr class="separator:ga91c119ea3d451fe1c908ff14ecb24312"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga6f6b699b50011cb75aae07787816e2d7" id="r_ga6f6b699b50011cb75aae07787816e2d7"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___a_p_p.html#ga6f6b699b50011cb75aae07787816e2d7">timer2_pwm_enable</a> (void)</td></tr>
 <tr class="memdesc:ga6f6b699b50011cb75aae07787816e2d7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Enable Timer2 PWM outputs.  <br /></td></tr>
 <tr class="separator:ga6f6b699b50011cb75aae07787816e2d7"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -177,9 +187,9 @@ timer_hnd uvp_timer&#160;</td><td class="memItemRight" valign="bottom"><b>__SECT
 <tr class="memitem:ga14840a8f42cc0574c8b39bd1f3046791" id="r_ga14840a8f42cc0574c8b39bd1f3046791"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___a_p_p.html#ga14840a8f42cc0574c8b39bd1f3046791">user_svc1_pwm_freq_wr_ind_handler</a> (ke_msg_id_t const msgid, struct custs1_val_write_ind const *param, ke_task_id_t const dest_id, ke_task_id_t const src_id)</td></tr>
 <tr class="memdesc:ga14840a8f42cc0574c8b39bd1f3046791"><td class="mdescLeft">&#160;</td><td class="mdescRight">Handle client writes to PWM Frequency characteristic.  <br /></td></tr>
 <tr class="separator:ga14840a8f42cc0574c8b39bd1f3046791"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:gac5ce80be01027f38df019ba10e89451c" id="r_gac5ce80be01027f38df019ba10e89451c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___a_p_p.html#gac5ce80be01027f38df019ba10e89451c">user_svc1_pwm_dc_and_offset_wr_ind_handler</a> (ke_msg_id_t const msgid, struct custs1_val_write_ind const *param, ke_task_id_t const dest_id, ke_task_id_t const src_id)</td></tr>
-<tr class="memdesc:gac5ce80be01027f38df019ba10e89451c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Handle client writes to PWM duty cycle and offset characteristic.  <br /></td></tr>
-<tr class="separator:gac5ce80be01027f38df019ba10e89451c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga7c1a0c412a4500a4e12f0f2ca742624d" id="r_ga7c1a0c412a4500a4e12f0f2ca742624d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___a_p_p.html#ga7c1a0c412a4500a4e12f0f2ca742624d">user_svc1_pwm_vbias_and_offset_wr_ind_handler</a> (ke_msg_id_t const msgid, struct custs1_val_write_ind const *param, ke_task_id_t const dest_id, ke_task_id_t const src_id)</td></tr>
+<tr class="memdesc:ga7c1a0c412a4500a4e12f0f2ca742624d"><td class="mdescLeft">&#160;</td><td class="mdescRight">BLE Write Indication Handler for the PWM VBIAS and Offset Characteristic.  <br /></td></tr>
+<tr class="separator:ga7c1a0c412a4500a4e12f0f2ca742624d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga49d7c347aaec71e4d30678215f0c111b" id="r_ga49d7c347aaec71e4d30678215f0c111b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___a_p_p.html#ga49d7c347aaec71e4d30678215f0c111b">user_svc1_pwm_state_wr_ind_handler</a> (ke_msg_id_t const msgid, struct custs1_val_write_ind const *param, ke_task_id_t const dest_id, ke_task_id_t const src_id)</td></tr>
 <tr class="memdesc:ga49d7c347aaec71e4d30678215f0c111b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Handle client write to PWM State characteristic (single-byte ON/OFF).  <br /></td></tr>
 <tr class="separator:ga49d7c347aaec71e4d30678215f0c111b"><td class="memSeparator" colspan="2">&#160;</td></tr>

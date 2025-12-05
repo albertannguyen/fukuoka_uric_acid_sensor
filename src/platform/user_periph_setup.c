@@ -21,7 +21,7 @@
 #include "uart.h"
 #include "syscntl.h"
 
-// Needed for flag_gpio_uvp
+// Needed for uvp_shutdown
 #include "user_empty_peripheral_template.h"
 
 /*
@@ -45,14 +45,14 @@ void GPIO_reservations(void)
 	#endif
 
 	// reserve UVP pins as GPIO
-	RESERVE_GPIO(UVP_MAX_SHDN, UVP_MAX_SHDN_PORT, UVP_MAX_SHDN_PIN, PID_GPIO);
+	RESERVE_GPIO(UVP_EN_OUTPUT, UVP_EN_OUTPUT_PORT, UVP_EN_OUTPUT_PIN, PID_GPIO);
 	
 	// reserve ADC pins
 	RESERVE_GPIO(ADC_INPUT, ADC_INPUT_PORT, ADC_INPUT_PIN, PID_ADC);
 	
 	// reserve PWM pins
-	RESERVE_GPIO(PWM2_OUTPUT, PWM2_PORT, PWM2_PIN, PID_PWM2);
-	RESERVE_GPIO(PWM3_OUTPUT, PWM3_PORT, PWM3_PIN, PID_PWM3);
+	RESERVE_GPIO(PWM2_OUTPUT, PWM2_OUTPUT_PORT, PWM2_OUTPUT_PIN, PID_PWM2);
+	RESERVE_GPIO(PWM3_OUTPUT, PWM3_OUTPUT_PORT, PWM3_OUTPUT_PIN, PID_PWM3);
 }
 
 #endif
@@ -64,7 +64,7 @@ void GPIO_reservations(void)
 		i.e. to set P0_1 as Generic purpose Output:
 		GPIO_ConfigurePin(GPIO_PORT_0, GPIO_PIN_1, OUTPUT, PID_GPIO, false);
 
-		last argument sets level of digital output, true is high and false is low
+		last argument sets initial level of digital output, true is high and false is low
 		last argument is ignored if pin is configured as an input
 		this info can be found in gpio.c and gpio.h
  */
@@ -84,24 +84,28 @@ void set_pad_functions(void)
 			GPIO_ConfigurePin(UART2_TX_PORT, UART2_TX_PIN, OUTPUT, PID_UART2_TX, false);
 	#endif
 	
-	// set pin 9 (UVP_MAX_SHDN) as digital output high or low based on flag in user_empty_peripheral_template.c
-	if(flag_gpio_uvp)
+	// set pin 9 (enable) as digital output high or low based on flag in user_empty_peripheral_template.c
+	if(uvp_shutdown)
 	{
-		// GPIO_SetInactive(UVP_MAX_SHDN_PORT, UVP_MAX_SHDN_PIN); // shutdown amplifiers
-		GPIO_ConfigurePin(UVP_MAX_SHDN_PORT, UVP_MAX_SHDN_PIN, OUTPUT, PID_GPIO, false);
+		GPIO_ConfigurePin(UVP_EN_OUTPUT_PORT, UVP_EN_OUTPUT_PIN, OUTPUT, PID_GPIO, false); // enable output low
 	}
 	else
 	{
-		// GPIO_SetActive(UVP_MAX_SHDN_PORT, UVP_MAX_SHDN_PIN); // enable amplifiers
-		GPIO_ConfigurePin(UVP_MAX_SHDN_PORT, UVP_MAX_SHDN_PIN, OUTPUT, PID_GPIO, true);
+		GPIO_ConfigurePin(UVP_EN_OUTPUT_PORT, UVP_EN_OUTPUT_PIN, OUTPUT, PID_GPIO, true); // enable output high
 	}
 	
 	// set ADC pin as input
 	GPIO_ConfigurePin(ADC_INPUT_PORT, ADC_INPUT_PIN, INPUT, PID_ADC, false);
 	
 	// set PWM pins
-	GPIO_ConfigurePin(PWM2_PORT, PWM2_PIN, OUTPUT, PID_PWM2, false);
-	GPIO_ConfigurePin(PWM3_PORT, PWM3_PIN, OUTPUT, PID_PWM3, false);
+	GPIO_ConfigurePin(PWM2_OUTPUT_PORT, PWM2_OUTPUT_PIN, OUTPUT, PID_PWM2, false);
+	GPIO_ConfigurePin(PWM3_OUTPUT_PORT, PWM3_OUTPUT_PIN, OUTPUT, PID_PWM3, false);
+	
+	// set GPIO outputs to reduced current driving strength (except for UART pin)
+	// PWM low current is more accurate when testing with +/- 1V
+	GPIO_ConfigurePinPower(UVP_EN_OUTPUT_PORT, UVP_EN_OUTPUT_PIN, GPIO_POWER_RAIL_1V);
+	GPIO_ConfigurePinPower(PWM2_OUTPUT_PORT, PWM2_OUTPUT_PIN, GPIO_POWER_RAIL_1V);
+	GPIO_ConfigurePinPower(PWM3_OUTPUT_PORT, PWM3_OUTPUT_PIN, GPIO_POWER_RAIL_1V);
 }
 
 #if defined (CFG_PRINTF_UART2)
@@ -122,10 +126,9 @@ static const uart_cfg_t uart_cfg = {
 void periph_init(void)
 {
 	#if defined (__DA14531__)
+	// Template code (old)
 	// In Boost mode enable the DCDC converter to supply VBAT_HIGH for the used GPIOs
 	// Assumption: The connected external peripheral is powered by 3V
-	
-	// template code (old)
 	// syscntl_dcdc_turn_on_in_boost(SYSCNTL_DCDC_LEVEL_3V0);
 	
 	// Set converter to buck mode and generate VBAT_LOW = 1.1V typical value

@@ -29,14 +29,14 @@ Custom server 1 (CUSTS1) profile database definitions.
 \Hypertarget{group___u_s_e_r___c_o_n_f_i_g_ga00a8685c86c34f120c75b40cbdf65a15}\label{group___u_s_e_r___c_o_n_f_i_g_ga00a8685c86c34f120c75b40cbdf65a15} 
 \#define {\bfseries DEF\+\_\+\+SVC1\+\_\+\+PWM\+\_\+\+FREQ\+\_\+\+USER\+\_\+\+DESC}~"{}Timer2 PWM Frequency Config"{}
 \item 
-\Hypertarget{group___u_s_e_r___c_o_n_f_i_g_ga612a2a30e14557cf60e24ac58049386e}\label{group___u_s_e_r___c_o_n_f_i_g_ga612a2a30e14557cf60e24ac58049386e} 
-\#define {\bfseries DEF\+\_\+\+SVC1\+\_\+\+PWM\+\_\+\+DC\+\_\+\+AND\+\_\+\+OFFSET\+\_\+\+UUID\+\_\+128}~\{0x72,0x50,0x8a,0x2d,0xca,0xcf,0x9c,0xb6,0x51,0x4f,0x07,0xbc,0xf6,0x0d,0xff,0x3a\}
+\Hypertarget{group___u_s_e_r___c_o_n_f_i_g_gab813ac29b8da43bb8a75105c7fef706b}\label{group___u_s_e_r___c_o_n_f_i_g_gab813ac29b8da43bb8a75105c7fef706b} 
+\#define {\bfseries DEF\+\_\+\+SVC1\+\_\+\+PWM\+\_\+\+VBIAS\+\_\+\+AND\+\_\+\+OFFSET\+\_\+\+UUID\+\_\+128}~\{0xfb,0xbe,0x45,0xc7,0x2f,0xef,0x80,0xae,0xa5,0x4a,0x0c,0x5e,0xc0,0x5f,0xb1,0xcc\}
 \item 
-\Hypertarget{group___u_s_e_r___c_o_n_f_i_g_ga340c7819e0e0e39615b78b433e2748f4}\label{group___u_s_e_r___c_o_n_f_i_g_ga340c7819e0e0e39615b78b433e2748f4} 
-\#define {\bfseries DEF\+\_\+\+SVC1\+\_\+\+PWM\+\_\+\+DC\+\_\+\+AND\+\_\+\+OFFSET\+\_\+\+CHAR\+\_\+\+LEN}~4
+\Hypertarget{group___u_s_e_r___c_o_n_f_i_g_ga30e12f1e14fba707f1cc0cf4bcb84bca}\label{group___u_s_e_r___c_o_n_f_i_g_ga30e12f1e14fba707f1cc0cf4bcb84bca} 
+\#define {\bfseries DEF\+\_\+\+SVC1\+\_\+\+PWM\+\_\+\+VBIAS\+\_\+\+AND\+\_\+\+OFFSET\+\_\+\+CHAR\+\_\+\+LEN}~10
 \item 
-\Hypertarget{group___u_s_e_r___c_o_n_f_i_g_gaa9334bcd495a04e9c477c17d372718aa}\label{group___u_s_e_r___c_o_n_f_i_g_gaa9334bcd495a04e9c477c17d372718aa} 
-\#define {\bfseries DEF\+\_\+\+SVC1\+\_\+\+PWM\+\_\+\+DC\+\_\+\+AND\+\_\+\+OFFSET\+\_\+\+USER\+\_\+\+DESC}~"{}Timer2 PWM2 and PWM3 Duty Cycles and Offsets"{}
+\Hypertarget{group___u_s_e_r___c_o_n_f_i_g_gabffda24e4eb73bc617d89a5252257f58}\label{group___u_s_e_r___c_o_n_f_i_g_gabffda24e4eb73bc617d89a5252257f58} 
+\#define {\bfseries DEF\+\_\+\+SVC1\+\_\+\+PWM\+\_\+\+VBIAS\+\_\+\+AND\+\_\+\+OFFSET\+\_\+\+USER\+\_\+\+DESC}~"{}Timer2 PWM2 and PWM3 Vbias and Offsets"{}
 \item 
 \Hypertarget{group___u_s_e_r___c_o_n_f_i_g_ga68cc17b30ad18b4fb9eea892b4fd946f}\label{group___u_s_e_r___c_o_n_f_i_g_ga68cc17b30ad18b4fb9eea892b4fd946f} 
 \#define {\bfseries DEF\+\_\+\+SVC1\+\_\+\+PWM\+\_\+\+STATE\+\_\+\+UUID\+\_\+128}~\{0x42,0x2d,0x1b,0x1c,0x46,0x02,0x26,0xb4,0xd0,0x4a,0x1e,0xd5,0x25,0xf9,0xc3,0x2d\}
@@ -71,9 +71,9 @@ enum \{ \newline
 , {\bfseries SVC1\+\_\+\+IDX\+\_\+\+PWM\+\_\+\+FREQ\+\_\+\+VAL}
 , {\bfseries SVC1\+\_\+\+IDX\+\_\+\+PWM\+\_\+\+FREQ\+\_\+\+USER\+\_\+\+DESC}
 , \newline
-{\bfseries SVC1\+\_\+\+IDX\+\_\+\+PWM\+\_\+\+DC\+\_\+\+AND\+\_\+\+OFFSET\+\_\+\+CHAR}
-, {\bfseries SVC1\+\_\+\+IDX\+\_\+\+PWM\+\_\+\+DC\+\_\+\+AND\+\_\+\+OFFSET\+\_\+\+VAL}
-, {\bfseries SVC1\+\_\+\+IDX\+\_\+\+PWM\+\_\+\+DC\+\_\+\+AND\+\_\+\+OFFSET\+\_\+\+USER\+\_\+\+DESC}
+{\bfseries SVC1\+\_\+\+IDX\+\_\+\+PWM\+\_\+\+VBIAS\+\_\+\+AND\+\_\+\+OFFSET\+\_\+\+CHAR}
+, {\bfseries SVC1\+\_\+\+IDX\+\_\+\+PWM\+\_\+\+VBIAS\+\_\+\+AND\+\_\+\+OFFSET\+\_\+\+VAL}
+, {\bfseries SVC1\+\_\+\+IDX\+\_\+\+PWM\+\_\+\+VBIAS\+\_\+\+AND\+\_\+\+OFFSET\+\_\+\+USER\+\_\+\+DESC}
 , {\bfseries SVC1\+\_\+\+IDX\+\_\+\+PWM\+\_\+\+STATE\+\_\+\+CHAR}
 , \newline
 {\bfseries SVC1\+\_\+\+IDX\+\_\+\+PWM\+\_\+\+STATE\+\_\+\+VAL}

@@ -57,33 +57,34 @@ i.e.
 
 // For user_periph_setup.c
 #include <stdbool.h>
-extern bool flag_gpio_uvp;
+extern bool uvp_shutdown;
 
 /*
  ****************************************************************************************
  * FUNCTION DECLARATIONS
  ****************************************************************************************
  */
- 
-/**
+
+ /**
  ****************************************************************************************
  * @brief UVP (for battery voltage) periodic timer callback.
+ *
  * @details
- *  - Samples the VBAT_HIGH ADC channel (single-shot).
- *  - Converts raw sample to millivolts.
- *  - Compares to a chosen undervoltage threshold (1900 mV).
- *  - Toggles UVP_MAX_SHDN GPIO to disable/enable amplifiers accordingly.
- *  - If phone notifications are enabled and the app is connected,
- *		a BLE notification is built and sent containing the 16-bit
- *    battery voltage (mV) in **little-endian** byte order (LSB first).
+ * - Samples the VBAT_HIGH ADC channel (single-shot).
+ * - Converts raw sample to millivolts.
+ * - Compares to a chosen undervoltage shutdown threshold (1825 mV) and a restart threshold (1875 mV) using hysteresis logic.
+ * - If shutdown is triggered, it disables the PWM VBIAS and the sensor sampling timer.
+ * - If phone notifications are enabled and the app is connected,
+ * a BLE notification is built and sent containing the 16-bit
+ * battery voltage (mV) in **little-endian** byte order (LSB first).
  *
  * @note app_easy_timer ticks are 10 ms each in SDK6; this callback reschedules
- *       itself every 500 ms or 0.5 s.
+ * itself every 500 ms or 0.5 s via app_easy_timer(50, ...).
  * @sa gpadc_init_se, gpadc_collect_sample, gpadc_sample_to_mv, KE_MSG_ALLOC_DYN, KE_MSG_SEND
  ****************************************************************************************
  */
 void uvp_wireless_timer_cb(void);
- 
+
 /**
  ****************************************************************************************
  * @brief Sensor Voltage periodic timer callback.
@@ -107,8 +108,6 @@ void gpadc_wireless_timer_cb(void);
  *
  * @param[in] input            		ADC input channel (e.g., P0_6, VBAT_HIGH).
  * @param[in] smpl_time_mult   		Sample time multiplier (1–15).
- * @param[in] continuous       		Enable or disable continuous sampling mode.
- * @param[in] interval_mult    		Interval multiplier for continuous mode (0–255).
  * @param[in] input_attenuator 		Attenuation factor for the ADC input.
  *														 		Must be one of the values from adc_input_attn_t enum.
  * @param[in] chopping         		Enable or disable chopping.
@@ -127,7 +126,7 @@ void gpadc_wireless_timer_cb(void);
  * @sa adc_init, adc_input_shift_disable, adc_temp_sensor_disable, adc_delay_set, adc_offset_calibrate
  ****************************************************************************************
  */
-void gpadc_init_se(adc_input_se_t input, uint8_t smpl_time_mult, bool continuous, uint8_t interval_mult, adc_input_attn_t input_attenuator, bool chopping, uint8_t oversampling);
+void gpadc_init_se(adc_input_se_t input, uint8_t smpl_time_mult, adc_input_attn_t input_attenuator, bool chopping, uint8_t oversampling);
 
 /**
  ****************************************************************************************
@@ -159,6 +158,61 @@ uint16_t gpadc_collect_sample(void);
  ****************************************************************************************
  */
 uint16_t gpadc_sample_to_mv(uint16_t sample);
+ 
+ /**
+ ****************************************************************************************
+ * @brief Periodic timer callback that runs the control loop to adjust the PWM Duty Cycle (DC) to compensate for battery voltage (VBAT) changes.
+ *
+ * @details This function is executed periodically (every 50ms).
+ * It sequentially calls the main control function, `timer2_pwm_dc_control`, for each active PWM channel
+ * (`TIM2_PWM_2` and `TIM2_PWM_3`) to update their Duty Cycles.
+ * * **Control Sequence:**
+ * 1. Restarts the timer (`app_easy_timer`).
+ * 2. Reads the global battery voltage (VBAT) from the last ADC reading.
+ * 3. Calls `timer2_pwm_dc_control` to calculate the new PWM pulse width.
+ * 4. Writes the result to the PWM hardware register.
+ *
+ * @sa timer2_pwm_dc_control, gpadc_collect_sample
+ ****************************************************************************************
+ */
+void timer2_pwm_dc_control_timer_cb(void);
+ 
+ /**
+ ****************************************************************************************
+ * @brief Calculates and updates the PWM Duty Cycle (DC) value based on a target output voltage and the current battery voltage (VBAT).
+ *
+ * @param[in] target_vbias_mv	  The desired DC target voltage (in mV) for the channel.
+ * @param[in] channel           The Timer2 PWM channel to be controlled (`TIM2_PWM_CHANNEL1` to `TIM2_PWM_CHANNEL7`).
+ *
+ * @details This function implements the core control logic, calculating the precise Duty Cycle required
+ * to maintain the target output voltage despite fluctuations in the battery voltage (VBAT). It is typically called
+ * by the periodic timer (`timer2_pwm_dc_control_timer_cb()`).
+ *
+ * * **Control Logic:** This function reads VBAT, applies it to the compensation formula, calculates the necessary PWM pulse width,
+ * and writes the resulting `END_CYCLE` value to the hardware register for the specified channel.
+ *
+ * @sa timer2_pwm_dc_control_timer_cb, timer2_pwm_set_offset
+ ****************************************************************************************
+ */
+void timer2_pwm_dc_control(int16_t target_vbias_mv, tim2_pwm_t channel);
+ 
+ /**
+ ****************************************************************************************
+ * @brief Directly sets the PWM offset (`START_CYCLE`) as a fixed Duty Cycle (DC) percentage for a channel.
+ *
+ * @param[in] offset_percentage	The desired PWM Duty Cycle (DC) offset, expressed as a percentage (0-100).
+ * @param[in] channel           The Timer2 PWM channel to configure (`TIM2_PWM_CHANNEL1` to `TIM2_PWM_CHANNEL7`).
+ *
+ * @details This function is used to apply a fixed Duty Cycle (DC) offset to the PWM signal
+ * by writing the corresponding timer count value directly to the channel's `START_CYCLE` register.
+ * This function is separate from the main VBAT compensation control loop entirely.
+ *
+ * @note The calculated `START_CYCLE` value depends on the configured Timer2 period.
+ *
+ * @sa timer2_pwm_set_dc_and_offset
+ ****************************************************************************************
+ */
+void timer2_pwm_set_offset(uint8_t offset_percentage, tim2_pwm_t channel);
 
 /**
  ****************************************************************************************
@@ -182,22 +236,6 @@ void timer2_pwm_set_frequency(tim0_2_clk_div_t clk_div, tim2_clk_src_t clk_src, 
 
 /**
  ****************************************************************************************
- * @brief Set PWM duty cycle and offset for TIM2 channels 2 and 3.
- *
- * @param[in] dc_pwm2     	 Duty cycle for PWM2 in percent (0 to 100).
- * @param[in] offset_pwm2    Offset for PWM2 in percent (0 to 100).
- * @param[in] dc_pwm3     	 Duty cycle for PWM3 in percent (0 to 100).
- * @param[in] offset_pwm3 	 Offset for PWM3 in percent (0 to 100).
- *
- * @details Values are clamped to 0 to 100 and loaded into the timer via timer2_pwm_signal_config().
- *          This function does not start the timer — call timer2_pwm_enable() to begin outputs.
- * @sa timer2_pwm_signal_config, timer2_pwm_enable
- ****************************************************************************************
- */
-void timer2_pwm_set_dc_and_offset(uint8_t dc_pwm2, uint8_t offset_pwm2, uint8_t dc_pwm3, uint8_t offset_pwm3);
- 
-/**
- ****************************************************************************************
  * @brief Enable Timer2 PWM outputs.
  *
  * @details Enables timer input clock via timer0_2_clk_enable() and starts Timer2 via
@@ -218,7 +256,6 @@ void timer2_pwm_enable(void);
  */
 void timer2_pwm_disable(void);
 
-// TODO: see if connection or disconnection function need to be used for device operation
 /**
  ****************************************************************************************
  * @brief Called when a BLE central connects to the device.
@@ -302,24 +339,34 @@ void user_svc1_pwm_freq_wr_ind_handler(ke_msg_id_t const msgid,
                                struct custs1_val_write_ind const *param,
                                ke_task_id_t const dest_id,
                                ke_task_id_t const src_id);
-													 
+
 /**
  ****************************************************************************************
- * @brief Handle client writes to PWM duty cycle and offset characteristic.
+ * @brief BLE Write Indication Handler for the PWM VBIAS and Offset Characteristic.
  *
- * @param[in] msgid   Message ID (CUSTS1_VAL_WRITE_IND).
- * @param[in] param   Pointer to custs1_val_write_ind.
- * @param[in] dest_id Receiver task id.
- * @param[in] src_id  Sender task id.
+ * @param[in] msgid         Message ID (CUSTS1_VAL_WRITE_IND).
+ * @param[in] param         Pointer to custs1_val_write_ind structure containing the characteristic value.
+ * @param[in] dest_id       Receiver task id.
+ * @param[in] src_id        Sender task id.
  *
- * @details
- *  - Expected byte array payload: [dc_pwm2, offset_pwm2, dc_pwm3, offset_pwm3] where each is 0 to 100%.
- *  - Validates byte array length and ignores incomplete writes.
- *  - Calls timer2_pwm_set_dc_and_offset(...) which clamps all inputs to [0,100].
- * @sa timer2_pwm_set_dc_and_offset, CLAMP, timer2_pwm_enable
+ * @details This function is executed when a BLE central device (e.g., a phone) writes to the custom
+ * PWM VBIAS and Offset characteristic. It is responsible for parsing the 10-byte payload
+ * and immediately applying the requested VBIAS target voltages and PWM offsets for
+ * channels `TIM2_PWM_2` and `TIM2_PWM_3`.
+ *
+ * The handler performs the following critical steps:
+ * 1. **Guard Check:** Prevents changes if the Under Voltage Protection (UVP) shutdown is active.
+ * 2. **Validation:** Checks if the received packet length is exactly 10 bytes.
+ * 3. **Data Parsing:** Extracts two sets of `vbias_mv` (target voltage in mV), `zero_cal` (zero-voltage calibration value), and `offset` (Duty Cycle percentage).
+ * 4. **Compensation:** Subtracts the `zero_cal` value from the raw `vbias_mv` targets to compensate for Op Amp rail offsets.
+ * 5. **Clamping:** Clamps the resulting target voltages to the hardware-safe range (±1000 mV).
+ * 6. **PWM Configuration:** Calls `timer2_pwm_set_offset` for the new `START_CYCLE` value, and `timer2_pwm_dc_control` to set the initial PWM Duty Cycle (DC) based on the new targets.
+ * 7. **Global Update:** Updates the global `target_vbias_1_mv` and `target_vbias_2_mv` variables, which the periodic compensation loop (`timer2_pwm_dc_control_timer_cb`) uses for subsequent Duty Cycle updates.
+ *
+ * @sa timer2_pwm_set_offset, timer2_pwm_dc_control, timer2_pwm_dc_control_timer_cb
  ****************************************************************************************
- */
-void user_svc1_pwm_dc_and_offset_wr_ind_handler(ke_msg_id_t const msgid,
+ */		
+void user_svc1_pwm_vbias_and_offset_wr_ind_handler(ke_msg_id_t const msgid,
                                struct custs1_val_write_ind const *param,
                                ke_task_id_t const dest_id,
                                ke_task_id_t const src_id);
