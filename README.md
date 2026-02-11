@@ -66,62 +66,58 @@ To ensure measurement accuracy, the firmware incorporates a calibration routine 
 ---
 
 ## 📡 BLE Service Definition (GATT)
-The firmware implements a custom 128-bit UUID service (`D6E0...`) for full sensor control via a smartphone or gateway.
+The firmware implements a custom 128-bit UUID service for sensor control and telemetry via a mobile device. All data is transmitted in **Little-Endian** format due to hardware architecture. This requires the mobile application to flip the byte order before converting from **Hex to Decimal** to obtain the correct millivolt reading.
 
-| Characteristic | Data Format | Description |
-| :--- | :--- | :--- |
-| **Sensor Voltage** | 16-bit uint | Real-time electrochemical data (mV) sent via Notifications. |
-| **PWM Frequency** | 4-byte Array | Configures `clk_div`, `clk_src`, and `pwm_div` dynamically. |
-| **Vbias & Offset** | 10-byte Array | Sets target bias and Op-Amp rail zero-calibration. |
-| **PWM State** | 8-bit uint | Software ON/OFF toggle (1 = ON, 0 = OFF). |
-| **Battery Level** | 16-bit uint | Real-time Vbat telemetry (mV) with UVP status. |
+| Characteristic | Properties | Length | User Description |
+| :--- | :--- | :--- | :--- |
+| **Sensor Voltage** | Read/Notify | 2 Bytes | Sensor Voltage (little-endian bytes to mV) |
+| **PWM Frequency** | Write | 4 Bytes | Timer2 PWM Frequency Config |
+| **PWM Vbias & Offset** | Write | 10 Bytes | Timer2 PWM2 and PWM3 Vbias and Offsets |
+| **PWM State** | Write | 1 Byte | Timer2 PWM State On/Off |
+| **Battery Voltage** | Read/Notify | 2 Bytes | Battery Voltage (little-endian bytes to mV) |
 
 ---
 
 ## 🛠 Tech Stack
-* **Microcontroller:** Renesas (Dialog) DA14531-00 SmartBond TINY™
-* **Core:** ARM Cortex-M0+
-* **SDK:** Dialog SmartBond SDK6 (v6.0.24.1464)
-* **Peripherals:** * **GPADC:** Configured with oversampling and chopping for low-noise sensing.
-    * **Timer 2:** Utilized for high-precision PWM generation.
-    * **SysCntl:** Buck-mode DCDC management for optimized power efficiency.
-* **Development:** Keil uVision 5 with ARM Compiler 6.
+**Microcontroller:** Dialog Semiconductor (Renesas) DA14531-00 (Base variant)
+**Development Environment:** Keil uVision 5
+**SDK:** Dialog SmartBond SDK6 (v6.0.24.1464)
+**Communication:** Bluetooth Low Energy (BLE 5.1)
 
 ---
 
 ## 📂 Project Structure
-This repository follows the Dialog SDK6 design patterns, with application-specific logic decoupled from the hardware abstraction layer.
+This firmware leverages the `empty_peripheral_template` project framework provided by the Dialog SDK. While the skeletal structure follows the SDK’s design patterns, the core application logic and peripheral driver integrations are custom implementations tailored for the final hardware.
 
-* **`user_empty_peripheral_template.c/.h`**
-  * The **System Coordinator**. Manages the main event loop, UVP state machine, and the mathematical control logic for PWM compensation.
-* **`user_periph_setup.c/.h`**
-  * The **Hardware Abstraction Layer (HAL)**. Implements a dual-configuration setup using the `BOARD_CUSTOM_PCB` preprocessor toggle to switch between the **DA14531 USB DevKit** and the final **Custom PCB** pinout.
-* **`user_custs1_def.c/.h`**
-  * The **BLE Database**. Defines the 128-bit custom service and characteristic structures for the Uric Acid sensor telemetry.
-* **`user_config.h`**
-  * **System Configuration**. Centralizes settings for the `ARCH_EXT_SLEEP_ON` power state and high-performance advertising intervals (687.5ms).
+### 🛠 Hardware & System Configuration
+* **`user_periph_setup.c/.h`**: Defines the GPIO pinmuxing and hardware initialization for the SoC.
+* **`user_callback_config.h`**: Reroutes the SDK main loop by implementing user callback functions to manage autonomous system execution.
+* **`user_config.h`**: Configures the sleep mode and defines the device advertising parameters.
+* **`user_modules_config.h`**: Configures the inclusion of SDK software modules. Enables the BLE module that holds the custom service.
+* **`da14531_config_basic.h`**: Configures UART output to establish a serial debugging interface for hardware development.
+
+### 🧠 User Application
+* **`user_empty_peripheral_template.c/.h`**: The primary user application layer.
+
+### 📡 BLE & GATT Implementation
+* **`user_custs1_def.c/.h`**: Defines the structure of the custom GATT database. It specifies the 128-bit UUIDs, attributes, indexing, and permissions for the user-defined characteristics. This file acts as the primary interface between the firmware and any central BLE device.
 
 ---
 
 ## ⚙️ Getting Started
 
 ### Prerequisites
-* **Keil uVision 5**.
-* **Dialog SmartBond SDK6** (v6.0.24.1464).
+* **Keil uVision 5** with ARM Compiler support.
+* **Dialog SmartBond SDK6** (v6.0.24.1464 or compatible).
 * **DA14531 Development Kit** or custom hardware based on the DA14531-00.
 
 ### Installation & Build
-1. Clone the repository:
-   ```bash
-   git clone [https://github.com/albertannguyen/fukuoka_uric_acid_sensor.git](https://github.com/albertannguyen/fukuoka_uric_acid_sensor.git)
-   ```
-2. Open the project file `*.uvprojx` in Keil uVision.
-3. **Configuration:** To target the custom sensor hardware, ensure `#define BOARD_CUSTOM_PCB` is enabled in `user_periph_setup.h`.
-4. Build the target and flash using a **J-Link** debugger.
+1. To maintain the relative include paths, clone this repository into your local SDK directory at: `...\DA145xx_SDK\6.0.24.1464\projects\target_apps\template\fukuoka_uric_acid_sensor`
+2. Navigate to the `Keil_5` folder within the project and launch the `*.uvprojx` file in Keil uVision.
+3. Build the target and flash using a **J-Link** debugger.
 
 ---
 
 ## 📝 Technical Notes & Optimization
-* **NMI Hardfault Mitigation:** During development, returning `KEEP_POWERED` in the system-powered callback led to NMI hardfaults. This was resolved by implementing a `GOTO_SLEEP` return, allowing the SDK kernel to manage power-state transitions safely.
-* **Low-Power Accuracy:** By configuring PWM pins with reduced current driving strength (`GPIO_POWER_RAIL_1V`), the system achieves higher stability for the ±1V sensing rails required for electrochemical analysis.
-* **Watchdog Management:** The Watchdog Timer is explicitly frozen during sensitive UVP (Undervoltage Protection) logic checks and resumed immediately after, ensuring system reliability without risking unintended resets during critical battery telemetry processing.
+
+* **Experimental Rail Optimization:** Through hardware validation using a Digital Multimeter (DMM), it was determined that configuring the PWM GPIOs with reduced current drive significantly improved output accuracy. This configuration minimizes switching noise and brings the physical sensor excitation voltage into closer alignment with the theoretical ±1V model, ensuring higher data integrity for the electrochemical front-end.
