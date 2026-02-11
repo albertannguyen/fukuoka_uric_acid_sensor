@@ -7,10 +7,18 @@
 ![License](https://img.shields.io/badge/License-MIT-yellow.svg)
 
 ## 📖 Introduction
-This repository contains the full and finalized firmware for the **Fukuoka Uric Acid Sensor**, targeting the **DA14531 SmartBond TINY™ SoC**. 
+This repository contains the finalized firmware for the **Fukuoka Uric Acid Sensor**, developed on the **DA14531 SmartBond TINY™ SoC**. While the initial prototype established basic operation, this codebase represents a fully integrated system designed for high-accuracy sensing and long-term battery reliability.
 
-### The Evolution
-Building upon the initial proof-of-concept, this version introduces a robust event-driven architecture designed for long-term battery operation. Key advancements include a **Battery-Aware Control Loop** for sensor excitation, a high-reliability **Undervoltage Protection (UVP)** state machine, and full utilization of the SoC's **Retention RAM** to preserve system state during deep sleep cycles.
+### 🔄 Key Advancements & Evolution
+This version introduces four major system-level upgrades over the initial prototype:
+
+1. **Full Custom BLE GATT Server:** Created a custom 128-bit UUID service. This includes asynchronous notification handlers, dynamic read/write indications, and a structured GATT database for real-time telemetry and remote configuration of the hardware.
+
+2. **Internal UVP with Software Hysteresis:** Replaced external hardware voltage supervisors with an internal ADC-driven **Undervoltage Protection (UVP)** state machine. By sampling `VBAT_HIGH` and implementing a dual-threshold hysteresis (1850 mV/1900 mV), the firmware manages battery health and system stability entirely in software and saves valuable board space on the PCB.
+
+3. **Dynamic PWM Control Loop:** Implemented a feed-forward compensation algorithm to maintain sensor excitation stability. The firmware dynamically calculates and adjusts PWM duty cycles based on real-time battery fluctuations, ensuring the electrochemical sensor receives a precise ±1V bias regardless of battery state.
+
+4. **Defensive Architecture & System Robustness:** The firmware incorporates strict input clamping, Op-Amp rail offset compensation via remote calibration, and strategic power management. The safeguards ensure a stable boot-up sequence and prevent system hard faults even under complex asynchronous BLE event handling. The other improvements increase sensor runtime and accuracy in the final measurements.
 
 ---
 
