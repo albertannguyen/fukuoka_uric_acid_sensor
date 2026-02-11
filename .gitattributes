@@ -3,3 +3,8 @@
 
 # Mark Doxygen folder as documentation to exclude it from language stats
 doxygen/** linguist-documentation
+
+# Exclude Makefiles and Keil project files from language statistics
+Makefile linguist-vendored
+*.uvprojx linguist-vendored
+*.uvoptx linguist-vendored
