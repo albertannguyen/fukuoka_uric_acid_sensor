@@ -80,7 +80,7 @@ The firmware implements a custom 128-bit UUID service for sensor control and tel
 
 **Microcontroller:** Dialog Semiconductor (Renesas) DA14531-00 (Base variant)
 
-**Development Environment:** Keil uVision 5
+**Development Environment:** Keil µVision 5
 
 **SDK:** Dialog SmartBond Software Development Kit (SDK6 v6.0.24.1464)
 
@@ -109,13 +109,13 @@ This firmware leverages the `empty_peripheral_template` project framework provid
 ## ⚙️ Getting Started
 
 ### Prerequisites
-* **Keil uVision 5** with ARM Compiler support.
+* **Keil µVision 5** with ARM Compiler support.
 * **Dialog SmartBond SDK6** (v6.0.24.1464 or compatible).
 * **DA14531 Development Kit** or custom hardware based on the DA14531-00.
 
 ### Installation & Build
 1. To maintain the relative include paths, clone this repository into your local SDK directory at: `...\DA145xx_SDK\6.0.24.1464\projects\target_apps\template\fukuoka_uric_acid_sensor`
-2. Navigate to the `Keil_5` folder within the project and launch the `*.uvprojx` file in Keil uVision.
+2. Navigate to the `Keil_5` folder within the project and launch the `*.uvprojx` file in Keil µVision.
 3. Build the target and flash to the device.
 
 ---
