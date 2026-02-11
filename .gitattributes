@@ -1,2 +1,5 @@
 # Auto detect text files and perform LF normalization
 * text=auto
+
+# Mark Doxygen folder as documentation to exclude it from language stats
+doxygen/** linguist-documentation
