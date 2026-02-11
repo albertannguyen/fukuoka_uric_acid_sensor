@@ -1,10 +1,14 @@
 # Auto detect text files and perform LF normalization
 * text=auto
 
-# Mark Doxygen folder as documentation to exclude it from language stats
-doxygen/** linguist-documentation
+# Hide everything from language stats by default
+* linguist-vendored
 
-# Exclude Makefiles and Keil project files from language statistics
-Makefile linguist-vendored
-*.uvprojx linguist-vendored
-*.uvoptx linguist-vendored
+# Explicitly count only your C source code
+src/*.c linguist-vendored=false
+src/*.h linguist-vendored=false
+Keil_5/*.c linguist-vendored=false
+Keil_5/*.h linguist-vendored=false
+
+# Keep documentation labeled as documentation
+doxygen/** linguist-documentation
