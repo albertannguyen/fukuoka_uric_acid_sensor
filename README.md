@@ -7,14 +7,14 @@
 ![License](https://img.shields.io/badge/License-MIT-yellow.svg)
 
 ## 📖 Introduction
-Developed on the **DA14531 SmartBond TINY™ System-on-Chip (SoC)**, this repository contains the finalized firmware for the **Fukuoka Uric Acid Sensor**. While the initial prototype established basic operation for glucose detection, the current codebase represents a fully integrated system reconfigured for high accuracy uric acid sensing and long term battery reliability.
+Developed on the **DA14531 SmartBond TINY™ System-on-Chip (SoC)**, this repository contains the finalized firmware for the **Fukuoka Uric Acid Sensor**. While the initial prototype established basic operation for glucose detection, the current codebase represents a fully integrated system reconfigured for high-accuracy uric acid sensing and long-term battery reliability.
 
-> **Note on Project Evolution:** This version builds upon the [Initial Proof-of-Concept](https://github.com/albertannguyen/fukuoka_glucose_sensor) developed during the project's first semester. The architecture has been matured from a glucose-sensing prototype into a production ready platform capable of precise electrochemical bias control for measurement of varied analytes.
+> **Note on Project Evolution:** This version builds upon the [Initial Proof-of-Concept](https://github.com/albertannguyen/fukuoka_glucose_sensor) developed during the project's first semester. The architecture has matured from a glucose-sensing prototype into a production-ready platform capable of precise electrochemical bias control for the measurement of varied analytes.
 
 ### 🔄 Key Advancements & Evolution
 Four major upgrades distinguish this production firmware from the initial prototype:
 
-1. **Full Custom BLE GATT Server:** Created a custom 128-bit Universally Unique Identifier (UUID) service via via Bluetooth Low Energy (BLE) and the Generic Attribute Profile (GATT). This includes asynchronous notification handlers, dynamic read/write indications, and a structured GATT database for real-time telemetry and remote configuration of the hardware.
+1. **Full Custom BLE GATT Server:** Created a custom 128-bit Universally Unique Identifier (UUID) service via Bluetooth Low Energy (BLE) and the Generic Attribute Profile (GATT). This includes asynchronous notification handlers, dynamic read/write indications, and a structured GATT database for real-time telemetry and remote configuration of the hardware.
 
 2. **Internal UVP with Software Hysteresis:** Replaced external hardware voltage supervisors with an internal Analog-to-Digital Converter (ADC) driven **Undervoltage Protection (UVP)** state machine. By sampling `VBAT_HIGH` and implementing a dual-threshold hysteresis (1850 mV/1900 mV), the firmware manages battery health and system stability entirely in software, saving valuable Printed Circuit Board (PCB) space.
 
@@ -55,7 +55,7 @@ The firmware replaces the external hardware voltage supervisor from the initial 
 ### 3. Remote Calibration & Memory Retention
 To ensure measurement accuracy, the firmware incorporates a calibration routine that compensates for non-ideal hardware behavior, specifically targeting voltage offsets in the analog front-end.
 
-* **Charge Pump Offset Compensation:** Due to non-ideal performance of the hardware charge pump providing the negative rail for the operational amplifiers, the center point (0 V) of the excitation signal can shift.
+* **Charge Pump Offset Compensation:** Due to the non-ideal performance of the hardware charge pump providing the negative rail for the operational amplifiers, the center point (0 V) of the excitation signal can shift.
 
 * **Calibration Process:** Using a Digital Multimeter (DMM), the real-world offset is measured and sent to the device via a dedicated BLE characteristic. The characteristic handler function subtracts this `zero_cal` value from the target voltage in real-time, centering the excitation rails and ensuring the sensor receives the intended bias.
 
@@ -116,7 +116,7 @@ This firmware leverages the `empty_peripheral_template` project framework provid
 ### Installation & Build
 1. To maintain the relative include paths, clone this repository into your local SDK directory at: `...\DA145xx_SDK\6.0.24.1464\projects\target_apps\template\fukuoka_uric_acid_sensor`
 2. Navigate to the `Keil_5` folder within the project and launch the `*.uvprojx` file in Keil µVision.
-3. Build the target and flash to the device.
+3. Build the target and flash it to the device.
 
 ---
 
